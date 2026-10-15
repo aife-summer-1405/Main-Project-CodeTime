@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { iranSans, logoFont } from "@/assets/fonts";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -11,7 +12,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${iranSans.className} ${logoFont.className} h-full antialiased`}
+      className={cn(
+        "h-full",
+        "antialiased",
+        iranSans.className,
+      )}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
