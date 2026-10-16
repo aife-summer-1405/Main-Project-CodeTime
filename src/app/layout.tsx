@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { iranSans, logoFont } from "@/assets/fonts";
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/components/theme-provider";
+import Header from "@/components/header";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -11,14 +14,24 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
-      className={cn(
-        "h-full",
-        "antialiased",
-        iranSans.className,
-      )}
+      dir="rtl"
+      lang="fa"
+      className={cn("h-full", "antialiased", iranSans.className)}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+      <ThemeToggle />
+          
+          <Header />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
