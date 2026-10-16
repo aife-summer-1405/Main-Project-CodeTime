@@ -3,7 +3,7 @@ import "./globals.css";
 import { iranSans, logoFont } from "@/assets/fonts";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "@/components/header";
+import Header from "@/components/header/header";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export const metadata: Metadata = {
@@ -26,8 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem
           disableTransitionOnChange
         >
-      <ThemeToggle />
-          
+          <ThemeToggle />
           <Header />
           {children}
         </ThemeProvider>
