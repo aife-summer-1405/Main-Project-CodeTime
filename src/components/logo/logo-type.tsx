@@ -1,5 +1,8 @@
 import { logoFont } from "@/assets/fonts";
+import Link from "next/link";
 import { FC } from "react";
+
+const goHomePage = () => {};
 
 interface IProps {
   textSize?: string;
@@ -21,8 +24,9 @@ const LogoType: FC<IProps> = ({
   darkTextColor2 = "#005EA4",
 }) => {
   return (
-    <div
-      className={`${logoFont.className} flex gap-1 leading-13.75` }
+    <Link
+      href={"/"}
+      className={`${logoFont.className} flex gap-1 leading-13.75`}
       style={
         {
           fontSize: textSize,
@@ -40,7 +44,7 @@ const LogoType: FC<IProps> = ({
       <span className="text-(--logo-color-2) dark:text-(--logo-dark-color-2)">
         کده
       </span>
-    </div>
+    </Link>
   );
 };
 
