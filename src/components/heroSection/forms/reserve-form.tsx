@@ -1,20 +1,21 @@
 "use client";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
   reserveSchema,
   type ReserveFormValues,
 } from "@/schemas/reserve-schema";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, ChevronDown, SearchIcon } from "lucide-react";
+import { ChevronDown, SearchIcon } from "lucide-react";
+import ListInput from "./list-inpt";
+import { useState } from "react";
+import DateInput from "./date-input";
 
 export default function ReserveForm() {
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<ReserveFormValues>({
@@ -22,7 +23,7 @@ export default function ReserveForm() {
     defaultValues: {
       checkIn: "",
       checkOut: "",
-      guests: 2,
+      guests: 0,
       location: "",
     },
   });
@@ -31,65 +32,98 @@ export default function ReserveForm() {
     console.log("اطلاعات فرم:", data);
   };
 
+  const items = [
+    { label: "Light", value: "light" },
+    { label: "Dark", value: "dark" },
+    { label: "System", value: "system" },
+    { label: "a", value: "a" },
+    { label: "b", value: "b" },
+    { label: "c", value: "c" },
+    { label: "d", value: "d" },
+    { label: "e", value: "e" },
+    { label: "f", value: "f" },
+  ];
+
+  const guestsItems = [
+    { label: 1, value: 1 },
+    { label: 2, value: 2 },
+    { label: 3, value: 3 },
+    { label: 4, value: 4 },
+    { label: 5, value: 5 },
+    { label: 6, value: 6 },
+  ];
+
+  const [location, setLocation] = useState("");
+  const [count, setCount] = useState("");
+  const [checkIn, setCheckIn] = useState<Date | undefined>();
+  const [checkOut, setCheckOut] = useState<Date | undefined>();
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-wrap items-start gap-4 w-213 mx-auto"
+      className="flex flex-wrap items-start gap-10 w-213 mx-auto"
     >
-      <div className="flex flex-col gap-1">
-        <label className="flex gap-1 text-sm" htmlFor="location">
-          مقصد
-          <ChevronDown/>
-        </label>
-        <Input
-          id="location"
-          placeholder="مازندران،ساری،لفور..."
-          {...register("location")}
-        />
-        {errors.location && (
-          <p className="text-sm text-red-500">{errors.location.message}</p>
-        )}
-      </div>
-      <div className="flex flex-col gap-1">
-        <label className="flex gap-1 text-sm" htmlFor="checkIn">
-          تاریخ ورود
-          <ChevronDown />
-        </label>
-        <Input id="checkIn" type="date" {...register("checkIn")} />
-        {errors.checkIn && (
-          <p className="text-sm text-red-500">{errors.checkIn.message}</p>
-        )}
-      </div>
+      <ListInput
+        errors={errors}
+        id="location"
+        items={items}
+        register={register}
+        setValue={setValue}
+        title="مقصد"
+        state={location}
+        setState={setLocation}
+        placeHolder="مقصد را انتخاب کنید"
+        className="w-31.5"
+      />
 
-      <div className="flex flex-col gap-1">
-        <label className="flex gap-1 text-sm" htmlFor="checkOut">
-          تاریخ خروج
-          <ChevronDown />
-        </label>
-        <Input id="checkOut" type="date" {...register("checkOut")} />
-        {errors.checkOut && (
-          <p className="text-sm text-red-500">{errors.checkOut.message}</p>
-        )}
-      </div>
+      <div className="h-13.5 border-r-2 border-black-2 opacity-20"></div>
 
-      <div className="flex flex-col gap-1">
-        <label className="flex gap-1 text-sm" htmlFor="guests">
-          تعداد نفرات
-          <ChevronDown/>
-        </label>
-        <Input
-          id="guests"
-          type="number"
-          {...register("guests", { valueAsNumber: true })}
-        />
-        {errors.guests && (
-          <p className="text-sm text-red-500">{errors.guests.message}</p>
-        )}
-      </div>
+      <DateInput
+        errors={errors}
+        id="checkIn"
+        register={register}
+        setValue={setValue}
+        state={checkIn}
+        setState={setCheckIn}
+        title="تاریخ ورود"
+        className="w-23"
+      />
 
-      <Button className={"w-30! h-12 p-0 text-sm font-medium"} type="submit" disabled={isSubmitting}>
-        {/* <SearchIcon /> */}
-        جستجوی
+      <span className="h-7.75 font-bold text-xl leading-[100%]">_</span>
+
+      <DateInput
+        errors={errors}
+        id="checkOut"
+        register={register}
+        setValue={setValue}
+        state={checkOut}
+        setState={setCheckOut}
+        title="تاریخ خروج"
+        className="w-23.75"
+      />
+      
+      <div className="h-13.5 border-r-2 border-black-2 opacity-20"></div>
+
+      <ListInput
+        errors={errors}
+        id="guests"
+        items={guestsItems}
+        register={register}
+        title="تعداد نفرات"
+        setValue={setValue}
+        state={count}
+        setState={setCount}
+        placeHolder="انتخاب کن چند نفرین"
+        className="w-31.5"
+      />
+
+      <Button
+        className={"w-30! h-12 p-0 text-sm font-medium"}
+        type="submit"
+        disabled={isSubmitting}
+      >
+        <SearchIcon />
+        جستجو
       </Button>
     </form>
   );

@@ -47,7 +47,7 @@ export const HERO_FILTER = {
   options: [
     { title: "رهن و اجاره", value: "rent" },
     { title: "خرید", value: "buy" },
-    { title: "فوش ملک", value: "sell" },
+    { title: "فروش ملک", value: "sell" },
     { title: "رزرو ملک", value: "reserve" },
   ],
   search: "جستجو",
