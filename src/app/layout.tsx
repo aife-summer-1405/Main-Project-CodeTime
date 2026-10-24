@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header/header";
 import { ThemeToggle } from "@/components/theme-toggle";
+import Footer from "@/components/footer/Footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <ThemeToggle />
           <Header />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
