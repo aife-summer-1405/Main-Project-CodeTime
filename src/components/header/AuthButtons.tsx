@@ -4,9 +4,9 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 
 const AuthButtons = () => {
-  const logout = () => {
-    localStorage.clear()
-  }
+  // const logout = () => {
+  //   localStorage.clear()
+  // }
   return (
     <div className="flex items-center gap-8 text-lg text-blue-1 dark:text-blue-4 font-bold">
       <Link href={"/login"} className="h-fit">{HEADER_TEXTS.login}</Link>
@@ -19,7 +19,7 @@ const AuthButtons = () => {
       >
         {HEADER_TEXTS.register}
       </Button>
-      <Button onClick={() => { logout() }} className={'px-10 py-2.5 bg-red-1'}>log out</Button>
+      {/* <Button onClick={() => { logout() }} className={'px-10 py-2.5 bg-red-1'}>log out</Button> */}
     </div>
   );
 };
