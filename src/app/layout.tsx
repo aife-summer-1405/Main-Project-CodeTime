@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header/header";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LandingArrow1, LandingArrow2 } from "@/components/svgs/landing-arrows";
+import LandingArrowText from "@/components/landing-arrow-text";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,6 +28,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem
           disableTransitionOnChange
         >
+          <LandingArrow1 />
+          <div className="absolute top-110 flex flex-wrap gap-4 -rotate-90 origin-bottom-right">
+            <LandingArrow2 />
+            <LandingArrowText/>
+          </div>
           <ThemeToggle />
           <Header />
           {children}

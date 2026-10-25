@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const AuthButtons = () => {
   return (
-    <div className="flex items-center gap-8 text-lg text-blue-1 dark:text-blue-4 font-bold">
+    <div className="z-99 flex items-center gap-8 text-lg text-blue-1 dark:text-blue-4 font-bold">
       <Link href={"/login"} className="h-fit">{HEADER_TEXTS.login}</Link>
       <Button
         className={
