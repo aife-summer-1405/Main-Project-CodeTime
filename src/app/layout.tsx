@@ -3,7 +3,6 @@ import "./globals.css";
 import { iranSans } from "@/assets/fonts";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {

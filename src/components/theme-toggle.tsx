@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
 
-const subscribe = () => () => {};
+const subscribe = () => () => { };
 const getServerSnapshot = () => false;
 const getClientSnapshot = () => true;
 
@@ -20,7 +20,7 @@ export function ThemeToggle() {
 
   return (
     <Button
-      className="bg-white-1 hover:bg-white-1 dark:bg-blue-2 hover:dark:bg-blue-2 size-10 rounded-full absolute left-7 bottom-20 shadow-[0_0_10px_#008FA440] hover:shadow-[0_0_10px_#008FA480] duration-500 cursor-pointer border-0"
+      className="fixed left-7 bottom-16 z-50 bg-white-1 hover:bg-white-1 dark:bg-blue-2 hover:dark:bg-blue-2 size-10 rounded-full shadow-[0_0_10px_#008FA440] hover:shadow-[0_0_10px_#008FA480] duration-500 cursor-pointer border-0"
       variant="outline"
       aria-label="تغییر تم"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
