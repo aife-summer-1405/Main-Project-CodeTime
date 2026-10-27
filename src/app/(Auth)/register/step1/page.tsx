@@ -8,6 +8,7 @@ import AuthFloatingMenu from '../../login/popMenu/PopMenu'
 import { registerStep1Schema, RegisterStep1FormData } from '@/lib/schemas/auth'
 import { startRegister } from '@/lib/Api/authApi'
 import { RegisterStepName } from '../types/types'
+import SocialButtons from '../../components/SocialButtons'
 
 
 
@@ -103,16 +104,8 @@ export default function RegisterStep1({ setStep, setTempUserId, setEmail }: ISte
                     <p className="text-[#060425] font-bold dark:text-white-1 text-[14px] md:text-[16px]">خوش آمدید :)</p>
                     <h1 className="text-[#060425] font-bold mt-2.5 dark:text-white-1 text-[18px] md:text-[20px]">ایجاد حساب کاربری</h1>
 
-                    {/* Google */}
-                    <button
-                        type="button"
-                        className="w-full h-14 flex justify-center items-center mt-8 md:mt-10 rounded-[16px] bg-[#0887CA] active:scale-[0.97] transition cursor-pointer"
-                    >
-                        <div className="flex items-center gap-4">
-                            <img src="/images/google.svg" alt="" />
-                            <p className="text-white font-medium text-[14px]">ورود با حساب گوگل</p>
-                        </div>
-                    </button>
+                    {/* Google github */}
+                    <SocialButtons />
 
                     <div className="w-full flex justify-center items-center py-3 mt-3">
                         <i className="w-full border-t-2 border-[#7777778d] dark:border-blue-3" />

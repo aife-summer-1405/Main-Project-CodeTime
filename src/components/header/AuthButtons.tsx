@@ -19,7 +19,7 @@ const AuthButtons = () => {
       >
         {HEADER_TEXTS.register}
       </Button>
-      <Button onClick={() => { logout() }} className={'px-10 py-2.5 bg-red-1'}>log out</Button>
+      {/* <Button onClick={() => { logout() }} className={'px-10 py-2.5 bg-red-1'}>log out</Button> */}
     </div>
   );
 };

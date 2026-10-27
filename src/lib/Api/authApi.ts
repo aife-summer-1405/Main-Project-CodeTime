@@ -60,3 +60,20 @@ export const forgotPasswordVerify = (data: ForgotStep2) =>
 
 export const forgotPasswordReset = (data: ForgotStep3) =>
     api.post('api/auth/forgot-password/reset', data)
+
+//login with github or google
+export type SocialProvider = 'google' | 'github'
+
+export const GITHUB_LOGIN_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/github`
+
+export const githubCallback = (params: { code: string; state: string }) =>
+    api.get('/api/auth/github/callback', { params })
+
+
+export const googleLogin = (provider: SocialProvider) =>
+    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/${provider}`
+
+export const googleLoginCallback = (
+    provider: SocialProvider,
+    params: { code: string; state: string }
+) => api.get(`/api/auth/${provider}/callback`, { params })
