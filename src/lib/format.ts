@@ -1,0 +1,1 @@
+export const fa = (n: number) => n.toLocaleString('fa-IR')
