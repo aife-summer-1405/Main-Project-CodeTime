@@ -5,13 +5,11 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import L, { type Marker as LeafletMarker } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { fa } from '@/lib/format'
-import type { Hotel } from '@/data/hotels'
+import { Hotel } from '@/lib/Api/house'
 
 const money = (n: number) => fa(n).replace(/٬/g, ',')
-
-const TIP_H = 11 //  height of the triangle 
-const TIP_GAP = 6
-const POPUP_OFFSET = TIP_H + TIP_GAP
+const POPUP_OFFSET = 17
+const FONT = 'font-[family-name:IRANSansX,IRANSans,Vazirmatn,Tahoma,sans-serif]'
 
 const POPUP = [
     'hotel-popup !mb-0',
@@ -29,14 +27,14 @@ const POPUP = [
     '[&_.leaflet-popup-content-wrapper]:after:-ml-[5px]',
     '[&_.leaflet-popup-content-wrapper]:after:border-solid',
     '[&_.leaflet-popup-content-wrapper]:after:border-transparent',
-    '[&_.leaflet-popup-content-wrapper]:after:border-x-[13px]', // 26px wide
-    '[&_.leaflet-popup-content-wrapper]:after:border-t-[12px]', // 12 - 1px overlap = 11px visible
+    '[&_.leaflet-popup-content-wrapper]:after:border-x-[13px]',
+    '[&_.leaflet-popup-content-wrapper]:after:border-t-[12px]',
     '[&_.leaflet-popup-content-wrapper]:after:border-b-0',
     '[&_.leaflet-popup-content-wrapper]:after:border-t-[#F5F5F5]',
 ].join(' ')
 
 const pin = (price: number) => `
-<div class="absolute flex h-[30px] w-[30px] items-center justify-center box-border rounded-full border border-[#B7E4D3] bg-[#F5F5F5] text-[8px] font-bold leading-none text-[#0887CA] shadow-[0_1px_4px_rgba(0,0,0,.12)] font-[family-name:IRANSansX,IRANSans,Vazirmatn,Tahoma,sans-serif] [transform:translate(-50%,calc(-100%_-_4px))]">
+<div class="absolute flex h-[30px] w-[30px] items-center justify-center box-border rounded-full border border-[#B7E4D3] bg-[#F5F5F5] text-[8px] font-bold leading-none text-[#0887CA] shadow-[0_1px_4px_rgba(0,0,0,.12)] ${FONT} [transform:translate(-50%,calc(-100%_-_4px))]">
     ${Math.round(price / 1000).toLocaleString('fa-IR', { useGrouping: false })}
     <i class="absolute -bottom-[3px] left-1/2 box-border h-[7px] w-[7px] -translate-x-1/2 rotate-45 border-0 border-b border-r border-solid border-[#B7E4D3] bg-[#F5F5F5]"></i>
 </div>`
@@ -59,26 +57,24 @@ function Controller({ hotels, selectedId, markers }: { hotels: Hotel[]; selected
     const map = useMap()
 
     useEffect(() => {
-        const ro = new ResizeObserver(() => map.invalidateSize())
-        ro.observe(map.getContainer())
-        return () => ro.disconnect()
+        const observer = new ResizeObserver(() => map.invalidateSize())
+        observer.observe(map.getContainer())
+        return () => observer.disconnect()
     }, [map])
 
     useEffect(() => {
         const hotel = hotels.find((h) => h.id === selectedId)
 
-        if (!hotel) {
-            if (hotels.length) {
-                map.fitBounds(L.latLngBounds(hotels.map((h) => [h.lat, h.lng] as [number, number])), {
-                    padding: [56, 56],
-                    maxZoom: 14,
-                })
-            }
-            return
+        if (hotel) {
+            map.flyTo([hotel.lat, hotel.lng], Math.max(map.getZoom(), 15), { duration: 0.8 })
+            markers.current[hotel.id]?.openPopup()
+        } else if (hotels.length) {
+            map.closePopup()
+            map.fitBounds(L.latLngBounds(hotels.map((h) => [h.lat, h.lng] as [number, number])), {
+                padding: [56, 56],
+                maxZoom: 14,
+            })
         }
-
-        map.flyTo([hotel.lat, hotel.lng], Math.max(map.getZoom(), 15), { duration: 0.8 })
-        markers.current[hotel.id]?.openPopup()
     }, [hotels, selectedId, map, markers])
 
     return null
@@ -95,11 +91,12 @@ export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
 
     return (
         <MapContainer
-            center={[37.2808, 49.5832]}
-            zoom={12}
+            center={[32.4279, 53.688]}
+            zoom={6}
             scrollWheelZoom
             zoomControl={false}
-            className='absolute inset-0 h-full w-full !font-[family-name:IRANSansX,IRANSans,Vazirmatn,Tahoma,sans-serif]'
+            className={`absolute inset-0 h-full w-full `}
+            style={{fontFamily:'IRANSans'}}
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -121,7 +118,7 @@ export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
                         <div dir='rtl' className='flex gap-2'>
                             <img src={h.image} alt={h.title} className='h-[90px] w-[110px] shrink-0 rounded-lg object-cover' />
 
-                            <div className='flex h-[90px] min-w-0 flex-1 px-0 flex-col justify-between py-[2px]'>
+                            <div className='flex h-[90px] min-w-0 flex-1 flex-col justify-between py-[2px]'>
                                 <h3 className='truncate text-base font-bold leading-[22px] text-[#060425]'>{h.title}</h3>
 
                                 <div className='flex items-center justify-between gap-2 whitespace-nowrap'>

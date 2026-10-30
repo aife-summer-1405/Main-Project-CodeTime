@@ -1,41 +1,83 @@
 'use client'
-import { useMemo, useState } from 'react'
-import FilterDrawer, { Filters, emptyFilters } from '@/components/reserve/filters/FilterDrawer'
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import FilterDrawer, { Filters } from '@/components/reserve/filters/FilterDrawer'
 import NavigationBar from '@/components/reserve/hotels/NavigationBar'
 import Toolbar from '@/components/reserve/hotels/ToolBar'
 import HotelList from '@/components/reserve/hotels/HotelList'
 import MapPanel from '@/components/reserve/map/MapPanel'
-import { filterHotels } from '@/data/hotels'
-import { useDebounce } from '@/components/reserve/hotels/hook/useDebounce'
-import { useHotels } from '@/components/reserve/hotels/hook/useHotels'
+import { useHotels } from '@/components/reserve/hotels/hooks/useHotels'
 
-const Page = () => {
+const one = (v: string | null) => (v ? [v] : [])
+
+const Content = () => {
+    const router = useRouter()
+    const pathname = usePathname()
+    const sp = useSearchParams()
+
     const [filterOpen, setFilterOpen] = useState(false)
-    const [showMap, setShowMap] = useState(false) // mobile/tablet only
-    const [filters, setFilters] = useState<Filters>(emptyFilters)
-    const [query, setQuery] = useState('')
+    const [showMap, setShowMap] = useState(false)
     const [selectedId, setSelectedId] = useState<number | null>(null)
 
-    const debouncedQuery = useDebounce(query, 400)
+    const query = sp.get('q') ?? ''
+    const [text, setText] = useState(query)
 
-    const { hotels, loading, error } = useHotels()
-
-    const visible = useMemo(
-        () => filterHotels(hotels, filters, debouncedQuery),
-        [hotels, filters, debouncedQuery]
+    const filters = useMemo<Filters>(
+        () => ({
+            destination: one(sp.get('destination')),
+            sort: one(sp.get('sort')),
+            minPrice: one(sp.get('minPrice')),
+            maxPrice: one(sp.get('maxPrice')),
+            rooms: one(sp.get('rooms')),
+            bathrooms: one(sp.get('bathrooms')),
+            toilets: one(sp.get('toilets')),
+            parking: one(sp.get('parking')),
+        }),
+        [sp]
     )
 
-    const activeId = visible.some((h) => h.id === selectedId) ? selectedId : null
-    const selectedHotel = visible.find((h) => h.id === activeId)
+    const update = useCallback(
+        (patch: Record<string, string | undefined>) => {
+            const next = new URLSearchParams(sp.toString())
+            Object.entries(patch).forEach(([k, v]) => (v ? next.set(k, v) : next.delete(k)))
+            const s = next.toString()
+            router.replace(s ? `${pathname}?${s}` : pathname, { scroll: false })
+        },
+        [sp, router, pathname]
+    )
+
+    useEffect(() => {
+        if (text === query) return
+        const t = setTimeout(() => update({ q: text.trim() || undefined }), 400)
+        return () => clearTimeout(t)
+    }, [text, query, update])
+
+    const { hotels, loading, error } = useHotels(filters, query)
+
+    const activeId = hotels.some((h) => h.id === selectedId) ? selectedId : null
+    const selectedHotel = hotels.find((h) => h.id === activeId)
 
     const select = (id: number) => {
-        setSelectedId(id)
-        if (window.matchMedia('(max-width: 1023px)').matches) setShowMap(true)
+        const next = id === activeId ? null : id
+        setSelectedId(next)
+        if (next !== null && window.matchMedia('(max-width: 1023px)').matches) setShowMap(true)
     }
 
+    const applyFilters = (f: Filters) =>
+        update({
+            destination: f.destination[0],
+            sort: f.sort[0],
+            minPrice: f.minPrice[0],
+            maxPrice: f.maxPrice[0],
+            rooms: f.rooms[0],
+            bathrooms: f.bathrooms[0],
+            toilets: f.toilets[0],
+            parking: f.parking[0],
+        })
+
     const resetAll = () => {
-        setFilters(emptyFilters)
-        setQuery('')
+        setText('')
+        router.replace(pathname, { scroll: false })
     }
 
     return (
@@ -46,14 +88,14 @@ const Page = () => {
                 <NavigationBar hotelTitle={selectedHotel?.title} />
 
                 <Toolbar
-                    query={query}
-                    onQueryChange={setQuery}
+                    query={text}
+                    onQueryChange={setText}
                     onOpenFilters={() => setFilterOpen(true)}
                     onShowMap={() => setShowMap(true)}
                 />
 
                 <HotelList
-                    hotels={visible}
+                    hotels={hotels}
                     loading={loading}
                     error={error}
                     selectedId={activeId}
@@ -62,17 +104,17 @@ const Page = () => {
                 />
             </div>
 
-            <MapPanel
-                hotels={visible}
-                selectedId={activeId}
-                visible={showMap}
-                onSelect={select}
-                onBack={() => setShowMap(false)}
-            />
+            <MapPanel hotels={hotels} selectedId={activeId} visible={showMap} onSelect={select} onBack={() => setShowMap(false)} />
 
-            <FilterDrawer open={filterOpen} onClose={() => setFilterOpen(false)} onApply={setFilters} />
+            <FilterDrawer open={filterOpen} value={filters} onClose={() => setFilterOpen(false)} onApply={applyFilters} />
         </div>
     )
 }
+
+const Page = () => (
+    <Suspense>
+        <Content />
+    </Suspense>
+)
 
 export default Page

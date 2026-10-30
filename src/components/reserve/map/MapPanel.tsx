@@ -1,7 +1,6 @@
+import { Hotel } from '@/lib/Api/house'
 import dynamic from 'next/dynamic'
-import type { Hotel } from '@/data/hotels'
 
-//load the map on the client  :)
 const HotelsMap = dynamic(() => import('@/components/reserve/map/HotelsMap'), {
     ssr: false,
     loading: () => <div className='absolute inset-0 animate-pulse bg-gray-100 dark:bg-[#1c1c1c]' />,
@@ -10,7 +9,7 @@ const HotelsMap = dynamic(() => import('@/components/reserve/map/HotelsMap'), {
 type Props = {
     hotels: Hotel[]
     selectedId: number | null
-    visible: boolean // mobile/tablet 
+    visible: boolean
     onSelect: (id: number) => void
     onBack: () => void
 }
@@ -18,7 +17,8 @@ type Props = {
 export default function MapPanel({ hotels, selectedId, visible, onSelect, onBack }: Props) {
     return (
         <div
-            className={`${visible ? 'block' : 'hidden'} lg:block lg:self-start lg:max-h-[900px] lg:h-full isolate relative flex-1 lg:flex-none lg:w-[40%] xl:w-[50%] min-h-0 border-2 rounded-tr-[42px] rounded-tl-[8px] rounded-br-[8px] rounded-bl-[42px] overflow-hidden`}        >
+            className={`${visible ? 'block' : 'hidden'} lg:block lg:self-start lg:max-h-[900px] lg:h-full isolate relative flex-1 lg:flex-none lg:w-[40%] xl:w-[50%] min-h-0 border-2 rounded-tr-[42px] rounded-tl-[8px] rounded-br-[8px] rounded-bl-[42px] overflow-hidden`}
+        >
             <button
                 type='button'
                 onClick={onBack}

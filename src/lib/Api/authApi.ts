@@ -1,4 +1,4 @@
-import api from "../api"
+import api from "../interceptor/api"
 
 export interface RegisterStep1 {
     email: string
