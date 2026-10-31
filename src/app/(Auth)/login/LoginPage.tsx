@@ -11,6 +11,7 @@ import AuthFloatingMenu from './popMenu/PopMenu'
 import LoginSlider from './slider/LoginSlider'
 import { loginSchema, LoginFormData } from '@/lib/schemas/auth'
 import { loginUser } from '@/lib/Api/authApi'
+import GoogleButton from '@/components/auth/GoogleButton'
 
 const LoginPage = () => {
   const [isShow, setIsShow] = useState(false)
@@ -64,16 +65,7 @@ const LoginPage = () => {
             <p className="text-[#060425] font-bold dark:text-white-1 text-[14px] md:text-[16px]">خوش آمدید :)</p>
             <h1 className="text-[#060425] font-bold mt-2.5 dark:text-white-1 text-[18px] md:text-[20px]">ورود به حساب کاربری</h1>
 
-            <button
-              type="button"
-              className="w-full flex justify-center items-center h-14 mt-8 md:mt-10 rounded-[16px] bg-[#0887CA] active:scale-[0.97] transition cursor-pointer"
-            >
-              <div className="flex gap-4">
-                <img src="/images/google.svg" alt="" />
-                <p className="text-white font-medium text-[14px]">ورود با حساب گوگل</p>
-              </div>
-            </button>
-
+            <GoogleButton />
             <div className="w-full flex justify-center items-center py-3 mt-3">
               <i className="w-full border-t-2 dark:border-blue-3 border-[#7777778d]"></i>
               <p className="text-[#0887CA] dark:text-blue-3 px-1.5">یا</p>
