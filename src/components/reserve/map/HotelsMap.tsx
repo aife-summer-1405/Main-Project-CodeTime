@@ -51,9 +51,9 @@ const icon = (price: number, active: boolean) =>
         html: active ? dot : pin(price),
     })
 
-type Markers = MutableRefObject<Record<number, LeafletMarker | null>>
+type Markers = MutableRefObject<Record<string, LeafletMarker | null>>
 
-function Controller({ hotels, selectedId, markers }: { hotels: Hotel[]; selectedId: number | null; markers: Markers }) {
+function Controller({ hotels, selectedId, markers }: { hotels: Hotel[]; selectedId: string | null; markers: Markers }) {
     const map = useMap()
 
     useEffect(() => {
@@ -66,11 +66,11 @@ function Controller({ hotels, selectedId, markers }: { hotels: Hotel[]; selected
         const hotel = hotels.find((h) => h.id === selectedId)
 
         if (hotel) {
-            map.flyTo([hotel.lat, hotel.lng], Math.max(map.getZoom(), 15), { duration: 0.8 })
+            map.flyTo([hotel.location?.lat, hotel.location?.lng], Math.max(map.getZoom(), 15), { duration: 0.8 })
             markers.current[hotel.id]?.openPopup()
         } else if (hotels.length) {
             map.closePopup()
-            map.fitBounds(L.latLngBounds(hotels.map((h) => [h.lat, h.lng] as [number, number])), {
+            map.fitBounds(L.latLngBounds(hotels.map((h) => [h.location?.lat, h.location?.lng] as [number, number])), {
                 padding: [56, 56],
                 maxZoom: 14,
             })
@@ -82,8 +82,8 @@ function Controller({ hotels, selectedId, markers }: { hotels: Hotel[]; selected
 
 type Props = {
     hotels: Hotel[]
-    selectedId: number | null
-    onSelect: (id: number) => void
+    selectedId: string | null
+    onSelect: (id: string) => void
 }
 
 export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
@@ -96,7 +96,7 @@ export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
             scrollWheelZoom
             zoomControl={false}
             className={`absolute inset-0 h-full w-full `}
-            style={{fontFamily:'IRANSans'}}
+            style={{ fontFamily: 'IRANSans' }}
         >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -106,7 +106,7 @@ export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
             {hotels.map((h) => (
                 <Marker
                     key={h.id}
-                    position={[h.lat, h.lng]}
+                    position={[h.location?.lat, h.location?.lng]}
                     icon={icon(h.price, h.id === selectedId)}
                     zIndexOffset={h.id === selectedId ? 1000 : 0}
                     ref={(m) => {
@@ -116,17 +116,20 @@ export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
                 >
                     <Popup className={POPUP} autoPan={false} closeButton={false} minWidth={200} maxWidth={275}>
                         <div dir='rtl' className='flex gap-2'>
-                            <img src={h.image} alt={h.title} className='h-[90px] w-[110px] shrink-0 rounded-lg object-cover' />
+                            <img src={h.photos[0]} alt={h.title} className='h-[90px] w-[110px] shrink-0 rounded-lg object-cover' />
 
                             <div className='flex h-[90px] min-w-0 flex-1 flex-col justify-between py-[2px]'>
                                 <h3 className='truncate text-base font-bold leading-[22px] text-[#060425]'>{h.title}</h3>
 
                                 <div className='flex items-center justify-between gap-2 whitespace-nowrap'>
-                                    {h.discount > 0 && (
+                                    {/* {h.discounted_price > 0 && (
                                         <span className='text-[12px] leading-none text-gray-400 line-through decoration-red-500'>
-                                            {money(h.oldPrice)}
+                                            {money(h.discounted_price)}تومان
                                         </span>
-                                    )}
+                                    )} */}
+                                    <span className='text-[12px] leading-none text-gray-400 line-through decoration-red-500'>
+                                            {money(200000)}تومان
+                                        </span>
                                     <span className='text-[13px] font-bold leading-none text-[#0887CA]'>{money(h.price)} تومان</span>
                                 </div>
 

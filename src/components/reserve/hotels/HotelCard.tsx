@@ -6,7 +6,7 @@ import { Hotel } from '@/lib/Api/house'
 type Props = {
     hotel: Hotel
     selected: boolean
-    onSelect: (id: number) => void
+    onSelect: (id: string) => void
 }
 
 export default function HotelCard({ hotel, selected, onSelect }: Props) {
@@ -25,7 +25,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
             className={`group cursor-pointer shadow-[0_0_6px_0_#0887CA40] w-full md:h-55 shrink-0 p-2 border hover:border-blue-4 hover:border-2 transition rounded-[32px] flex flex-col md:flex-row gap-3 ${selected ? 'border-blue-4 border-2' : ''}`}
         >
             <div className='relative h-52 md:h-full w-full md:w-64 xl:w-90 shrink-0'>
-                {hotel.discount > 0 && (
+                {/* {hotel.discount > 0 && (
                     <>
                         <span className='absolute top-7 z-10 -right-6 bg-red-500 text-white text-xs font-bold px-1 py-1 rounded-tr-[4px] rounded-br-[4px]'>
                             %{fa(hotel.discount)}
@@ -35,17 +35,24 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                             className='absolute top-5 z-1 -right-6 bg-red-400 font-bold w-4 h-3'
                         />
                     </>
-                )}
+                )} */}
+                <span className='absolute top-7 z-10 -right-6 bg-red-500 text-white text-xs font-bold px-1 py-1 rounded-tr-[4px] rounded-br-[4px]'>
+                    %11
+                </span>
+                <div
+                    style={{ clipPath: 'polygon( 100% 100%, 0 100% ,0 0)' }}
+                    className='absolute top-5 z-1 -right-6 bg-red-400 font-bold w-4 h-3'
+                />
 
                 <div className='relative z-10 w-full h-full rounded-[24px] overflow-hidden'>
-                    {hotel.photos ? (
-                        <img src={hotel.photos} alt={hotel.title} className='w-full h-full object-cover' />
+                    {hotel.photos === undefined ? (
+                        <img src={hotel.photos[0]} alt={hotel.title} className='w-full h-full object-cover' />
                     ) : (
-                        <div className='w-full h-full object-cover bg-pink-500'></div>
+                        <div className='w-full h-full object-cover from-lime-400 to-green-2 bg-linear-30'></div>
                     )}
 
                     <div className='absolute top-3 right-3 flex items-center gap-1 text-white text-xs font-bold'>
-                        <span>{fa(hotel.rating)}</span>
+                        <span>{fa(hotel.rate)}</span>
                         <Star size={20} />
                     </div>
 
@@ -65,7 +72,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                     <h2 className='text-[#060425] dark:text-white-1 font-bold text-base'>{hotel.title}</h2>
                     <p className='flex items-center gap-1.5 text-gray-1 text-xs w-full'>
                         <MapPin size={20} className='shrink-0' />
-                        <span className='truncate w-full'>{hotel.location}</span>
+                        <span className='truncate w-full'>{hotel.address}</span>
                     </p>
                 </div>
 
@@ -78,15 +85,18 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
 
                 <div className='flex flex-col gap-3'>
                     <div className='flex flex-wrap items-center justify-between gap-x-3 gap-y-1'>
-                        {hotel.discount > 0 ? (
+                        {/* {hotel.discounted_price > 0 ? (
                             <div className='text-gray-1 text-xs relative'>
                                 <div className='border-t border-red-1 absolute top-[5px] left-0 w-full' />
-                                {fa(hotel.oldPrice)} تومان
+                                {fa(hotel.discounted_price)} تومان
                             </div>
                         ) : (
                             <span />
-                        )}
-
+                        )} */}
+                        <div className='text-gray-1 text-xs relative'>
+                            <div className='border-t border-red-1 absolute top-[5px] left-0 w-full' />
+                            {fa(200000)} تومان
+                        </div>
                         <p className='text-blue-4 font-bold text-sm'>
                             {fa(hotel.price)} تومان
                             <span className='text-gray-1 font-normal text-xs'> /هر شب</span>

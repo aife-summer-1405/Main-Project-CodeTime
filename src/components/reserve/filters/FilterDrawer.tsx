@@ -5,7 +5,7 @@ import { AnimatePresence, MotionConfig, motion, type PanInfo, type Variants } fr
 import { fa } from '@/lib/format'
 import Select, { Option } from './Select'
 
-export type Filters = {
+export interface Filters {
     destination: string[]
     sort: string[]
     minPrice: string[]
@@ -109,10 +109,10 @@ const CountPicker = ({ label, value, onChange }: CountPickerProps) => {
                             aria-pressed={active}
                             onClick={() => onChange(n === 0 || active ? [] : [String(n)])}
                             className={`h-9 w-9 flex items-center justify-center rounded-full border text-xs font-bold cursor-pointer transition active:scale-[0.9] ${active
-                                    ? 'bg-blue-4 border-blue-4 text-white'
-                                    : n === 0
-                                        ? 'border-blue-4/40 text-blue-4'
-                                        : 'border-gray-1 text-[#060425] dark:text-white-1'
+                                ? 'bg-blue-4 border-blue-4 text-white'
+                                : n === 0
+                                    ? 'border-blue-4/40 text-blue-4'
+                                    : 'border-gray-1 text-[#060425] dark:text-white-1'
                                 }`}
                         >
                             {fa(n)}
