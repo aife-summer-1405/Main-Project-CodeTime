@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, type MutableRefObject } from 'react'
+import { useEffect, useRef, useState, type MutableRefObject } from 'react'
 import Link from 'next/link'
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import L, { type Marker as LeafletMarker } from 'leaflet'
@@ -10,6 +10,26 @@ import { Hotel } from '@/lib/Api/house'
 const money = (n: number) => fa(n).replace(/٬/g, ',')
 const POPUP_OFFSET = 17
 const FONT = 'font-[family-name:IRANSansX,IRANSans,Vazirmatn,Tahoma,sans-serif]'
+
+// مرکز فرضی (وسط ایران) برای هتل‌هایی که مختصات ندارن
+const FALLBACK: [number, number] = [32.4279, 53.688]
+
+const coords = (h: Hotel): [number, number] => {
+    const lat = Number(h.location?.lat)
+    const lng = Number(h.location?.lng)
+    if (Number.isFinite(lat) && Number.isFinite(lng)) return [lat, lng]
+
+    
+    let seed = 0
+    for (const ch of String(h.id)) seed = (seed * 31 + ch.charCodeAt(0)) % 9973
+    const angle = (seed % 360) * (Math.PI / 180)
+    const radius = 0.05 + (seed % 50) / 1000 
+
+    return [FALLBACK[0] + Math.sin(angle) * radius, FALLBACK[1] + Math.cos(angle) * radius]
+}
+
+const isSelected = (id: string | number, selectedId: string | number | null) =>
+    selectedId !== null && selectedId !== undefined && String(id) === String(selectedId)
 
 const POPUP = [
     'hotel-popup !mb-0',
@@ -35,12 +55,12 @@ const POPUP = [
 
 const pin = (price: number) => `
 <div class="absolute flex h-[30px] w-[30px] items-center justify-center box-border rounded-full border border-[#B7E4D3] bg-[#F5F5F5] text-[8px] font-bold leading-none text-[#0887CA] shadow-[0_1px_4px_rgba(0,0,0,.12)] ${FONT} [transform:translate(-50%,calc(-100%_-_4px))]">
-    ${Math.round(price / 1000).toLocaleString('fa-IR', { useGrouping: false })}
+    ${Math.round((Number(price) || 0) / 1000).toLocaleString('fa-IR', { useGrouping: false })}
     <i class="absolute -bottom-[3px] left-1/2 box-border h-[7px] w-[7px] -translate-x-1/2 rotate-45 border-0 border-b border-r border-solid border-[#B7E4D3] bg-[#F5F5F5]"></i>
 </div>`
 
 const dot = `
-<div class="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#F5002D] shadow-[0_0_0_3px_rgba(245,0,45,.35),0_0_0_6px_rgba(245,0,45,.16)]"></div>`
+<div class="absolute h-2 w-2 translate-x-[12px] translate-y-[0px] rounded-full bg-[#F5002D] shadow-[0_0_0_3px_rgba(245,0,45,.35),0_0_0_6px_rgba(245,0,45,.16)]"></div>`
 
 const icon = (price: number, active: boolean) =>
     L.divIcon({
@@ -53,37 +73,55 @@ const icon = (price: number, active: boolean) =>
 
 type Markers = MutableRefObject<Record<string, LeafletMarker | null>>
 
-function Controller({ hotels, selectedId, markers }: { hotels: Hotel[]; selectedId: string | null; markers: Markers }) {
+function Controller({
+    hotels,
+    selectedId,
+    markers,
+}: {
+    hotels: Hotel[]
+    selectedId: string | number | null
+    markers: Markers
+}) {
     const map = useMap()
+    const [ready, setReady] = useState(false)
 
     useEffect(() => {
-        const observer = new ResizeObserver(() => map.invalidateSize())
+        const check = () => {
+            map.invalidateSize()
+            const size = map.getSize()
+            setReady(size.x > 0 && size.y > 0)
+        }
+
+        check()
+        const observer = new ResizeObserver(check)
         observer.observe(map.getContainer())
         return () => observer.disconnect()
     }, [map])
 
     useEffect(() => {
-        const hotel = hotels.find((h) => h.id === selectedId)
+        if (!ready) return
+
+        const hotel = hotels.find((h) => isSelected(h.id, selectedId))
 
         if (hotel) {
-            map.flyTo([hotel.location?.lat, hotel.location?.lng], Math.max(map.getZoom(), 15), { duration: 0.8 })
+            map.flyTo(coords(hotel), Math.max(map.getZoom(), 15), { duration: 0.8 })
             markers.current[hotel.id]?.openPopup()
         } else if (hotels.length) {
             map.closePopup()
-            map.fitBounds(L.latLngBounds(hotels.map((h) => [h.location?.lat, h.location?.lng] as [number, number])), {
-                padding: [56, 56],
-                maxZoom: 14,
-            })
+            const bounds = L.latLngBounds(hotels.map(coords))
+            if (bounds.isValid()) {
+                map.fitBounds(bounds, { padding: [56, 56], maxZoom: 14 })
+            }
         }
-    }, [hotels, selectedId, map, markers])
+    }, [hotels, selectedId, map, markers, ready])
 
     return null
 }
 
 type Props = {
     hotels: Hotel[]
-    selectedId: string | null
-    onSelect: (id: string) => void
+    selectedId: string | number | null
+    onSelect: (id:any) => void
 }
 
 export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
@@ -91,11 +129,11 @@ export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
 
     return (
         <MapContainer
-            center={[32.4279, 53.688]}
+            center={FALLBACK}
             zoom={6}
             scrollWheelZoom
             zoomControl={false}
-            className={`absolute inset-0 h-full w-full `}
+            className='absolute inset-0 h-full w-full'
             style={{ fontFamily: 'IRANSans' }}
         >
             <TileLayer
@@ -103,47 +141,64 @@ export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
                 url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
 
-            {hotels.map((h) => (
-                <Marker
-                    key={h.id}
-                    position={[h.location?.lat, h.location?.lng]}
-                    icon={icon(h.price, h.id === selectedId)}
-                    zIndexOffset={h.id === selectedId ? 1000 : 0}
-                    ref={(m) => {
-                        markers.current[h.id] = m
-                    }}
-                    eventHandlers={{ click: () => onSelect(h.id) }}
-                >
-                    <Popup className={POPUP} autoPan={false} closeButton={false} minWidth={200} maxWidth={275}>
-                        <div dir='rtl' className='flex gap-2'>
-                            <img src={h.photos[0]} alt={h.title} className='h-[90px] w-[110px] shrink-0 rounded-lg object-cover' />
+            {hotels.map((h) => {
+                const active = isSelected(h.id, selectedId)
 
-                            <div className='flex h-[90px] min-w-0 flex-1 flex-col justify-between py-[2px]'>
-                                <h3 className='truncate text-base font-bold leading-[22px] text-[#060425]'>{h.title}</h3>
+                return (
+                    <Marker
+                        key={h.id}
+                        position={coords(h)}
+                        icon={icon(h.price, active)}
+                        zIndexOffset={active ? 1000 : 0}
+                        ref={(m) => {
+                            markers.current[h.id] = m
+                        }}
+                        eventHandlers={{ click: () => onSelect(h.id) }}
+                    >
+                        <Popup className={POPUP} autoPan={false} closeButton={false} minWidth={200} maxWidth={300}>
+                            {/* عرض ثابت و ریسپانسیو: روی موبایل هیچ‌وقت از صفحه بیرون نمی‌زنه */}
+                            <div dir='rtl' className='flex w-[min(272px,calc(100vw-96px))] gap-2'>
+                                {h.photos?.[0] ? (
+                                    <img
+                                        src={h.photos[0]}
+                                        alt={h.title}
+                                        className='h-[90px] w-[84px] shrink-0 rounded-lg object-cover min-[400px]:w-[110px]'
+                                    />
+                                ) : (
+                                    <div className='h-[90px] w-[84px] shrink-0 rounded-lg bg-gray-200 min-[400px]:w-[110px]' />
+                                )}
 
-                                <div className='flex items-center justify-between gap-2 whitespace-nowrap'>
-                                    {/* {h.discounted_price > 0 && (
-                                        <span className='text-[12px] leading-none text-gray-400 line-through decoration-red-500'>
-                                            {money(h.discounted_price)}تومان
-                                        </span>
-                                    )} */}
-                                    <span className='text-[12px] leading-none text-gray-400 line-through decoration-red-500'>
+                                <div className='flex h-[90px] min-w-0 flex-1 flex-col justify-between overflow-hidden py-[2px]'>
+                                    <h3 className='truncate text-sm font-bold leading-[22px] text-[#060425] min-[400px]:text-base'>
+                                        {h.title}
+                                    </h3>
+
+                                    <div className='flex min-w-0 flex-wrap items-center justify-between gap-x-2 gap-y-0.5'>
+                                        {/* {h.discounted_price > 0 && (
+                                            <span className='text-[12px] leading-none text-gray-400 line-through decoration-red-500'>
+                                                {money(h.discounted_price)}تومان
+                                            </span>
+                                        )} */}
+                                        <span className='whitespace-nowrap text-[11px] leading-none text-gray-400 line-through decoration-red-500 min-[400px]:text-[12px]'>
                                             {money(200000)}تومان
                                         </span>
-                                    <span className='text-[13px] font-bold leading-none text-[#0887CA]'>{money(h.price)} تومان</span>
-                                </div>
+                                        <span className='whitespace-nowrap text-[12px] font-bold leading-none text-[#0887CA] min-[400px]:text-[13px]'>
+                                            {money(h.price)} تومان
+                                        </span>
+                                    </div>
 
-                                <Link
-                                    href={`/hotels/${h.id}`}
-                                    className='flex h-6 items-center justify-center rounded-[8px] border border-[#0887CA] text-xs leading-none !text-[#0887CA] transition hover:bg-[#0887CA]/10'
-                                >
-                                    جزییات رزرو
-                                </Link>
+                                    <Link
+                                        href={`/hotels/${h.id}`}
+                                        className='flex h-6 items-center justify-center rounded-[8px] border border-[#0887CA] text-xs leading-none !text-[#0887CA] transition hover:bg-[#0887CA]/10'
+                                    >
+                                        جزییات رزرو
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
-                    </Popup>
-                </Marker>
-            ))}
+                        </Popup>
+                    </Marker>
+                )
+            })}
 
             <Controller hotels={hotels} selectedId={selectedId} markers={markers} />
         </MapContainer>

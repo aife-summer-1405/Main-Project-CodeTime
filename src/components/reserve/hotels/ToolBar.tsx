@@ -31,7 +31,7 @@ export default function Toolbar({ query, onQueryChange, onOpenFilters, onShowMap
                 </button>
             </div>
 
-            <search className='flex-1 sm:flex-none min-w-0 justify-center items-center pl-2 flex h-12 text-blue-4 text-sm pr-2.5 rounded-[16px] border border-blue-4'>
+            <search className='flex-1 xl:w-90 sm:flex-none min-w-0 justify-center items-center pl-2 flex h-12 text-blue-4 text-sm pr-2.5 rounded-[16px] border border-blue-4'>
                 <input
                     type='text'
                     id='search'

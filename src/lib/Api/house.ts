@@ -10,7 +10,7 @@ export type Hotel = {
     tags: string[]
     last_updated: string
     capacity: number
-    location: { lat: number; lng: number }
+    location: { lat: number; lng: number; }
     categories: { name: string }
     bathrooms: number
     parking: number

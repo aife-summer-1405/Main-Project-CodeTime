@@ -70,7 +70,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
             <div className='w-full min-w-0 h-full p-2 flex flex-col justify-between gap-3'>
                 <div className='flex flex-col gap-2'>
                     <h2 className='text-[#060425] dark:text-white-1 font-bold text-base'>{hotel.title}</h2>
-                    <p className='flex items-center gap-1.5 text-gray-1 text-xs w-full'>
+                    <p className='flex items-center gap-1.5 text-gray-1 dark:text-white-1 text-xs w-full'>
                         <MapPin size={20} className='shrink-0' />
                         <span className='truncate w-full'>{hotel.address}</span>
                     </p>
@@ -78,7 +78,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
 
                 <i className='w-full border-t' />
 
-                <p className='flex items-center gap-1.5 text-gray-1 text-xs'>
+                <p className='flex items-center dark:text-white-1 gap-1.5 text-gray-1 text-xs'>
                     <Moon size={14} />
                     10 شب
                 </p>
@@ -93,13 +93,13 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                         ) : (
                             <span />
                         )} */}
-                        <div className='text-gray-1 text-xs relative'>
-                            <div className='border-t border-red-1 absolute top-[5px] left-0 w-full' />
+                        <div className='text-gray-1 dark:text-white-1 text-xs relative'>
+                            <div className='border-t border-red-1 absolute top-[7px] left-0 w-full' />
                             {fa(200000)} تومان
                         </div>
                         <p className='text-blue-4 font-bold text-sm'>
                             {fa(hotel.price)} تومان
-                            <span className='text-gray-1 font-normal text-xs'> /هر شب</span>
+                            <span className='text-gray-1 dark:text-white-1 font-normal text-xs'> /هر شب</span>
                         </p>
                     </div>
 
