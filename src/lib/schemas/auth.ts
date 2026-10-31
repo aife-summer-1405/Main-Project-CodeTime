@@ -67,3 +67,22 @@ export const forgotStep3Schema = z
         path: ['confirmPassword'],
     })
 export type ForgotStep3FormData = z.infer<typeof forgotStep3Schema>
+
+//register (phone) step1
+export const registerPhoneStep1Schema = z.object({
+    phoneNumber: z
+        .string()
+        .min(1, 'شماره تماس را وارد کنید')
+        .regex(/^09\d{9}$/, 'شماره تماس معتبر نیست (مثال: 09123456789)'),
+})
+export type RegisterPhoneStep1FormData = z.infer<typeof registerPhoneStep1Schema>
+
+
+//register (phone) step3
+export const registerPhoneStep3Schema = z.object({
+    password: z
+        .string()
+        .min(1, 'رمز عبور را وارد کنید')
+        .min(8, 'رمز عبور باید حداقل ۸ کاراکتر باشد'),
+})
+export type RegisterPhoneStep3FormData = z.infer<typeof registerPhoneStep3Schema>

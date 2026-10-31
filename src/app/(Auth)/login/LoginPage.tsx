@@ -146,8 +146,8 @@ const LoginPage = () => {
                 )}
               </div>
 
-              <div className="flex flex-wrap w-full items-center justify-end gap-x-3 gap-y-3 mt-6 md:mt-8">
-                {/* <p className="text-[#10088F] font-bold border-b dark:text-white-1 border-[#10088F] text-[13px] md:text-[14px] cursor-pointer">ورود با شماره موبایل</p> */}
+              <div className="flex flex-wrap w-full items-center justify-between gap-x-3 gap-y-3 mt-6 md:mt-8">
+                <Link href={'registerPhone'} className="text-[#10088F] font-bold border-b dark:text-white-1 border-[#10088F] text-[13px] md:text-[14px] cursor-pointer">ثبت‌ نام با شماره موبایل</Link>
                 <Link href={'forget-password'} className="text-[#0887CAB2] font-semibold border-b border-[#0887CAB2] text-xs cursor-pointer">رمز عبور خود را فراموش کردید؟</Link>
               </div>
 

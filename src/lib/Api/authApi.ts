@@ -35,6 +35,14 @@ export interface ForgotStep3 {
     newPassword: string
 }
 
+export interface RegisterPhoneStep1 {
+    phoneNumber: string
+}
+
+export interface Logout {
+    refreshToken: string
+}
+
 //step1
 export const startRegister = (data: RegisterStep1) =>
     api.post('api/auth/register', data)
@@ -60,3 +68,17 @@ export const forgotPasswordVerify = (data: ForgotStep2) =>
 
 export const forgotPasswordReset = (data: ForgotStep3) =>
     api.post('api/auth/forgot-password/reset', data)
+
+//phone step1
+export const startRegisterPhone = (data: RegisterPhoneStep1) =>
+    api.post('api/auth/register-phone', data)
+//phone step2
+export const verifyPhone = (data: RegisterStep2) =>
+    api.post('api/auth/verify-phone', data)
+//phone step2
+export const completePhoneRegistration = (data: RegisterStep3) =>
+    api.post('api/auth/complete-registration', data)
+
+//logout
+export const logoutUser = (data: Logout) =>
+    api.post('api/auth/logout', data)
