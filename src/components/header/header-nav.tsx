@@ -1,6 +1,6 @@
 "use client";
 import { HEADER_LINKS } from "@/constants/header";
-import NavUnderline from "../svgs/nav-underline";
+import {NavUnderline} from "../svgs/nav-underline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -43,7 +43,7 @@ const HeaderNav = () => {
                       transition-opacity duration-300 translate-y-1
                       ${isActive ? "opacity-100 block" : "opacity-0 hidden"}`}
                 >
-                  <NavUnderline />
+                  <NavUnderline/>
                 </div>
               </div>
             </NavigationMenuItem>
