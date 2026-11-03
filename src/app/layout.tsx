@@ -8,6 +8,7 @@ import Header from "@/components/header/header";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LandingArrow1, LandingArrow2 } from "@/components/svgs/landing-arrows";
 import LandingArrowText from "@/components/landing-arrow-text";
+import Footer from "@/components/footer/Footer";
 
 export const metadata: Metadata = {
   title: "Rahn kadeh",
@@ -42,6 +43,7 @@ export default function RootLayout({
           <Header />
           {children}
          
+          <Footer />
         </ThemeProvider>
         <Toaster
           position="top-center"
