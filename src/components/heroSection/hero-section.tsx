@@ -1,11 +1,14 @@
 import HeroContent from "./hero-content"
 import HeroFilter from "./hero-filter"
+import HeroFilterMobile from "./hero-filter-mobile"
+import HeroMedia from "./hero-media-wrapper"
 
 const HeroSection = () => {
   return (
-    <div className="w-318.25 h-173.75 mt-6 mb-13.75 flex justify-between relative">
+    <div className="max-w-318.25 w-[83%] max-xl:w-[95%] h-173.75 mt-6 mb-13.75 flex justify-between max-lg:flex-col max-lg:items-center relative mx-auto">
+      <HeroFilterMobile/>
       <HeroContent/>
-      <div className="border border-green-1 w-141.25 h-154.5 ml-4 mt-8"></div>
+      <HeroMedia/>
       <HeroFilter/>
     </div>
   )

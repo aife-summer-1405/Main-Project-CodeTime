@@ -5,9 +5,8 @@ import {
   reserveSchema,
   type ReserveFormValues,
 } from "@/schemas/reserve-schema";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import ListInput from "./list-inpt";
 import { useState } from "react";
 import DateInput from "./date-input";
@@ -118,7 +117,7 @@ export default function ReserveForm() {
       />
 
       <Button
-        className={"w-30! h-12 p-0 text-sm font-medium"}
+        className={"w-30! h-12 p-0 text-sm font-medium dark:bg-black-2 text-white-1"}
         type="submit"
         disabled={isSubmitting}
       >

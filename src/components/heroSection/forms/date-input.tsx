@@ -53,7 +53,7 @@ function DateInput<T extends FieldValues>({
   return (
     <div className={cn("flex flex-col gap-2.5 relative", className)}>
       <Popover>
-        <PopoverTrigger className={"text-right flex gap-1"}>
+        <PopoverTrigger className={"text-right flex gap-1 cursor-pointer"}>
           {title}
           <ChevronDownIcon className="size-6" />
         </PopoverTrigger>
@@ -79,6 +79,7 @@ function DateInput<T extends FieldValues>({
             }}
             className="rounded-lg"
           />
+
         </PopoverContent>
       </Popover>
 

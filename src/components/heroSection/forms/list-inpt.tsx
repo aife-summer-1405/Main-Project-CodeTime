@@ -60,7 +60,7 @@ function ListInput<T extends FieldValues>({
       >
         <SelectTrigger
           iconClassName="size-6"
-          className="h-6! cursor-pointer border-0 p-0 "
+          className="h-6! cursor-pointer border-0 p-0"
         >
           <span>{title}</span>
         </SelectTrigger>

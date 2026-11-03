@@ -52,3 +52,10 @@ export const HERO_FILTER = {
   ],
   search: "جستجو",
 };
+
+export const HERO_MEDIA = [
+  "/images/Hero1.jpg",
+  "/images/Hero2.png",
+  "/images/Hero3.png",
+  "/images/Hero4.png",
+];
