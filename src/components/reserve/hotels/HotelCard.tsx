@@ -99,7 +99,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                         </div>
                         <p className='text-blue-4 font-bold text-sm'>
                             {fa(hotel.price)} تومان
-                            <span className='text-gray-1 dark:text-white-1 font-normal text-xs'> /هر شب</span>
+                            <span className='text-[#111111] dark:text-white-1 font-normal text-xs'> /هر شب</span>
                         </p>
                     </div>
 

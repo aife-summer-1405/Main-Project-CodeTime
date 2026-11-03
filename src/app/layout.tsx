@@ -40,10 +40,10 @@ export default function RootLayout({
             <LandingArrowText/>
           </div>
           <ThemeToggle />
-          <Header />
+          {/* <Header /> */}
           {children}
          
-          <Footer />
+          {/* <Footer /> */}
         </ThemeProvider>
         <Toaster
           position="top-center"

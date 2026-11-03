@@ -23,7 +23,7 @@ const AuthButtons = () => {
 
 
   return (
-    <div className="flex items-center gap-8 text-lg text-blue-1 dark:text-blue-4 font-bold">
+    <div className="flex relative z-1000 items-center gap-8 text-lg text-blue-1 dark:text-blue-4 font-bold">
       {isLoggedIn ? (
         <>
           <Button
