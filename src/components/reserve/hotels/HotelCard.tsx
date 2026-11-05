@@ -22,7 +22,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                     onSelect(hotel.id)
                 }
             }}
-            className={`group cursor-pointer shadow-[0_0_6px_0_#0887CA40] w-full md:h-55 shrink-0 p-2 border hover:border-blue-4 hover:border-2 transition rounded-[32px] flex flex-col md:flex-row gap-3 ${selected ? 'border-blue-4 border-2' : ''}`}
+            className={`group cursor-pointer shadow-[0_0_6px_0_#0887CA40] w-full md:h-55 shrink-0 p-2 border hover:border-[#005EA4] hover:border-2 transition rounded-[32px] flex flex-col md:flex-row gap-3 ${selected ? 'border-[#005EA4] border-2' : ''}`}
         >
             <div className='relative h-52 md:h-full w-full md:w-64 xl:w-90 shrink-0'>
                 {/* {hotel.discount > 0 && (
@@ -97,7 +97,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                             <div className='border-t border-red-1 absolute top-[7px] left-0 w-full' />
                             {fa(200000)} تومان
                         </div>
-                        <p className='text-blue-4 font-bold text-sm'>
+                        <p className='text-[#0887CA] font-bold text-sm'>
                             {fa(hotel.price)} تومان
                             <span className='text-[#111111] dark:text-white-1 font-normal text-xs'> /هر شب</span>
                         </p>
@@ -106,7 +106,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                     <Link
                         href={`/hotels/${hotel.id}`}
                         onClick={(e) => e.stopPropagation()}
-                        className='w-full h-10 flex justify-center items-center rounded-[12px] border border-[#0887CA] text-[#0887CA] text-sm font-medium transition active:scale-[0.97] group-hover:bg-[#0887CA] group-hover:text-white'
+                        className='w-full h-9 flex justify-center items-center rounded-[12px] border border-[#0887CA] text-[#0887CA] text-sm font-medium transition active:scale-[0.97] group-hover:bg-[#0887CA] group-hover:text-white'
                     >
                         بررسی و رزرو
                     </Link>
