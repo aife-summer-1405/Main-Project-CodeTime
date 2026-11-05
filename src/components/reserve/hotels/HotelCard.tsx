@@ -71,7 +71,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                 <div className='flex flex-col gap-2'>
                     <h2 className='text-[#060425] dark:text-white-1 font-bold text-base'>{hotel.title}</h2>
                     <p className='flex items-center gap-1.5 text-gray-1 dark:text-white-1 text-xs w-full'>
-                        <MapPin size={20} className='shrink-0' />
+                        <img className='h-5 w-5' src="/images/Loc.svg" alt="" />
                         <span className='truncate w-full'>{hotel.address}</span>
                     </p>
                 </div>
@@ -79,7 +79,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                 <i className='w-full border-t' />
 
                 <p className='flex items-center dark:text-white-1 gap-1.5 text-gray-1 text-xs'>
-                    <Moon size={14} />
+                    <img className='h-5 w-5' src="/images/alarmclock.svg" alt="" />
                     10 شب
                 </p>
 
