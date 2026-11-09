@@ -8,7 +8,7 @@ const HeroFilterMobile = () => {
       <Search className="absolute size-5 top-3.5 right-4"/>
       <Input placeholder="جستجوی خانه ..." className="w-86.25 h-12 bg-[#DEDDE1] indent-10.5 text-xs!" />
       <Popover>
-        <PopoverTrigger className={"absolute left-2 top-2 flex items-center justify-center cursor-pointer bg-black-2 text-white-1 size-8 rounded-[8px]"}>
+        <PopoverTrigger className={"absolute left-2 top-2 flex items-center justify-center cursor-pointer bg-black-2! text-white-1 size-8 rounded-[8px]"}>
           <Filter className="size-5" />
         </PopoverTrigger>
         <PopoverContent className={"w-fit"}></PopoverContent>

@@ -1,5 +1,5 @@
 "use client";
-import { Underline1 } from "@/components/svgs/nav-underline";
+import { NavUnderlineMobile, Underline1 } from "@/components/svgs/underline";
 import LandingTitle from "../landing-titles";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -20,7 +20,7 @@ const BuySellSection = () => {
 
   return (
     <div className="mt-17.75 mb-40">
-      <div className="ml-23.5 flex flex-col gap-6 mr-23.5">
+      <div className="mx-23.5 max-[600px]:m-0 flex flex-col max-[820px]:items-center gap-6">
         <LandingTitle
           className="font-medium"
           text="خرید و فروش هوشمند، با بهترین پیشنهادات و قیمت‌های بی‌نظیر!"
@@ -30,20 +30,20 @@ const BuySellSection = () => {
             {BUY_SELL.map((item) => (
               <div key={item} className="group flex items-center gap-3">
                 <RadioGroupItem
-                  className={"peer hidden"}
+                  className="peer"
                   value={item}
                   id={item}
                 />
 
                 <div className="flex flex-col items-center justify-end relative">
                   <Label
-                    className="flex justify-center h-10.25 cursor-pointer group-has-data-checked:text-xl group-has-data-checked:font-bold"
+                    className="flex justify-center h-10.25 cursor-pointer max-md:text-sm group-has-data-checked:text-xl max-md:group-has-data-checked:text-md group-has-data-checked:font-bold"
                     htmlFor={item}
                   >
                     {item}
                   </Label>
-                  <div className="opacity-0 group-has-data-checked:opacity-100  group-has-data-checked:static absolute transition-opacity duration-500">
-                    <Underline1 />
+                  <div className="opacity-0 scale-x-300 group-has-data-checked:opacity-100  group-has-data-checked:static absolute transition-opacity duration-500">
+                    <NavUnderlineMobile />
                   </div>
                 </div>
               </div>
@@ -62,10 +62,10 @@ const BuySellSection = () => {
       </div>
 
       <div
-        className="max-[820px]:hidden bg-linear-[0.32deg,rgba(245,245,245,0.6)_0.27%,rgba(227,242,255,0.6)_49.99%,rgba(245,245,245,0.6)_99.71%]
+        className="max-lg:hidden bg-linear-[0.32deg,rgba(245,245,245,0.6)_0.27%,rgba(227,242,255,0.6)_49.99%,rgba(245,245,245,0.6)_99.71%]
                   dark:bg-linear-[0.32deg,rgba(18,18,18,0.3)_0.27%,rgba(40,165,230,0.15)_49.99%,rgba(18,18,18,0.3)_99.71%] flex items-center gap-4 pr-23.5"
       >
-        <SlideButtons swiper={swiper}/>
+        <SlideButtons swiper={swiper} />
         <Swiper
           dir="rtl"
           slidesPerView={4}
@@ -75,7 +75,7 @@ const BuySellSection = () => {
           className="w-full"
           slidesPerGroup={1}
           breakpoints={{
-            0:{
+            0: {
               slidesPerView: 1.6,
               spaceBetween: 10,
             },

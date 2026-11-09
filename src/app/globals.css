@@ -143,6 +143,16 @@
   }
 }
 
+/* * {
+  outline: 1px solid red;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+} */
+
 /* swiper */
 
 .swiper .swiper-pagination {
@@ -159,4 +169,10 @@
 .swiper .swiper-pagination-bullet-active {
   background: #f5f5f5 !important;
   opacity: 1 !important;
+}
+
+@media (max-width: 1023) {
+  .swiper .swiper-pagination {
+    bottom: 10px !important;
+  }
 }

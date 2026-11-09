@@ -1,11 +1,11 @@
 import { HERO_FILTER } from "@/constants/hero-section";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import ReserveForm from "./forms/reserve-form";
-import { Underline2 } from "../svgs/nav-underline";
+import { Underline2 } from "../svgs/underline";
 
 const HeroFilter = () => {
   return (
-    <div className="max-lg:hidden text-black-2 absolute left-38.75 bottom-20 w-255 h-35 rounded-[8px_64px_8px_64px] shadow-[8px_0px_20px_0px_#0887CA4D] bg-white-1">
+    <div className="max-lg:hidden text-black-2 absolute left-38.75 max-xl:left-10 max-[1105px]:-left-5! bottom-20 w-255 h-35 rounded-[8px_64px_8px_64px] shadow-[8px_0px_20px_0px_#0887CA4D] bg-white-1">
       <Tabs defaultValue={HERO_FILTER.options[3].value} className="w-full">
         <TabsList
           className={"w-fit p-0 mt-2 mb-5.5 mx-auto gap-7 dark:bg-white-1"}

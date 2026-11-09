@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const HeroContent = () => {
   return (
-    <div className="w-130.5 h-93.5 mt-11.5 ">
+    <div className="w-full max-w-130.5 h-93.5 mt-11.5 mx-auto">
       <div className="relative w-fit max-xl:w-80.25 max-lg:mx-auto">
         <h1 className="text-[50px] max-xl:text-[32px] font-black w-[320px] max-xl:w-52.75 text-black-2 dark:text-white-1 mb-9">
           {HERO_CONTENT.title.title1}
@@ -16,7 +16,7 @@ const HeroContent = () => {
           {HERO_CONTENT.buttons.map((item) => (
             <Button
               key={item.href}
-              className={`${item.classname} ${item.variant === "outline"? "max-xl:hidden" : "mx-auto"} h-fit px-5 py-3`}
+              className={`${item.classname} ${item.variant === "outline" ? "max-xl:hidden" : "mx-auto"} h-fit px-5 py-3`}
               variant={item.variant}
               render={<Link href={item.href} />}
               nativeButton={false}

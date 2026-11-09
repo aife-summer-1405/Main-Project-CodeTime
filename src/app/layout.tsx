@@ -7,6 +7,7 @@ import Header from "@/components/header/header";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LandingArrow1, LandingArrow2 } from "@/components/svgs/landing-arrows";
 import LandingArrowText from "@/components/landing-arrow-text";
+import NavigationMobile from "@/components/landing-top/navigation-mobile/navigation-mobile";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,16 +23,23 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
+
+        <div className="sm:hidden fixed bottom-10 flex justify-center w-full z-999">
+          <NavigationMobile />
+        </div>
+
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <LandingArrow1 />
-          <div className="absolute top-110 flex flex-wrap gap-4 -rotate-90 origin-bottom-right">
+          <div className="max-lg:hidden">
+            <LandingArrow1 />
+          </div>
+          <div className="max-lg:hidden absolute top-110 flex flex-wrap gap-4 -rotate-90 origin-bottom-right">
             <LandingArrow2 />
-            <LandingArrowText/>
+            <LandingArrowText />
           </div>
           <ThemeToggle />
           <Header />

@@ -8,7 +8,7 @@ const AuthButtons = () => {
       <Link href={"/login"} className="h-fit">{HEADER_TEXTS.login}</Link>
       <Button
         className={
-          "w-35 h-12 max-md:w-16 max-md:h-10 text-lg max-md:text-sm  text-blue-1 font-bold dark:text-blue-4 bg-white-1 shadow-[0_0_6px_#0604254D] hover:bg-white-1"
+          "w-35 h-12 max-md:w-16 max-md:h-10 text-lg max-md:text-sm  text-blue-1 font-bold dark:text-blue-4 bg-white-1 shadow-[0_0_6px_#0604254D] hover:bg-white-1 z-99"
         }
         render={<Link href={"/register"} />}
         nativeButton={false}

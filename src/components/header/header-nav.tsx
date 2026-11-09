@@ -1,6 +1,6 @@
 "use client";
 import { HEADER_LINKS } from "@/constants/header";
-import {NavUnderline} from "../svgs/nav-underline";
+import {NavUnderline} from "../svgs/underline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
