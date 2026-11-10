@@ -1,7 +1,7 @@
 'use client'
 import { EyeClosed, EyeIcon } from 'lucide-react'
 import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
@@ -24,23 +24,39 @@ const LoginPage = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   })
+  const searchParams = useSearchParams()
+
+  const callbackUrl = searchParams.get('callbackUrl')
 
   const onSubmit = async (values: LoginFormData) => {
     try {
       const { data } = await loginUser(values)
-      console.log(values)
+
       localStorage.setItem('access_token', data.accessToken)
       localStorage.setItem('refresh_token', data.refreshToken)
+
       toast.success('با موفقیت وارد شدید')
-      router.push('/')
+
+      const redirectUrl =
+        callbackUrl?.startsWith('/') && !callbackUrl.startsWith('//')
+          ? callbackUrl
+          : '/'
+
+      router.replace(redirectUrl)
+
     } catch (err) {
-      const message = isAxiosError(err) ? err.response?.data?.message : undefined
+      const message = isAxiosError(err)
+        ? err.response?.data?.message
+        : undefined
+
       if (message === 'Invalid credentials') {
         return toast.error('ایمیل یا رمز عبور اشتباه است')
       }
+
       toast.error('مشکلی پیش آمده، دوباره تلاش کنید')
     }
   }
+
 
   return (
     <div className="w-full min-h-dvh bg-white-1 flex justify-center items-center p-1 dark:bg-[#121212]">

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Star, MapPin, Moon, ArrowUpLeft } from 'lucide-react'
-import { fa } from '@/lib/format'
+import { discountPercent, fa } from '@/lib/format'
 import { Hotel } from '@/lib/Api/house'
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
 }
 
 export default function HotelCard({ hotel, selected, onSelect }: Props) {
+    const percent = discountPercent(hotel.price, hotel.discounted_price)
     return (
         <div
             role='button'
@@ -22,30 +23,24 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                     onSelect(hotel.id)
                 }
             }}
-            className={`group cursor-pointer shadow-[0_0_6px_0_#0887CA40] w-full md:h-55 shrink-0 p-2 border hover:border-[#005EA4] hover:border-2 transition rounded-[32px] flex flex-col md:flex-row gap-3 ${selected ? 'border-[#005EA4] border-2' : ''}`}
+            className={`group cursor-pointer shadow-[0_0_6px_0_#0887CA40] w-full md:h-55  shrink-0 p-2 border hover:border-[#005EA4] hover:border-2 transition rounded-[32px] flex flex-col md:flex-row gap-3 ${selected ? 'border-[#005EA4] border-2' : ''}`}
         >
             <div className='relative h-52 md:h-full w-full md:w-64 xl:w-90 shrink-0'>
-                {/* {hotel.discount > 0 && (
+                
+                {hotel.discount_percentage > 0 && (
                     <>
                         <span className='absolute top-7 z-10 -right-6 bg-red-500 text-white text-xs font-bold px-1 py-1 rounded-tr-[4px] rounded-br-[4px]'>
-                            %{fa(hotel.discount)}
+                            %{fa(hotel.discount_percentage)}
                         </span>
                         <div
                             style={{ clipPath: 'polygon( 100% 100%, 0 100% ,0 0)' }}
                             className='absolute top-5 z-1 -right-6 bg-red-400 font-bold w-4 h-3'
                         />
                     </>
-                )} */}
-                <span className='absolute top-7 z-10 -right-6 bg-red-500 text-white text-xs font-bold px-1 py-1 rounded-tr-[4px] rounded-br-[4px]'>
-                    %11
-                </span>
-                <div
-                    style={{ clipPath: 'polygon( 100% 100%, 0 100% ,0 0)' }}
-                    className='absolute top-5 z-1 -right-6 bg-red-400 font-bold w-4 h-3'
-                />
+                )}
 
                 <div className='relative z-10 w-full h-full rounded-[24px] overflow-hidden'>
-                    {hotel.photos === undefined ? (
+                    {hotel.photos === null ? (
                         <img src={hotel.photos[0]} alt={hotel.title} className='w-full h-full object-cover' />
                     ) : (
                         <div className='w-full h-full object-cover from-lime-400 to-green-2 bg-linear-30'></div>
@@ -57,7 +52,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                     </div>
 
                     <Link
-                        href={`/hotels/${hotel.id}`}
+                        href={`/reserve/${hotel.id}`}
                         onClick={(e) => e.stopPropagation()}
                         aria-label='مشاهده'
                         className='absolute top-3 left-3 cursor-pointer text-white'
@@ -69,9 +64,10 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
 
             <div className='w-full min-w-0 h-full p-2 flex flex-col justify-between gap-3'>
                 <div className='flex flex-col gap-2'>
-                    <h2 className='text-[#060425] dark:text-white-1 font-bold text-base'>{hotel.title}</h2>
+                    <h2 className='text-[#060425] dark:text-white-1 font-bold text-base truncate'>{hotel.title}</h2>
                     <p className='flex items-center gap-1.5 text-gray-1 dark:text-white-1 text-xs w-full'>
-                        <img className='h-5 w-5' src="/images/Loc.svg" alt="" />
+                        <img className='h-5 w-5 block dark:hidden' src="/images/Loc.svg" alt="" />
+                        <img className='h-5 w-5 hidden dark:block' src="/images/LocD.svg" alt="" />
                         <span className='truncate w-full'>{hotel.address}</span>
                     </p>
                 </div>
@@ -79,24 +75,26 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                 <i className='w-full border-t' />
 
                 <p className='flex items-center dark:text-white-1 gap-1.5 text-gray-1 text-xs'>
-                    <img className='h-5 w-5' src="/images/alarmclock.svg" alt="" />
+                    <img className='h-5 w-5 block dark:hidden' src="/images/alarmclock.svg" alt="" />
+                    <img className='h-5 w-5 hidden dark:block' src="/images/alarmclockD.svg" alt="" />
                     10 شب
                 </p>
 
                 <div className='flex flex-col gap-3'>
                     <div className='flex flex-wrap items-center justify-between gap-x-3 gap-y-1'>
-                        {/* {hotel.discounted_price > 0 ? (
-                            <div className='text-gray-1 text-xs relative'>
-                                <div className='border-t border-red-1 absolute top-[5px] left-0 w-full' />
-                                {fa(hotel.discounted_price)} تومان
+                        {hotel.discounted_price === null ? (
+                            <div className='text-gray-1 dark:text-white-1 text-xs relative'>
+                                <div className='border-t border-red-1 absolute top-[7px] left-0 w-full' />
+                                {fa(200000)} تومان
                             </div>
                         ) : (
-                            <span />
-                        )} */}
-                        <div className='text-gray-1 dark:text-white-1 text-xs relative'>
-                            <div className='border-t border-red-1 absolute top-[7px] left-0 w-full' />
-                            {fa(200000)} تومان
-                        </div>
+                            <div className='text-gray-1 text-xs relative'>
+                                <div className='border-t border-red-1 absolute top-[5px] left-0 w-full' />
+                                {fa(Math.round(hotel.discounted_price))} تومان
+                            </div>
+
+                        )}
+
                         <p className='text-[#0887CA] font-bold text-sm'>
                             {fa(hotel.price)} تومان
                             <span className='text-[#111111] dark:text-white-1 font-normal text-xs'> /هر شب</span>
@@ -104,7 +102,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                     </div>
 
                     <Link
-                        href={`/hotels/${hotel.id}`}
+                        href={`/reserve/${hotel.id}`}
                         onClick={(e) => e.stopPropagation()}
                         className='w-full h-9 flex justify-center items-center rounded-[12px] border border-[#0887CA] text-[#0887CA] text-sm font-medium transition active:scale-[0.97] group-hover:bg-[#0887CA] group-hover:text-white'
                     >
@@ -112,6 +110,6 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                     </Link>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

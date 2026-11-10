@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { LandingArrow1, LandingArrow2 } from "@/components/svgs/landing-arrows";
 import LandingArrowText from "@/components/landing-arrow-text";
 import Footer from "@/components/footer/Footer";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Rahn kadeh",
@@ -34,15 +35,16 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LandingArrow1 />
+          <Suspense fallback={null}><LandingArrow1 /></Suspense>
           <div className="absolute top-110 flex flex-wrap gap-4 -rotate-90 origin-bottom-right">
-            <LandingArrow2 />
-            <LandingArrowText/>
+            <Suspense fallback={null}><LandingArrow2 /></Suspense>
+            <Suspense fallback={null}><LandingArrowText /></Suspense>
+            
           </div>
           <ThemeToggle />
           {/* <Header /> */}
           {children}
-         
+
           {/* <Footer /> */}
         </ThemeProvider>
         <Toaster

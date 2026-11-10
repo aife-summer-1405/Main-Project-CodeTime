@@ -8,13 +8,13 @@ import Categories from "@/components/landing-top/categories/categories";
 export default function Home() {
   return (
     <>
-      <main className="flex flex-col items-center">
+      <div className="flex flex-col items-center w-full overflow-x-clip">
         <HeroSection />
         <Categories />
         <PropertyCarousel />
         <FeaturedProperties />
         <TopComments />
-      </main>
+      </div>
     </>
   );
 }

@@ -60,7 +60,7 @@ export default function ReserveForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-wrap items-start gap-10 w-213 mx-auto"
+      className="flex flex-wrap items-start gap-10 w-213 max-w-full mx-auto"
     >
       <ListInput
         errors={errors}
@@ -100,7 +100,7 @@ export default function ReserveForm() {
         title="تاریخ خروج"
         className="w-23.75"
       />
-      
+
       <div className="h-13.5 border-r-2 border-black-2 opacity-20"></div>
 
       <ListInput

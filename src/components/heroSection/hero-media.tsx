@@ -18,7 +18,7 @@ const HeroMedia = () => {
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
 
   return (
-    <div className="rounded-[8px_100px_8px_100px] shadow-[0px_0px_40px_0px_#005EA433] z-0 w-141.25 max-lg:w-86.25 h-154.5 max-lg:h-116 max-lg:m-0  ml-4 mt-8 relative">
+    <div className="rounded-[8px_100px_8px_100px] shadow-[0px_0px_40px_0px_#005EA433] z-0 w-141.25 max-lg:w-full max-lg:max-w-86.25 h-154.5 max-lg:h-116 max-lg:m-0  ml-4 mt-8 relative">
       <div className="max-lg:hidden w-10 flex flex-col gap-2.5 absolute z-99 -left-5 top-1/2 -translate-y-1/2">
         <Button
           size={"icon"}

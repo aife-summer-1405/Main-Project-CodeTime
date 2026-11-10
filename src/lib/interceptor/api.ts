@@ -1,18 +1,23 @@
 import axios from 'axios'
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL
+const isBrowser = typeof window !== 'undefined'
 
 const api = axios.create({ baseURL, timeout: 15000 })
 
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('access_token')
-    if (token) config.headers.Authorization = `Bearer ${token}`
+    if (isBrowser) {
+        const token = localStorage.getItem('access_token')
+        if (token) config.headers.Authorization = `Bearer ${token}`
+    }
     return config
 })
 
 api.interceptors.response.use(
     (res) => res,
     async (error) => {
+        if (!isBrowser) return Promise.reject(error)
+
         const original = error.config
         const isAuthRequest = original?.url?.includes('auth/')
 

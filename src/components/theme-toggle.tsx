@@ -20,7 +20,7 @@ export function ThemeToggle() {
 
   return (
     <Button
-      className="fixed left-7 bottom-16 z-50 bg-white-1 hover:bg-white-1 dark:bg-blue-2 hover:dark:bg-blue-2 size-10 rounded-full shadow-[0_0_10px_#008FA440] hover:shadow-[0_0_10px_#008FA480] duration-500 cursor-pointer border-0"
+      className="fixed left-4 bottom-24 lg:left-7 lg:bottom-16 z-50 bg-white-1 hover:bg-white-1 dark:bg-blue-2 hover:dark:bg-blue-2 size-10 rounded-full shadow-[0_0_10px_#008FA440] hover:shadow-[0_0_10px_#008FA480] duration-500 cursor-pointer border-0"
       variant="outline"
       aria-label="تغییر تم"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}

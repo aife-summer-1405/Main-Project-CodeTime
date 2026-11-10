@@ -7,7 +7,7 @@ const LandingArrow1 = () => {
 
   return (
     <svg
-      className={`${pathName !== "/" ? "hidden" : ""} absolute left-[13%]`}
+      className={`${pathName !== "/" ? "hidden" : "hidden lg:block"} absolute left-[13%]`}
       width="686"
       height="411"
       viewBox="0 0 686 411"
@@ -35,7 +35,7 @@ const LandingArrow2 = () => {
 
   return (
     <svg
-      className={`${pathName !== "/" ? "hidden" : ""} rotate-90 abs relative top-3`}
+      className={`${pathName !== "/" ? "hidden" : "hidden lg:block"} rotate-90 abs relative top-3`}
       width="94"
       height="114"
       viewBox="0 0 94 114"

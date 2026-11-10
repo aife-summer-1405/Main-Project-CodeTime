@@ -46,7 +46,7 @@ export default function SiteFooter() {
   return (
     <footer dir="ltr" className="relative mt-12 w-full font-sans">
       <div className="flex w-full items-stretch">
-        <div className="relative min-w-0 flex-1 rounded-tl-[70px] bg-[#0862A5] px-4 pb-8 pt-10 sm:rounded-tl-[100px] sm:px-7 sm:pb-8 sm:pt-12 lg:rounded-tl-[130px] lg:px-10 xl:px-16">
+        <div className="relative min-w-0 flex-1 rounded-tl-[70px] bg-[#0862A5] px-4 pb-24 pt-10 sm:rounded-tl-[100px] sm:px-7 sm:pb-24 sm:pt-12 lg:rounded-tl-[130px] lg:px-10 lg:pb-8 xl:px-16">
           <div className="mx-auto max-w-350">
             <div className="grid grid-cols-1 gap-9 sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-[1.25fr_0.9fr_1.1fr_1.1fr] lg:gap-x-7 xl:gap-x-12">
               <div className="order-1 min-w-0 lg:order-4">

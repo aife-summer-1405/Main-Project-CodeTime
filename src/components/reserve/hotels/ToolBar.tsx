@@ -1,16 +1,14 @@
-import { MapPin } from 'lucide-react'
-
+import { MapPin } from "lucide-react";
 type Props = {
     query: string
     onQueryChange: (v: string) => void
     onOpenFilters: () => void
     onShowMap: () => void
 }
-
 export default function Toolbar({ query, onQueryChange, onOpenFilters, onShowMap }: Props) {
     return (
-        <div className='px-4 lg:pr-17 lg:pl-0 w-full flex flex-wrap items-center justify-between gap-3'>
-            <div className='flex items-center gap-2'>
+        <div className='w-full flex flex-col-reverse lg:flex-row lg:items-center gap-3'>
+            <div className='flex items-center justify-between gap-2 lg:justify-start'>
                 <button
                     type='button'
                     onClick={onOpenFilters}
@@ -31,14 +29,14 @@ export default function Toolbar({ query, onQueryChange, onOpenFilters, onShowMap
                 </button>
             </div>
 
-            <search className='flex-1 xl:w-90 sm:flex-none min-w-0 justify-center items-center pl-2 flex h-12 text-blue-4 text-sm pr-2.5 rounded-[16px] border border-blue-4'>
+            <search className='flex items-center lg:flex-1 min-w-0 pl-2 h-12 text-blue-4 text-sm pr-2.5 rounded-[16px] border border-blue-4'>
                 <input
                     type='text'
                     id='search'
                     value={query}
                     onChange={(e) => onQueryChange(e.target.value)}
                     placeholder='مقصدت کجاست ...'
-                    className='w-full sm:w-72 xl:w-120 min-w-0 outline-none h-full pl-2.5'
+                    className='w-full min-w-0 outline-none h-full pl-2.5'
                 />
                 <img src='/images/search.svg' className='h-5' alt='' />
             </search>

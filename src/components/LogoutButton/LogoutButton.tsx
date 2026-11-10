@@ -1,11 +1,8 @@
 'use client'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import toast from 'react-hot-toast'
 import { logoutUser } from '@/lib/Api/authApi'
 
 export default function LogoutButton() {
-    const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
 
     const handleLogout = async () => {
@@ -13,18 +10,13 @@ export default function LogoutButton() {
         setIsLoading(true)
 
         try {
-            const refreshToken = localStorage.getItem('refreshToken')
-            if (refreshToken) {
-                await logoutUser({ refreshToken })
-            }
-            toast.success('با موفقیت خارج شدید')
+            const refreshToken = localStorage.getItem('refresh_token')
+            if (refreshToken) await logoutUser({ refreshToken })
         } catch {
-            toast.error('خطا در ارتباط با سرور، از حساب خارج شدید')
         } finally {
-            localStorage.removeItem('accessToken')
-            localStorage.removeItem('refreshToken')
-            setIsLoading(false)
-            router.push('/login')
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('refresh_token')
+            window.location.assign('/')
         }
     }
 

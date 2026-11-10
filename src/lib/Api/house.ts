@@ -1,3 +1,5 @@
+import api from "../interceptor/api"
+
 export type Hotel = {
     id: string
     title: string
@@ -5,8 +7,8 @@ export type Hotel = {
     photos: string[]
     rate: number
     price: number
-    // still is not clear what is the type :|
-    discounted_price: string | number | null
+    discounted_price: number | null
+    discount_percentage: number
     tags: string[]
     last_updated: string
     capacity: number
@@ -17,14 +19,22 @@ export type Hotel = {
     rooms: number
     yard_type: string
     num_comments: number
-    discount_id: string
+    discount_id: string | null
     transaction_type: string
     sellerId: string
     sellerName: string
     caption: string
     bookings: number
-    favoriteId: string
+    favoriteId: string | null
     isFavorite: boolean
+}
+
+export type DiscountCode = {
+    id: string
+    house_id: string
+    code: string
+    discount_percentage: string
+    valid_until: string
 }
 
 export type HotelQuery = {
@@ -50,7 +60,10 @@ const SORTS: Record<string, { sort: string; order: string }> = {
     expensive: { sort: 'price', order: 'DESC' },
 }
 
-type ApiHotel = Omit<Hotel, 'rate' | 'price' | 'discounted_price' | 'photos' | 'tags' | 'rooms' | 'bathrooms' | 'parking'> & {
+type ApiHotel = Omit<
+    Hotel,
+    'rate' | 'price' | 'discounted_price' | 'discount_percentage' | 'photos' | 'tags' | 'rooms' | 'bathrooms' | 'parking'
+> & {
     rate: string
     price: string
     discounted_price: string | null
@@ -61,16 +74,49 @@ type ApiHotel = Omit<Hotel, 'rate' | 'price' | 'discounted_price' | 'photos' | '
     parking: number | null
 }
 
-const normalize = (h: ApiHotel): Hotel => ({
+const discountCache = new Map<string, Promise<number>>()
+
+export function getDiscountPercentage(id: string | null): Promise<number> {
+    if (!id) return Promise.resolve(0)
+
+    const cached = discountCache.get(id)
+    if (cached) return cached
+
+    const request = api
+        .get<DiscountCode>(`/api/discount-codes/${id}`)
+        .then(({ data }) => {
+            const expired = data.valid_until && new Date(data.valid_until) < new Date()
+            return expired ? 0 : Math.round(Number(data.discount_percentage)) || 0
+        })
+        .catch(() => {
+            discountCache.delete(id)
+            return 0
+        })
+
+    discountCache.set(id, request)
+    return request
+}
+
+const normalize = (h: ApiHotel): Hotel => {
+    const discounted = h.discounted_price == null ? null : Number(h.discounted_price)
+
+    return {
+        ...h,
+        rate: Number(h.rate) || 0,
+        price: Number(h.price) || 0,
+        discounted_price: discounted !== null && Number.isFinite(discounted) && discounted > 0 ? discounted : null,
+        discount_percentage: 0,
+        photos: h.photos ?? [],
+        tags: h.tags ?? [],
+        rooms: h.rooms ?? 0,
+        bathrooms: h.bathrooms ?? 0,
+        parking: h.parking ?? 0,
+    }
+}
+
+const withDiscount = async (h: Hotel): Promise<Hotel> => ({
     ...h,
-    rate: Number(h.rate) || 0,
-    price: Number(h.price) || 0,
-    discounted_price: h.discounted_price ? Number(h.discounted_price) : null,
-    photos: h.photos ?? [],
-    tags: h.tags ?? [],
-    rooms: h.rooms ?? 0,
-    bathrooms: h.bathrooms ?? 0,
-    parking: h.parking ?? 0,
+    discount_percentage: await getDiscountPercentage(h.discount_id),
 })
 
 export async function getHotels(q: HotelQuery, signal?: AbortSignal): Promise<Hotel[]> {
@@ -90,7 +136,13 @@ export async function getHotels(q: HotelQuery, signal?: AbortSignal): Promise<Ho
 
     const json = await res.json()
     const houses: ApiHotel[] = json.houses ?? json.data?.houses ?? []
-    return houses.map(normalize)
+    return Promise.all(houses.map((h) => withDiscount(normalize(h))))
+}
+
+export async function getHotelById(id: string): Promise<Hotel> {
+    const { data } = await api.get(`/api/houses/${id}`)
+
+    return withDiscount(normalize(data.house ?? data.data ?? data))
 }
 
 export const filterByCounts = (hotels: Hotel[], c: CountFilters): Hotel[] =>

@@ -5,7 +5,7 @@ import { Underline2 } from "../svgs/nav-underline";
 
 const HeroFilter = () => {
   return (
-    <div className="max-lg:hidden text-black-2 absolute left-38.75 bottom-20 w-255 h-35 rounded-[8px_64px_8px_64px] shadow-[8px_0px_20px_0px_#0887CA4D] bg-white-1">
+    <div className="max-lg:hidden text-black-2 absolute lg:left-1/2 lg:-translate-x-1/2 2xl:left-38.75 2xl:translate-x-0 bottom-20 w-[96%] max-w-255 2xl:w-255 h-35 rounded-[8px_64px_8px_64px] shadow-[8px_0px_20px_0px_#0887CA4D] bg-white-1">
       <Tabs defaultValue={HERO_FILTER.options[3].value} className="w-full">
         <TabsList
           className={"w-fit p-0 mt-2 mb-5.5 mx-auto gap-7 dark:bg-white-1"}
@@ -16,11 +16,11 @@ const HeroFilter = () => {
                 "group w-fit p-0 flex flex-col dark:data-active:text-blue-2 data-active:text-blue-2 data-active:hover:text-blue-2 data-active:text-base data-active:font-bold  dark:text-black-2 dark:hover:text-black-2 text-sm font-medium text-black-2 cursor-pointer"
               }
               key={item.value}
-              
+
               value={item.value}
             >
               {item.title}
-              <div aria-hidden="true" className="absolute -bottom-2 opacity-0  group-data-active:opacity-100 transition-opacity duration-300"> 
+              <div aria-hidden="true" className="absolute -bottom-2 opacity-0  group-data-active:opacity-100 transition-opacity duration-300">
                 <Underline2 />
               </div>
             </TabsTrigger>

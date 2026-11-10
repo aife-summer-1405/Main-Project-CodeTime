@@ -105,7 +105,7 @@ export default function PropertyCategorySlider() {
   return (
     <section
       dir="rtl"
-      className="w-full overflow-hidden px-2 py-10 sm:px-6"
+      className="w-full overflow-hidden px-2 py-20 sm:px-6"
     >
       <div className="mx-auto max-w-7xl">
         <header className="mb-7 text-center">

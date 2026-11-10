@@ -1,3 +1,5 @@
+'use client'
+import { useEffect, useState } from 'react'
 import { Hotel } from '@/lib/Api/house'
 import dynamic from 'next/dynamic'
 
@@ -14,7 +16,22 @@ type Props = {
     onBack: () => void
 }
 
+function useIsDesktop() {
+    const [isDesktop, setIsDesktop] = useState(false)
+    useEffect(() => {
+        const mq = window.matchMedia('(min-width: 1024px)')
+        const update = () => setIsDesktop(mq.matches)
+        update()
+        mq.addEventListener('change', update)
+        return () => mq.removeEventListener('change', update)
+    }, [])
+    return isDesktop
+}
+
 export default function MapPanel({ hotels, selectedId, visible, onSelect, onBack }: Props) {
+    const isDesktop = useIsDesktop()
+    const showMap = isDesktop || visible
+
     return (
         <div
             className={`${visible ? 'block' : 'hidden'} lg:block lg:self-start lg:max-h-[900px] lg:h-full isolate relative flex-1 lg:flex-none lg:w-[40%] xl:w-[50%] min-h-0 border-2 rounded-tr-[42px] rounded-tl-[8px] rounded-br-[8px] rounded-bl-[42px] overflow-hidden`}
@@ -27,7 +44,7 @@ export default function MapPanel({ hotels, selectedId, visible, onSelect, onBack
                 بازگشت به لیست
             </button>
 
-            <HotelsMap hotels={hotels} selectedId={selectedId} onSelect={onSelect} />
+            {showMap && <HotelsMap hotels={hotels} selectedId={selectedId} onSelect={onSelect} />}
         </div>
     )
 }

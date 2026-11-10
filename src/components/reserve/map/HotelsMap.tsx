@@ -11,7 +11,6 @@ const money = (n: number) => fa(n).replace(/٬/g, ',')
 const POPUP_OFFSET = 17
 const FONT = 'font-[family-name:IRANSansX,IRANSans,Vazirmatn,Tahoma,sans-serif]'
 
-// مرکز فرضی (وسط ایران) برای هتل‌هایی که مختصات ندارن
 const FALLBACK: [number, number] = [32.4279, 53.688]
 
 const coords = (h: Hotel): [number, number] => {
@@ -19,11 +18,11 @@ const coords = (h: Hotel): [number, number] => {
     const lng = Number(h.location?.lng)
     if (Number.isFinite(lat) && Number.isFinite(lng)) return [lat, lng]
 
-    
+
     let seed = 0
     for (const ch of String(h.id)) seed = (seed * 31 + ch.charCodeAt(0)) % 9973
     const angle = (seed % 360) * (Math.PI / 180)
-    const radius = 0.05 + (seed % 50) / 1000 
+    const radius = 0.05 + (seed % 50) / 1000
 
     return [FALLBACK[0] + Math.sin(angle) * radius, FALLBACK[1] + Math.cos(angle) * radius]
 }
@@ -121,11 +120,21 @@ function Controller({
 type Props = {
     hotels: Hotel[]
     selectedId: string | number | null
-    onSelect: (id:any) => void
+    onSelect: (id: any) => void
 }
 
 export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
     const markers: Markers = useRef({})
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+        return () => setMounted(false)
+    }, [])
+
+    if (!mounted) {
+        return <div className='absolute inset-0 animate-pulse bg-gray-100 dark:bg-[#1c1c1c]' />
+    }
 
     return (
         <MapContainer
@@ -156,16 +165,15 @@ export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
                         eventHandlers={{ click: () => onSelect(h.id) }}
                     >
                         <Popup className={POPUP} autoPan={false} closeButton={false} minWidth={200} maxWidth={300}>
-                            {/* عرض ثابت و ریسپانسیو: روی موبایل هیچ‌وقت از صفحه بیرون نمی‌زنه */}
                             <div dir='rtl' className='flex w-[min(272px,calc(100vw-96px))] gap-2'>
-                                {h.photos?.[0] ? (
+                                {h.photos?.[0] === undefined ? (
                                     <img
                                         src={h.photos[0]}
-                                        alt={h.title}
+                                        alt={''}
                                         className='h-[90px] w-[84px] shrink-0 rounded-lg object-cover min-[400px]:w-[110px]'
                                     />
                                 ) : (
-                                    <div className='h-[90px] w-[84px] shrink-0 rounded-lg bg-gray-200 min-[400px]:w-[110px]' />
+                                    <div className='h-[90px] w-[84px] shrink-0 rounded-lg bg-linear-30 from-lime-400 to-green-2 min-[400px]:w-[110px]' />
                                 )}
 
                                 <div className='flex h-[90px] min-w-0 flex-1 flex-col justify-between overflow-hidden py-[2px]'>
@@ -174,21 +182,18 @@ export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
                                     </h3>
 
                                     <div className='flex min-w-0 flex-wrap items-center justify-between gap-x-2 gap-y-0.5'>
-                                        {/* {h.discounted_price > 0 && (
-                                            <span className='text-[12px] leading-none text-gray-400 line-through decoration-red-500'>
-                                                {money(h.discounted_price)}تومان
-                                            </span>
-                                        )} */}
-                                        <span className='whitespace-nowrap text-[11px] leading-none text-gray-400 line-through decoration-red-500 min-[400px]:text-[12px]'>
-                                            {money(200000)}تومان
+
+                                        <span className='text-[12px] leading-none text-gray-400 line-through decoration-red-500'>
+                                            {money(h.discounted_price || 200000)} تومان
                                         </span>
+
                                         <span className='whitespace-nowrap text-[12px] font-bold leading-none text-[#0887CA] min-[400px]:text-[13px]'>
                                             {money(h.price)} تومان
                                         </span>
                                     </div>
 
                                     <Link
-                                        href={`/hotels/${h.id}`}
+                                        href={`/reserve/${h.id}`}
                                         className='flex h-6 items-center justify-center rounded-[8px] border border-[#0887CA] text-xs leading-none !text-[#0887CA] transition hover:bg-[#0887CA]/10'
                                     >
                                         جزییات رزرو
