@@ -6,10 +6,10 @@ import HotelInfo from './HotelInfo'
 import HotelTags from './HotelTags'
 import HotelAbout from './HotelAbout'
 import HotelComments from './comments/HotelComments'
-import HotelReserveCard from './HotelReserveCard'
 import SiteFooter from '@/components/footer/Footer'
 import { Comment } from '@/lib/Api/reserveDetail'
 import SimilarHotels from './SimilarHotels'
+import HotelReserveCard from './HotelReserveCard'
 interface IProps {
     hotel: Hotel
     comments: Comment[]

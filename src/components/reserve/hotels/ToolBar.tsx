@@ -12,7 +12,7 @@ export default function Toolbar({ query, onQueryChange, onOpenFilters, onShowMap
                 <button
                     type='button'
                     onClick={onOpenFilters}
-                    className='flex justify-center items-center gap-2 border border-blue-4 px-3.5 cursor-pointer active:scale-[0.9] transition py-2.5 rounded-[16px]'
+                    className='flex justify-center items-center gap-2 border border-blue-4 px-3.5 cursor-pointer active:scale-[0.9] transition py-3.5 rounded-[16px]'
                 >
                     <img src='/images/filter.svg' className='h-5' alt='' />
                     <h1 className='text-blue-4 text-sm whitespace-nowrap'>فیلتر های بیشتر</h1>

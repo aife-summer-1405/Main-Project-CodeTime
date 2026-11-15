@@ -1,3 +1,4 @@
+import { getUserId } from '../dashboard/dashboardApi'
 import api from '../interceptor/api'
 
 export interface IHotelDetail {
@@ -66,8 +67,20 @@ export const getCommentsByHouseId = async (houseId: number | string) => {
     return data
 }
 
-export async function getHouseById(id: string | number, params?: AbortSignal): Promise<IHotelDetail> {
-    const { data } = await api.get<IHotelDetail>(`/api/houses/${id}`, { params })
+
+export async function getHouseById(id: string | number, signal?: AbortSignal): Promise<IHotelDetail> {
+    const { data } = await api.get<IHotelDetail>(`/api/houses/${id}`, { signal })
     return data
 }
 
+export const addHotelToFavorites = async (houseId: string | number) => {
+    const userId = getUserId()
+    if (!userId) throw new Error('ابتدا وارد حساب کاربری شوید')
+    await api.post('/api/favorites', { house_id: Number(houseId), user_id: Number(userId) })
+    const house = await getHouseById(houseId)
+    return house.favoriteId
+}
+
+export const removeHotelFromFavorites = async (favoriteId: string) => {
+    await api.delete(`/api/favorites/${favoriteId}`)
+}

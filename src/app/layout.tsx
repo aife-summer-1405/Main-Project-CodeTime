@@ -11,6 +11,7 @@ import LandingArrowText from "@/components/landing-arrow-text";
 import Footer from "@/components/footer/Footer";
 import { Suspense } from "react";
 
+
 export const metadata: Metadata = {
   title: "Rahn kadeh",
   description: "Rahn kadeh website",
@@ -21,6 +22,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
+
   return (
     <html
       dir="rtl"
@@ -39,9 +43,9 @@ export default function RootLayout({
           <div className="absolute top-110 flex flex-wrap gap-4 -rotate-90 origin-bottom-right">
             <Suspense fallback={null}><LandingArrow2 /></Suspense>
             <Suspense fallback={null}><LandingArrowText /></Suspense>
-            
+
           </div>
-          <ThemeToggle />
+          
           {/* <Header /> */}
           {children}
 
@@ -59,6 +63,7 @@ export default function RootLayout({
           }}
         />
       </body>
+
     </html>
   );
 }

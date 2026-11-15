@@ -1,3 +1,4 @@
+import { ReserveHotel } from "@/app/(main)/reserve/[id]/startReserve/types/types"
 import api from "../interceptor/api"
 
 export type Hotel = {
@@ -74,6 +75,23 @@ type ApiHotel = Omit<
     parking: number | null
 }
 
+
+const FALLBACK_IMAGE = '/images/hotel-placeholder.jpg'
+
+export const toReserveHotel = (hotel: Hotel): ReserveHotel => {
+    const hasDiscount = hotel.discounted_price !== null && hotel.discounted_price < hotel.price
+
+    return {
+        id: hotel.id,
+        title: hotel.title,
+        address: hotel.address,
+        rating: hotel.rate,
+        image: hotel.photos[0] ?? FALLBACK_IMAGE,
+        capacity: Math.max(hotel.capacity, 1),
+        price: hasDiscount ? (hotel.discounted_price as number) : hotel.price,
+        discounted_price: hasDiscount ? hotel.price : null,
+    }
+}
 const discountCache = new Map<string, Promise<number>>()
 
 export function getDiscountPercentage(id: string | null): Promise<number> {

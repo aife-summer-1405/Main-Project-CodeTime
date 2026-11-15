@@ -109,7 +109,7 @@ const CountPicker = ({ label, value, onChange }: CountPickerProps) => {
                             aria-pressed={active}
                             onClick={() => onChange(n === 0 || active ? [] : [String(n)])}
                             className={`h-9 w-9 flex items-center justify-center rounded-full border text-xs font-bold cursor-pointer transition active:scale-[0.9] ${active
-                                ? 'bg-blue-4 border-blue-4 text-white'
+                                ? 'bg-[#0887CA80] border-[#10088F] text-[#10088F]'
                                 : n === 0
                                     ? 'border-blue-4/40 text-blue-4'
                                     : 'border-gray-1 text-[#060425] dark:text-white-1'

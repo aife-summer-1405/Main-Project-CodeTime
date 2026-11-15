@@ -3,7 +3,6 @@ import { HEADER_TEXTS } from "@/constants/header";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import LogoutButton from "../LogoutButton/LogoutButton";
 
 const TOKEN_KEY = "access_token";
 
@@ -28,12 +27,11 @@ const AuthButtons = () => {
         <>
           <Button
             className="w-35 h-12 text-lg text-blue-1 font-bold dark:text-blue-4 bg-white-1 shadow-[0_0_6px_#0604254D] hover:bg-white-1"
-            render={<Link href="/panel" />}
+            render={<Link href="/dashboard" />}
             nativeButton={false}
           >
             پنل کاربری
           </Button>
-          <LogoutButton />
         </>
       ) : (
         <>

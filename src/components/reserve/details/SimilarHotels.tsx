@@ -51,11 +51,11 @@ const SimilarHotels = ({ currentId, categoryName }: IProps) => {
                             className='flex gap-3 p-2 rounded-[16px] border border-[#0887CA1A] shadow-[0_0_10px_0_#005EA41A] hover:-translate-y-0.5 duration-300'
                         >
                             <div className='relative w-[104px] h-[92px] min-[420px]:w-[140px] min-[420px]:h-[100px] sm:w-[172px] sm:h-[108px] lg:w-[104px] lg:h-[92px] xl:w-[172px] xl:h-[108px] shrink-0'>
-                                {hotel.photos === undefined ? (
-                                    <img src={hotel.photos[0]} alt={hotel.title} className='w-full h-full object-cover rounded-[8px]' />
+                                <img src={hotel.photos[0]} alt={hotel.title} className='w-full h-full object-cover rounded-[8px]' />
+                                {/* {hotel.photos === undefined ? (
                                 ) : (
                                     <div className='w-full h-full object-cover from-lime-400 to-green-2 bg-linear-30 rounded-[8px]'></div>
-                                )}
+                                )} */}
                                 <div className='absolute top-2 right-2 flex items-center gap-1 text-white text-xs font-bold'>
                                     <Star size={14} color='white' />
                                     {hotel.rate.toLocaleString('fa-IR', { minimumFractionDigits: 1 })}

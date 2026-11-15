@@ -59,17 +59,17 @@ const HotelSlider = ({ photos, title }: IProps) => {
                             will-change-transform
                         '
                     >
-                        {src === undefined ? (
-                            <img
-                                src={src}
-                                alt={`${title} - تصویر ${toFa(i + 1)}`}
-                                loading={i === 0 ? 'eager' : 'lazy'}
-                                draggable={false}
-                                className='w-full h-full object-cover select-none'
-                            />
+                        <img
+                            src={src}
+                            alt={`${title} - تصویر ${toFa(i + 1)}`}
+                            loading={i === 0 ? 'eager' : 'lazy'}
+                            draggable={false}
+                            className='w-full h-full object-cover select-none'
+                        />
+                        {/* {src === undefined ? (
                         ) : (
                             <div className='w-full h-full from-lime-400 to-green-2 bg-linear-30 select-none' />
-                        )}
+                        )} */}
 
                         <span
                             className={`absolute bottom-3 left-3 sm:bottom-4 sm:left-4 flex items-center gap-1.5 rounded-lg bg-[#141828]/70 px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-[13px] text-white backdrop-blur-sm transition-opacity duration-500 ${activeIndex === i ? 'opacity-100' : 'opacity-0'

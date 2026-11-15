@@ -7,7 +7,7 @@ import MobileNav from "./MobileNav";
 const Header = () => {
   return (
     <>
-      <header className="w-[88.7%] h-13.75 mt-6 mx-auto flex justify-between">
+      <header className="w-[88.7%] h-13.75 mt-6 mx-auto flex justify-between max-w-[1920px] ">
         <div className="hidden lg:block">
           <Suspense fallback={null}><HeaderNav /></Suspense>
         </div>

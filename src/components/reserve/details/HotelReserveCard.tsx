@@ -1,10 +1,12 @@
 'use client'
 import { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import DatePicker, { DateObject } from 'react-multi-date-picker'
 import persian from 'react-date-object/calendars/persian'
 import persian_fa from 'react-date-object/locales/persian_fa'
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import type { Hotel } from '@/lib/Api/house'
+import { toApiDate } from '@/lib/Api/booking'
 
 interface IProps {
     hotel: Hotel
@@ -77,6 +79,8 @@ const GuestSelect = ({ max, value, onChange }: { max: number; value: number | nu
 )
 
 const HotelReserveCard = ({ hotel }: IProps) => {
+    const router = useRouter()
+    const pathname = usePathname()
     const [dates, setDates] = useState<DateObject[]>([])
     const [guests, setGuests] = useState<number | null>(null)
     const [activeField, setActiveField] = useState<'in' | 'out' | null>(null)
@@ -88,17 +92,17 @@ const HotelReserveCard = ({ hotel }: IProps) => {
         else setDates(val ? [val] : [])
     }
 
-    const canReserve = !!(checkIn && checkOut && guests)
+    const hasValidRange = !!(checkIn && checkOut && checkOut.toUnix() > checkIn.toUnix())
+    const canReserve = hasValidRange && !!guests
 
     const handleReserve = () => {
-        if (!canReserve) return
-
-        console.log({
-            houseId: hotel.id,
-            checkIn: checkIn.toDate().toISOString(),
-            checkOut: checkOut.toDate().toISOString(),
-            guests,
+        if (!canReserve || !guests) return
+        const query = new URLSearchParams({
+            checkIn: toApiDate(checkIn),
+            checkOut: toApiDate(checkOut),
+            guests: String(guests),
         })
+        router.push(`/reserve/${hotel.id}/startReserve?${query}`)
     }
 
     return (
@@ -164,15 +168,15 @@ const HotelReserveCard = ({ hotel }: IProps) => {
             <hr className='border-[#E0E0E0]' />
 
             <div className='flex flex-col gap-3'>
-                <p className='text-[14px] font-medium text-[#060425]'>
-                    قیمت کل با تخفیف
-                </p>
+                <p className='text-[14px] font-medium text-[#060425]'>قیمت کل با تخفیف</p>
 
-                <div className='flex flex-wrap items-center justify-between gap-2'>
-                    <div className='text-[#111111] text-sm font-bold relative'>
-                        <div className='border-t border-red-1 absolute top-[9px] left-0 w-full' />
-                        {hotel.discounted_price === null ? 3000000 : faNum(hotel.discounted_price)} تومان
-                    </div>
+                <div className={`flex flex-wrap items-center ${hotel.discounted_price === null ? 'justify-end':'justify-between'} gap-2`}>
+                    {hotel.discounted_price !== null && (
+                        <div className='text-[#111111] text-sm font-bold relative'>
+                            <div className='border-t border-red-1 absolute top-[9px] left-0 w-full' />
+                            {faNum(hotel.discounted_price)} تومان
+                        </div>
+                    )}
 
                     <span className='text-[16px] font-bold text-[#0A7FD6]'>{faNum(hotel.price)} تومان</span>
                 </div>
@@ -183,7 +187,7 @@ const HotelReserveCard = ({ hotel }: IProps) => {
                     type='button'
                     onClick={handleReserve}
                     disabled={!canReserve}
-                    className='w-full sm:w-[80%] h-12 rounded-[16px] bg-[#15977D] text-white text-[14px] font-bold cursor-pointer transition-all duration-300 hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed'
+                    className='w-full sm:w-[80%] h-12 rounded-[16px] bg-[#15977D] text-white text-[14px] font-bold cursor-pointer transition-all duration-300 hover:opacity-90 active:scale-[0.9] disabled:opacity-50 disabled:cursor-not-allowed'
                 >
                     همین الان رزرو کن
                 </button>

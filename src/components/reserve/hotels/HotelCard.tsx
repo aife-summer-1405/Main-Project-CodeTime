@@ -26,25 +26,25 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
             className={`group cursor-pointer shadow-[0_0_6px_0_#0887CA40] w-full md:h-55  shrink-0 p-2 border hover:border-[#005EA4] hover:border-2 transition rounded-[32px] flex flex-col md:flex-row gap-3 ${selected ? 'border-[#005EA4] border-2' : ''}`}
         >
             <div className='relative h-52 md:h-full w-full md:w-64 xl:w-90 shrink-0'>
-                
+
                 {hotel.discount_percentage > 0 && (
                     <>
-                        <span className='absolute top-7 z-10 -right-6 bg-red-500 text-white text-xs font-bold px-1 py-1 rounded-tr-[4px] rounded-br-[4px]'>
+                        <span className='absolute top-7 z-10 -right-7 bg-red-500 text-white text-xs font-bold px-1 py-1 rounded-tr-[4px] rounded-br-[4px]'>
                             %{fa(hotel.discount_percentage)}
                         </span>
                         <div
-                            style={{ clipPath: 'polygon( 100% 100%, 0 100% ,0 0)' }}
+                            style={{ clipPath: 'polygon( 100% 64%, 0 100% ,0 0)' }}
                             className='absolute top-5 z-1 -right-6 bg-red-400 font-bold w-4 h-3'
                         />
                     </>
                 )}
 
                 <div className='relative z-10 w-full h-full rounded-[24px] overflow-hidden'>
-                    {hotel.photos === null ? (
-                        <img src={hotel.photos[0]} alt={hotel.title} className='w-full h-full object-cover' />
+                    <img src={hotel.photos[0]} alt={hotel.title} className='w-full h-full object-cover' />
+                    {/* {hotel.photos === null ? (
                     ) : (
                         <div className='w-full h-full object-cover from-lime-400 to-green-2 bg-linear-30'></div>
-                    )}
+                    )} */}
 
                     <div className='absolute top-3 right-3 flex items-center gap-1 text-white text-xs font-bold'>
                         <span>{fa(hotel.rate)}</span>
@@ -81,12 +81,9 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                 </p>
 
                 <div className='flex flex-col gap-3'>
-                    <div className='flex flex-wrap items-center justify-between gap-x-3 gap-y-1'>
+                    <div className={`flex flex-wrap items-center ${hotel.discounted_price === null ? 'justify-end' : 'justify-between'} gap-x-3 gap-y-1`}>
                         {hotel.discounted_price === null ? (
-                            <div className='text-gray-1 dark:text-white-1 text-xs relative'>
-                                <div className='border-t border-red-1 absolute top-[7px] left-0 w-full' />
-                                {fa(200000)} تومان
-                            </div>
+                            ""
                         ) : (
                             <div className='text-gray-1 text-xs relative'>
                                 <div className='border-t border-red-1 absolute top-[5px] left-0 w-full' />

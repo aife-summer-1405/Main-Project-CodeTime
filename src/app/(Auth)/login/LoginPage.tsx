@@ -34,13 +34,13 @@ const LoginPage = () => {
 
       localStorage.setItem('access_token', data.accessToken)
       localStorage.setItem('refresh_token', data.refreshToken)
-
+      localStorage.setItem('userId',data.user?.id)
       toast.success('با موفقیت وارد شدید')
 
       const redirectUrl =
         callbackUrl?.startsWith('/') && !callbackUrl.startsWith('//')
           ? callbackUrl
-          : '/'
+          : '/dashboard'
 
       router.replace(redirectUrl)
 
