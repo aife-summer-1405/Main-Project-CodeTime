@@ -9,8 +9,11 @@ export interface CreatePaymentBody {
 }
 
 export interface Payment {
-    id: number
-    paymentUrl?: string
+    paymentUrl: string
+    transactionId: string | null
+    paymentId: string
+    amount: string
+    status: 'pending' | (string & {})
 }
 
 export async function createPayment(body: CreatePaymentBody, signal?: AbortSignal): Promise<Payment> {

@@ -6,7 +6,7 @@ export type NavItem = { label: string; href: string; icon: LucideIcon }
 
 export const currentRole: Role = 'buyer'
 
-export const currentUser = { name: 'غلام علی', phone: '09115556666', avatar: '' }
+// export const currentUser = { name: 'غلام علی', phone: '09115556666', avatar: '' }
 
 export const menus: Record<Role, NavItem[]> = {
     buyer: [

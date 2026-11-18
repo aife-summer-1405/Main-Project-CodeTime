@@ -30,7 +30,7 @@ const AuthButtons = () => {
             render={<Link href="/dashboard" />}
             nativeButton={false}
           >
-            پنل کاربری
+            داشبورد
           </Button>
         </>
       ) : (

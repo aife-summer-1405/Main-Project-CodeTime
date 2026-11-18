@@ -13,7 +13,7 @@ export const HEADER_LINKS = [
   },
   {
     title: "درباره ما",
-    href: "/about-us",
+    href: "/contact-us",
   },
 ] as const;
 

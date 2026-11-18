@@ -1,3 +1,4 @@
+import SafeImage from '@/functions/safeImage';
 import { Hotel } from '@/lib/Api/house'
 import React from 'react'
 
@@ -19,14 +20,14 @@ const HotelAbout = ({ hotel }: IProps) => {
             <div dir='ltr' className='w-full h-[200px] min-[480px]:h-[300px] lg:h-[450px] grid grid-cols-3 grid-rows-2 gap-1.5 sm:gap-2'>
                 {/* big one */}
                 <div className='col-span-2 row-span-2 rounded-[4px] rounded-bl-[24px] sm:rounded-bl-[40px] overflow-hidden' >
-                    <img src={hotel.photos[0]} className='w-full h-full object-cover' alt="" />
+                    <SafeImage src={hotel.photos?.[0]} className='w-full h-full object-cover' alt={hotel.title} />
                 </div>
 
                 <div className='  rounded-[4px] rounded-tr-[24px] sm:rounded-tr-[40px] overflow-hidden' >
-                    <img src={hotel.photos[1]} className='w-full h-full object-cover' alt="" />
+                    <SafeImage src={hotel.photos?.[1]} className='w-full h-full object-cover' alt="" />
                 </div>
                 <div className='  rounded-[4px] overflow-hidden' >
-                    <img src={hotel.photos[2]} className='w-full h-full object-cover' alt="" />
+                    <SafeImage src={hotel.photos?.[2]} className='w-full h-full object-cover' alt="" />
                 </div>
             </div>
             {/* why ? */}

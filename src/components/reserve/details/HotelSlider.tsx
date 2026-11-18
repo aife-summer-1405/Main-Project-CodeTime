@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css'
+import SafeImage from '@/functions/safeImage'
+
 
 interface IProps {
     photos: string[]
@@ -15,7 +17,7 @@ const MIN_SCALE = 0.88
 const MIN_OPACITY = 0.7
 
 const HotelSlider = ({ photos, title }: IProps) => {
-    const [activeIndex, setActiveIndex] = useState(Math.floor(photos.length / 2))
+    const [activeIndex, setActiveIndex] = useState(Math.floor((photos?.length ?? 0) / 2))
 
     if (!photos?.length) return null
 
@@ -52,24 +54,20 @@ const HotelSlider = ({ photos, title }: IProps) => {
             >
                 {photos.map((src, i) => (
                     <SwiperSlide
-                        key={src ?? i}
+                        key={`${i}-${src}`}
                         className='
                             relative !w-[88%] max-w-[880px] aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-3xl
                             md:!w-[70%] md:aspect-[16/7.2]
                             will-change-transform
                         '
                     >
-                        <img
+                        <SafeImage
                             src={src}
                             alt={`${title} - تصویر ${toFa(i + 1)}`}
                             loading={i === 0 ? 'eager' : 'lazy'}
                             draggable={false}
                             className='w-full h-full object-cover select-none'
                         />
-                        {/* {src === undefined ? (
-                        ) : (
-                            <div className='w-full h-full from-lime-400 to-green-2 bg-linear-30 select-none' />
-                        )} */}
 
                         <span
                             className={`absolute bottom-3 left-3 sm:bottom-4 sm:left-4 flex items-center gap-1.5 rounded-lg bg-[#141828]/70 px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-[13px] text-white backdrop-blur-sm transition-opacity duration-500 ${activeIndex === i ? 'opacity-100' : 'opacity-0'

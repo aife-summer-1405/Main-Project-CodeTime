@@ -4,15 +4,66 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { ChevronLeft, ChevronRight, Trash2 } from 'lucide-react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import type { Swiper as SwiperType } from 'swiper'
+import 'swiper/css'
 import Field from './Field'
 import { getErrorMessage, getUser, getUserId, updateUser, UpdateUserBody, uploadPicture } from '@/lib/dashboard/dashboardApi'
 
-type Picked = { id: string; url: string; file: File }
+type Avatar = { id: string; url: string }
 
-const defaultAvatar = '/images/avatars/1.png'
-const MAX_IMAGES = 8
+const defaultAvatars: Avatar[] = [1, 2, 3].map(n => ({ id: `default-${n}`, url: `/images/default-${n}.png` }))
+
+const serverId = 'server'
+const maxCustoms = 8
 
 const buttonBase = 'h-11 flex-1 rounded-xl text-sm transition disabled:opacity-60 sm:flex-none sm:px-8'
+const arrowBtn =
+    'flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#0087CA] bg-white text-[#0087CA] transition-all duration-300 active:scale-[0.9] disabled:cursor-default disabled:opacity-40 disabled:active:scale-100 dark:bg-transparent'
+
+const storageKey = (name: string) => `${name}_${getUserId()}`
+
+const cleanupFlag = 'profile_avatars_cleaned_v1'
+const cleanupOnce = () => {
+    if (localStorage.getItem(cleanupFlag)) return
+    Object.keys(localStorage)
+        .filter(key => key.startsWith('profile_avatars_') || key.startsWith('profile_avatar_selected_'))
+        .forEach(key => localStorage.removeItem(key))
+    localStorage.setItem(cleanupFlag, '1')
+}
+
+const readCustoms = (): Avatar[] => {
+    try {
+        return JSON.parse(localStorage.getItem(storageKey('profile_avatars')) ?? '[]')
+    } catch {
+        return []
+    }
+}
+
+const saveCustoms = (items: Avatar[]) =>
+    localStorage.setItem(storageKey('profile_avatars'), JSON.stringify(items.filter(item => item.id !== serverId)))
+
+const toDataUrl = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+        const image = new Image()
+        const objectUrl = URL.createObjectURL(file)
+        image.onload = () => {
+            const scale = Math.min(1, 400 / Math.max(image.width, image.height))
+            const canvas = document.createElement('canvas')
+            canvas.width = image.width * scale
+            canvas.height = image.height * scale
+            canvas.getContext('2d')?.drawImage(image, 0, 0, canvas.width, canvas.height)
+            URL.revokeObjectURL(objectUrl)
+            resolve(canvas.toDataURL('image/jpeg', 0.85))
+        }
+        image.onerror = reject
+        image.src = objectUrl
+    })
+
+const urlToFile = async (url: string) => {
+    const blob = await (await fetch(url)).blob()
+    return new File([blob], `avatar.${blob.type.split('/')[1] ?? 'png'}`, { type: blob.type })
+}
 
 export default function ProfileForm() {
     const {
@@ -21,14 +72,31 @@ export default function ProfileForm() {
         reset,
         formState: { errors, isSubmitting },
     } = useForm<UpdateUserBody>()
-    const [avatar, setAvatar] = useState(defaultAvatar)
-    const [savedAvatar, setSavedAvatar] = useState(defaultAvatar)
-    const [picked, setPicked] = useState<Picked[]>([])
-    const [selectedId, setSelectedId] = useState<string | null>(null)
+    const [picture, setPicture] = useState<string | null>(null)
+    const [customs, setCustoms] = useState<Avatar[]>([])
+    const [savedId, setSavedId] = useState(defaultAvatars[0].id)
+    const [selectedId, setSelectedId] = useState(defaultAvatars[0].id)
+    const [edge, setEdge] = useState({ start: true, end: true })
     const fileRef = useRef<HTMLInputElement>(null)
-    const listRef = useRef<HTMLDivElement>(null)
+    const swiperRef = useRef<SwiperType | null>(null)
+    const skipRef = useRef(false)
 
-    const selected = picked.find(item => item.id === selectedId)
+    const avatars = [...customs, ...defaultAvatars].filter((item, index, list) => list.findIndex(other => other.url === item.url) === index)
+    const avatarsRef = useRef(avatars)
+    avatarsRef.current = avatars
+    const selected = avatars.find(item => item.id === selectedId)
+
+    const updateEdge = (swiper: SwiperType) => setEdge({ start: swiper.isBeginning, end: swiper.isEnd })
+
+    const applyPicture = (url: string | null) => {
+        const stored = readCustoms()
+        const storedId = localStorage.getItem(storageKey('profile_avatar_selected'))
+        const knownId = [...stored, ...defaultAvatars].find(item => item.id === storedId)?.id
+        const id = knownId ?? (url ? serverId : defaultAvatars[0].id)
+        setCustoms(knownId || !url ? stored : [{ id: serverId, url }, ...stored])
+        setSavedId(id)
+        setSelectedId(id)
+    }
 
     const loadUser = async () => {
         const id = getUserId()
@@ -36,49 +104,76 @@ export default function ProfileForm() {
         try {
             const user = await getUser(id)
             reset({ firstName: user.firstName, lastName: user.lastName, email: user.email, phoneNumber: user.phoneNumber })
-            const picture = user.profilePicture ?? defaultAvatar
-            setSavedAvatar(picture)
-            setAvatar(picture)
-            setSelectedId(null)
+            setPicture(user.profilePicture ?? null)
+            applyPicture(user.profilePicture ?? null)
         } catch (error) {
             toast.error(getErrorMessage(error, 'دریافت اطلاعات کاربر با خطا مواجه شد'))
         }
     }
 
     useEffect(() => {
+        cleanupOnce()
         loadUser()
     }, [])
 
-    const onFile = (e: ChangeEvent<HTMLInputElement>) => {
+    useEffect(() => {
+        const swiper = swiperRef.current
+        const index = avatars.findIndex(item => item.id === selectedId)
+        if (!swiper || index < 0 || swiper.activeIndex === index) return
+        skipRef.current = true
+        swiper.slideTo(index, 400)
+    }, [selectedId, customs.length])
+
+    const onSlideChange = (swiper: SwiperType) => {
+        updateEdge(swiper)
+        if (skipRef.current) {
+            skipRef.current = false
+            return
+        }
+        const item = avatarsRef.current[swiper.activeIndex]
+        if (item) setSelectedId(item.id)
+    }
+
+    const onFile = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         e.target.value = ''
         if (!file) return
         if (!file.type.startsWith('image/')) return toast.error('فقط فایل تصویری مجاز است')
-        if (picked.length >= MAX_IMAGES) return toast.error(`حداکثر ${MAX_IMAGES} عکس می‌توانید اضافه کنید`)
-        const item = { id: crypto.randomUUID(), url: URL.createObjectURL(file), file }
-        setPicked(prev => [item, ...prev])
-        setSelectedId(item.id)
-        setAvatar(item.url)
-        listRef.current?.scrollTo({ left: 0, behavior: 'smooth' })
+        if (customs.length >= maxCustoms) return toast.error(`حداکثر ${maxCustoms} عکس می‌توانید اضافه کنید`)
+        try {
+            const url = await toDataUrl(file)
+            const existing = avatars.find(item => item.url === url)
+            if (existing) {
+                setSelectedId(existing.id)
+                return toast.error('این عکس قبلاً اضافه شده است')
+            }
+            const item = { id: `custom-${crypto.randomUUID()}`, url }
+            const next = [item, ...customs]
+            saveCustoms(next)
+            setCustoms(next)
+            setSelectedId(item.id)
+        } catch {
+            toast.error('افزودن عکس با خطا مواجه شد')
+        }
     }
 
-    const pickAvatar = (item: Picked) => {
-        setAvatar(item.url)
-        setSelectedId(item.id)
+    const removeAvatar = () => {
+        if (!selected) return
+        if (!selected.id.startsWith('custom-')) return toast.error('این عکس قابل حذف نیست')
+        const next = customs.filter(item => item.id !== selected.id)
+        saveCustoms(next)
+        setCustoms(next)
+        setSelectedId(next[0]?.id ?? defaultAvatars[0].id)
     }
-
-    const resetAvatar = () => {
-        setAvatar(savedAvatar)
-        setSelectedId(null)
-    }
-
-    const scroll = (dir: number) => listRef.current?.scrollBy({ left: dir * 120, behavior: 'smooth' })
 
     const onSubmit = async (values: UpdateUserBody) => {
         const id = getUserId()
         if (!id) return toast.error('ابتدا وارد حساب کاربری شوید')
         try {
-            if (selected) await uploadPicture(selected.file)
+            if (selected && selectedId !== savedId) {
+                await uploadPicture(await urlToFile(selected.url))
+                localStorage.setItem(storageKey('profile_avatar_selected'), selected.id)
+            }
             await updateUser(id, values)
             toast.success('اطلاعات با موفقیت ذخیره شد')
             loadUser()
@@ -89,7 +184,7 @@ export default function ProfileForm() {
 
     const onCancel = () => {
         reset()
-        resetAvatar()
+        applyPicture(picture)
     }
 
     return (
@@ -98,58 +193,67 @@ export default function ProfileForm() {
                 <h2 className='text-sm font-bold text-[#1A1A1A] dark:text-white'>عکس نمایه شما</h2>
 
                 <div className='flex items-center gap-4'>
-                    <img src={avatar} alt='' className='h-28 w-28 rounded-full object-cover sm:h-32 sm:w-32' />
-                    <div className='flex flex-col items-center gap-3'>
-                        <div className='flex items-center gap-2.5'>
-                            <button
-                                type='button'
-                                onClick={() => fileRef.current?.click()}
-                                className='rounded-full border cursor-pointer active:scale-[0.9] transition-all duration-300 border-dashed border-[#0087CA] px-4 py-2 text-xs text-[#0087CA]'
-                            >
-                                تغییر عکس
-                            </button>
-                            <button type='button' onClick={resetAvatar} className='cursor-pointer active:scale-[0.9] transition-all duration-300 text-[#E5484D]' aria-label='حذف عکس'>
-                                <Trash2 size={18} />
-                            </button>
-                        </div>
+                    <img src={selected?.url ?? defaultAvatars[0].url} alt='' className='h-28 w-28 rounded-full object-cover sm:h-32 sm:w-32' />
+                    <div className='flex items-center gap-2.5'>
+                        <button
+                            type='button'
+                            onClick={() => fileRef.current?.click()}
+                            className='cursor-pointer rounded-full border border-dashed border-[#0087CA] px-4 py-2 text-xs text-[#0087CA] transition-all duration-300 active:scale-[0.9]'
+                        >
+                            تغییر عکس
+                        </button>
+                        <button
+                            type='button'
+                            onClick={removeAvatar}
+                            className='cursor-pointer text-[#E5484D] transition-all duration-300 active:scale-[0.9]'
+                            aria-label='حذف عکس'
+                        >
+                            <Trash2 size={18} />
+                        </button>
                         <input ref={fileRef} type='file' accept='image/*' onChange={onFile} className='hidden' />
                     </div>
                 </div>
 
-                {picked.length > 0 && (
-                    <>
-                        <p className='text-xs text-[#55536D] dark:text-[#A1A1AA]'>یا میتونی یکی از عکس های زیر رو انتخاب کنی</p>
+                <p className='text-xs text-[#55536D] dark:text-[#A1A1AA]'>یا میتونی یکی از عکس های زیر رو انتخاب کنی</p>
 
-                        <div className='flex w-full max-w-xs items-center gap-2'>
-                            <button
-                                type='button'
-                                onClick={() => scroll(1)}
-                                className='flex cursor-pointer active:scale-[0.9] transition-all duration-300 h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#0887CA66] text-[#0087CA]'
-                            >
-                                <ChevronRight size={16} />
-                            </button>
-                            <div ref={listRef} className='flex flex-1 gap-3 overflow-x-auto'>
-                                {picked.map(item => (
-                                    <button
-                                        key={item.id}
-                                        type='button'
-                                        onClick={() => pickAvatar(item)}
-                                        className={`h-14 w-14 cursor-pointer active:scale-[0.9] transition-all duration-300 shrink-0 overflow-hidden rounded-full border-2 ${selectedId === item.id ? 'border-[#0087CA]' : 'border-transparent'}`}
-                                    >
-                                        <img src={item.url} alt='' className='h-full w-full object-cover' />
-                                    </button>
-                                ))}
-                            </div>
-                            <button
-                                type='button'
-                                onClick={() => scroll(-1)}
-                                className='flex cursor-pointer active:scale-[0.9] transition-all duration-300 h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#0887CA66] text-[#0087CA]'
-                            >
-                                <ChevronLeft size={16} />
-                            </button>
-                        </div>
-                    </>
-                )}
+                <div className='flex w-[300px] max-w-full items-center gap-2'>
+                    <button type='button' onClick={() => swiperRef.current?.slidePrev()} disabled={edge.start} aria-label='قبلی' className={arrowBtn}>
+                        <ChevronRight size={16} />
+                    </button>
+
+                    <Swiper
+                        dir='rtl'
+                        className='min-w-0 flex-1'
+                        slidesPerView={3}
+                        centeredSlides
+                        slideToClickedSlide
+                        spaceBetween={6}
+                        speed={400}
+                        onSwiper={swiper => {
+                            swiperRef.current = swiper
+                            updateEdge(swiper)
+                        }}
+                        onSlideChange={onSlideChange}
+                        onUpdate={updateEdge}
+                        onResize={updateEdge}
+                    >
+                        {avatars.map(item => (
+                            <SwiperSlide key={item.id} className='flex! items-center justify-center py-2'>
+                                <button
+                                    type='button'
+                                    aria-label='انتخاب عکس'
+                                    className='aspect-square w-full scale-[0.8] cursor-pointer overflow-hidden rounded-full transition-transform duration-300 [.swiper-slide-active_&]:scale-110'
+                                >
+                                    <img src={item.url} alt='' className='h-full w-full object-cover' />
+                                </button>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+
+                    <button type='button' onClick={() => swiperRef.current?.slideNext()} disabled={edge.end} aria-label='بعدی' className={arrowBtn}>
+                        <ChevronLeft size={16} />
+                    </button>
+                </div>
             </section>
 
             <section className='flex min-w-0 flex-col gap-4'>
@@ -191,14 +295,14 @@ export default function ProfileForm() {
                     <button
                         type='button'
                         onClick={onCancel}
-                        className={`${buttonBase} cursor-pointer active:scale-[0.9] transition-all duration-300 border border-[#BDBDBD] text-[#55536D] dark:border-[#2A2A2A] dark:text-[#A1A1AA]`}
+                        className={`${buttonBase} cursor-pointer border border-[#BDBDBD] text-[#55536D] transition-all duration-300 active:scale-[0.9] dark:border-[#2A2A2A] dark:text-[#A1A1AA]`}
                     >
                         انصراف
                     </button>
                     <button
                         type='submit'
                         disabled={isSubmitting}
-                        className={`${buttonBase} cursor-pointer active:scale-[0.9] transition-all duration-300 bg-[#10088F] text-white hover:opacity-90 dark:bg-[#0087CA]`}
+                        className={`${buttonBase} cursor-pointer bg-[#10088F] text-white transition-all duration-300 hover:opacity-90 active:scale-[0.9] dark:bg-[#0087CA]`}
                     >
                         {isSubmitting ? 'در حال ذخیره...' : 'اعمال تغییرات'}
                     </button>

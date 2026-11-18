@@ -27,7 +27,7 @@ function Avatar({ size, user }: { size: string; user: User | null }) {
     return (
         <span className={`flex shrink-0 items-center justify-center overflow-hidden rounded-full border-[3px] border-[#43D6B5] bg-white font-bold text-[#0069A6] dark:bg-[#121212] ${size}`}>
             {user?.profilePicture ? (
-                <img src={user.profilePicture} alt='' className='h-full w-full object-cover' />
+                <img src={user.profilePicture} alt='' className='h-full w-full' />
             ) : (
                 user?.firstName?.[0] ?? ''
             )}

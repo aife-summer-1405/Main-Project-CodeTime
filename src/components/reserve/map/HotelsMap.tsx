@@ -6,6 +6,8 @@ import L, { type Marker as LeafletMarker } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { fa } from '@/lib/format'
 import { Hotel } from '@/lib/Api/house'
+import SafeImage from '@/functions/safeImage'
+
 
 const money = (n: number) => fa(n).replace(/٬/g, ',')
 const POPUP_OFFSET = 17
@@ -69,6 +71,8 @@ const icon = (price: number, active: boolean) =>
         popupAnchor: [0, -POPUP_OFFSET],
         html: active ? dot : pin(price),
     })
+
+const THUMB = 'h-[90px] w-[84px] shrink-0 rounded-lg object-cover min-[400px]:w-[110px]'
 
 type Markers = MutableRefObject<Record<string, LeafletMarker | null>>
 
@@ -166,15 +170,7 @@ export default function HotelsMap({ hotels, selectedId, onSelect }: Props) {
                     >
                         <Popup className={POPUP} autoPan={false} closeButton={false} minWidth={200} maxWidth={300}>
                             <div dir='rtl' className='flex w-[min(272px,calc(100vw-96px))] gap-2'>
-                                {h.photos?.[0] === undefined ? (
-                                    <img
-                                        src={h.photos[0]}
-                                        alt={''}
-                                        className='h-[90px] w-[84px] shrink-0 rounded-lg object-cover min-[400px]:w-[110px]'
-                                    />
-                                ) : (
-                                    <div className='h-[90px] w-[84px] shrink-0 rounded-lg bg-linear-30 from-lime-400 to-green-2 min-[400px]:w-[110px]' />
-                                )}
+                                <SafeImage src={h.photos?.[0]} alt={h.title} className={THUMB} />
 
                                 <div className='flex h-[90px] min-w-0 flex-1 flex-col justify-between overflow-hidden py-[2px]'>
                                     <h3 className='truncate text-sm font-bold leading-[22px] text-[#060425] min-[400px]:text-base'>

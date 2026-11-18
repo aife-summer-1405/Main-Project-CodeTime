@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Star, MapPin, Moon, ArrowUpLeft } from 'lucide-react'
 import { discountPercent, fa } from '@/lib/format'
 import { Hotel } from '@/lib/Api/house'
+import SafeImage from '@/functions/safeImage'
 
 type Props = {
     hotel: Hotel
@@ -40,11 +41,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                 )}
 
                 <div className='relative z-10 w-full h-full rounded-[24px] overflow-hidden'>
-                    <img src={hotel.photos[0]} alt={hotel.title} className='w-full h-full object-cover' />
-                    {/* {hotel.photos === null ? (
-                    ) : (
-                        <div className='w-full h-full object-cover from-lime-400 to-green-2 bg-linear-30'></div>
-                    )} */}
+                    <SafeImage src={hotel.photos?.[0]} alt={hotel.title} className='w-full h-full object-cover' />
 
                     <div className='absolute top-3 right-3 flex items-center gap-1 text-white text-xs font-bold'>
                         <span>{fa(hotel.rate)}</span>
