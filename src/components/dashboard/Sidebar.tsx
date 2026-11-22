@@ -20,7 +20,7 @@ export default function Sidebar({ role, collapsible, onNavigate, onLogout }: Pro
             initial={false}
             animate={{ width: slim ? 78 : 210 }}
             transition={{ duration: 0.28, ease: 'easeInOut' }}
-            className='menuDashRight shadow-[0px_0px_8px_0px_#0887CA26] relative flex overflow-hidden overflow-y-scroll h-full flex-col rounded-3xl border border-[#DCEEF4] dark:border-[#2A2A2A] bg-[#F5F5F5] dark:bg-[#121212] p-3'
+            className='menuDashRight shadow-[0px_0px_8px_0px_#0887CA26] relative z-100000 flex overflow-hidden overflow-y-scroll h-full flex-col rounded-3xl border border-[#DCEEF4] dark:border-[#2A2A2A] bg-[#F5F5F5] dark:bg-[#121212] p-3'
         >
 
             <LogoType textSize={slim ? '10px' : '32px'} />

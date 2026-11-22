@@ -330,3 +330,19 @@
   width: 0;
   height: 0;
 }
+
+
+
+.dark .hotel-dark-tiles {
+    filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9);
+    transition: filter 0.25s ease;
+}
+
+.dark .hotel-popup .leaflet-popup-content-wrapper {
+    background-color: #252525 !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark .hotel-popup .leaflet-popup-content-wrapper::after {
+    border-top-color: #252525 !important;
+}

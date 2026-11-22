@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useEffect, useRef } from 'react'
@@ -13,9 +14,7 @@ type Props = {
 const DEFAULT_CENTER: Position = [36.5633, 53.0601]
 
 const tiles = (dark: boolean) =>
-    dark
-        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-        : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
 export default function LocationPicker({ value, onChange }: Props) {
     const container = useRef<HTMLDivElement>(null)
@@ -38,9 +37,28 @@ export default function LocationPicker({ value, onChange }: Props) {
             const start = initial.current ?? DEFAULT_CENTER
             map = L.map(container.current).setView(start, 14)
 
-            const layer = L.tileLayer(tiles(document.documentElement.classList.contains('dark')), {
-                attribution: '&copy; OpenStreetMap &copy; CARTO',
+            const isDark = () =>
+                document.documentElement.classList.contains('dark')
+
+            const layer = L.tileLayer(tiles(isDark()), {
+                attribution: '&copy; OpenStreetMap contributors',
             }).addTo(map)
+
+            const updateTheme = () => {
+                const dark = isDark()
+
+                layer.setUrl(tiles(dark))
+
+                const tileContainer = layer.getContainer()
+
+                if (tileContainer) {
+                    tileContainer.style.filter = dark
+                        ? 'invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9)'
+                        : 'none'
+                }
+            }
+
+            updateTheme()
 
             const marker = L.circleMarker(start, {
                 radius: 9,
@@ -55,8 +73,12 @@ export default function LocationPicker({ value, onChange }: Props) {
                 onChangeRef.current([e.latlng.lat, e.latlng.lng])
             })
 
-            observer = new MutationObserver(() => layer.setUrl(tiles(document.documentElement.classList.contains('dark'))))
-            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+            observer = new MutationObserver(updateTheme)
+
+            observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['class'],
+            })
         }
 
         init()

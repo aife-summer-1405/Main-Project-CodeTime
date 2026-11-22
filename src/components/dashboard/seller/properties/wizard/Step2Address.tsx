@@ -30,7 +30,7 @@ export default function Step2Address({ form, errors, update }: StepProps) {
                 </p>
             </div>
 
-            <div className='h-[260px] overflow-hidden rounded-[32px] rounded-tr-[4px] rounded-bl-[4px] border-4 border-white shadow-[0_0_12px_#0604252B] dark:border-[#242424] sm:h-[320px]'>
+            <div className='h-[260px] relative z-1 overflow-hidden rounded-[32px] rounded-tr-[4px] rounded-bl-[4px] border-4 border-white shadow-[0_0_12px_#0604252B] dark:border-[#242424] sm:h-[320px]'>
                 <LocationPicker value={position} onChange={([lat, lng]) => update({ lat, lng })} />
             </div>
         </div>
