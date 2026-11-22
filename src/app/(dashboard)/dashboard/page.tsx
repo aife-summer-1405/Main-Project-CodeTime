@@ -1,16 +1,7 @@
-import type { ComponentType } from 'react'
-import { notFound } from 'next/navigation'
 import BuyerOverview from '@/components/dashboard/buyer/BuyerOverview'
-import { currentRole, type Role } from '@/lib/dashboard/config'
-
-const overviews: Partial<Record<Role, ComponentType>> = {
-    buyer: BuyerOverview,
-}
-
+import SellerOverview from '@/components/dashboard/seller/SellerOverview'
+import RoleView from '@/components/dashboard/RoleView'
+export const instant = false
 export default function DashboardPage() {
-    const Overview = overviews[currentRole]
-
-    if (!Overview) notFound()
-
-    return <Overview />
+    return <RoleView views={{ buyer: <BuyerOverview />, seller: <SellerOverview /> }} />
 }

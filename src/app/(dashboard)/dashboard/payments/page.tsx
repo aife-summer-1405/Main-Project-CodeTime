@@ -1,11 +1,14 @@
-import DashboardSection from '@/components/dashboard/DashboardSection'
+import PageTitle from '@/components/dashboard/common/PageTitle'
+import PaymentsList from '@/components/dashboard/buyer/payments/PaymentsList'
+import { RoleGate } from '@/components/dashboard/RoleView'
 
 export default function PaymentsPage() {
     return (
         <div className='flex min-w-0 flex-col gap-5'>
-            <h1 className='text-base font-bold text-[#0087CA]'>••• پرداخت ها •••</h1>
-
-
+            <PageTitle>پرداخت ها</PageTitle>
+            <RoleGate allow={['buyer']}>
+                <PaymentsList />
+            </RoleGate>
         </div>
     )
 }

@@ -1,29 +1,40 @@
 'use client'
 
 import { useState, type ReactNode } from 'react'
+import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { logout } from '@/lib/dashboard/session'
 import Header from './Header'
 import Sidebar from './Sidebar'
 import LogoutModal from './components/LogoutModal'
-import type { Role } from '@/lib/dashboard/config'
+import { useRole } from './RoleProvider'
 
-export default function DashboardShell({ role, children }: { role: Role; children: ReactNode }) {
+export default function DashboardShell({ children }: { children: ReactNode }) {
+    const role = useRole()
+    const router = useRouter()
     const [drawer, setDrawer] = useState(false)
-    const [logout, setLogout] = useState(false)
+    const [logoutOpen, setLogoutOpen] = useState(false)
+    const [loggingOut, setLoggingOut] = useState(false)
+
+    const confirmLogout = async () => {
+        setLoggingOut(true)
+        await logout()
+        setLogoutOpen(false)
+        setLoggingOut(false)
+        toast.success('از حساب خارج شدید')
+        router.replace('/login')
+    }
 
     return (
         <>
-            <div dir='rtl' className='relative flex h-screen w-full gap-5 overflow-hidden bg-[#F5F5F5] dark:bg-[#121212] p-4 text-[#060425] dark:text-white sm:p-6 lg:pr-14'>
+            <div dir='rtl' className='relative flex h-dvh w-full gap-5 overflow-hidden bg-[#F5F5F5] dark:bg-[#121212] p-4 text-[#060425] dark:text-white sm:p-6 lg:pr-14'>
                 <img src='/images/dashboard/swoosh.svg' alt='' className='pointer-events-none absolute left-0 top-0 hidden h-[460px] w-full lg:block' />
                 <img src='/images/dashboard/hand.svg' alt='' className='absolute right-3 top-[190px] hidden w-9 lg:block' />
 
                 <div className='relative hidden shrink-0 lg:block'>
-                    <Sidebar
-                        role={role}
-                        collapsible
-                        onLogout={() => setLogout(true)}
-                    />
+                    <Sidebar role={role} collapsible onLogout={() => setLogoutOpen(true)} />
                 </div>
 
                 <div className='relative flex min-h-0 min-w-0 flex-1 flex-col gap-5'>
@@ -49,7 +60,7 @@ export default function DashboardShell({ role, children }: { role: Role; childre
                             exit={{ x: '100%' }}
                             transition={{ duration: 0.25 }}
                             onClick={(e) => e.stopPropagation()}
-                            className='absolute right-0 top-0 h-full bg-white dark:bg-[#121212] p-3'
+                            className='absolute right-0 top-0 h-full bg-white-1 dark:bg-[#121212] p-3'
                         >
                             <button
                                 type='button'
@@ -64,7 +75,7 @@ export default function DashboardShell({ role, children }: { role: Role; childre
                                 onNavigate={() => setDrawer(false)}
                                 onLogout={() => {
                                     setDrawer(false)
-                                    setLogout(true)
+                                    setLogoutOpen(true)
                                 }}
                             />
                         </motion.div>
@@ -72,7 +83,7 @@ export default function DashboardShell({ role, children }: { role: Role; childre
                 )}
             </AnimatePresence>
 
-            <LogoutModal open={logout} onClose={() => setLogout(false)} />
+            <LogoutModal open={logoutOpen} loading={loggingOut} onClose={() => setLogoutOpen(false)} onConfirm={confirmLogout} />
         </>
     )
 }

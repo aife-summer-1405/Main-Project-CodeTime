@@ -1,9 +1,9 @@
 import { LogOut } from 'lucide-react'
 import Modal from './Modal';
 
-type Props = { open: boolean; onClose: () => void; onConfirm: () => void }
+type Props = { open: boolean; onClose: () => void; onConfirm: () => void; loading?: boolean }
 
-export default function LogoutModal({ open, onClose, onConfirm }: Props) {
+export default function LogoutModal({ open, onClose, onConfirm, loading }: Props) {
     return (
         <Modal open={open} onClose={onClose} className='max-w-sm'>
             <div className='flex flex-col items-center gap-3 py-2 text-center'>
@@ -14,10 +14,11 @@ export default function LogoutModal({ open, onClose, onConfirm }: Props) {
                 <div className='mt-3 flex w-full gap-3'>
                     <button
                         type='button'
+                        disabled={loading}
                         onClick={onConfirm}
-                        className='h-10 flex-1 cursor-pointer rounded-xl bg-[#10088F] text-sm text-white transition-all duration-300 hover:opacity-90 active:scale-[0.9] dark:bg-[#0087CA]'
+                        className='h-10 flex-1 cursor-pointer rounded-xl bg-[#10088F] text-sm text-white transition-all duration-300 hover:opacity-90 active:scale-[0.9] disabled:opacity-60 dark:bg-[#0087CA]'
                     >
-                        بله
+                        {loading ? '...' : 'بله'}
                     </button>
                     <button
                         type='button'

@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Pencil, Settings } from 'lucide-react'
 import SecurityForm from './SecurityForm'
 import ProfileForm from './ProfileForm'
+import PageTitle from '@/components/dashboard/common/PageTitle'
+import { RoleGate } from '@/components/dashboard/RoleView'
 
 
 const tabs = [
@@ -11,13 +13,11 @@ const tabs = [
     { id: 'security', label: 'امنیت', icon: Settings },
 ] as const
 
-export default function AccountPage() {
+export function AccountPage() {
     const [active, setActive] = useState<(typeof tabs)[number]['id']>('profile')
 
     return (
         <div className='flex min-w-0 flex-col gap-5'>
-            <h1 className='text-base font-bold text-[#0087CA]'>••• اطلاعات کاربری •••</h1>
-
             <nav className='flex h-14 w-full items-center overflow-x-auto rounded-2xl bg-[#f5f5f5] px-3 shadow-[0px_0px_8px_0px_#0887CA26] dark:bg-[#121212]'>
                 <div className='flex items-center gap-2.5'>
                     {tabs.map(({ id, label, icon: Icon }) => (
@@ -40,6 +40,16 @@ export default function AccountPage() {
             <div className='rounded-2xl bg-[#f5f5f5] p-4 shadow-[0px_0px_8px_0px_#0887CA26] sm:p-6 dark:bg-[#121212]'>
                 {active === 'profile' ? <ProfileForm /> : <SecurityForm />}
             </div>
+        </div>
+    )
+}
+export default function page() {
+    return (
+        <div className='flex min-w-0 flex-col gap-5'>
+            <PageTitle>اطلاعات کاربری</PageTitle>
+            <RoleGate allow={['seller', 'buyer', 'admin']}>
+                <AccountPage />
+            </RoleGate>
         </div>
     )
 }

@@ -10,9 +10,9 @@ const HotelsMap = dynamic(() => import('@/components/reserve/map/HotelsMap'), {
 
 type Props = {
     hotels: Hotel[]
-    selectedId: number | null
+    selectedId: string | null
     visible: boolean
-    onSelect: (id: number) => void
+    onSelect: (id: string) => void
     onBack: () => void
 }
 

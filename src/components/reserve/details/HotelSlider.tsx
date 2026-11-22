@@ -5,9 +5,8 @@ import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css'
 import SafeImage from '@/functions/safeImage'
 
-
 interface IProps {
-    photos: string[]
+    photos?: string[] | null
     title: string
 }
 
@@ -17,9 +16,18 @@ const MIN_SCALE = 0.88
 const MIN_OPACITY = 0.7
 
 const HotelSlider = ({ photos, title }: IProps) => {
-    const [activeIndex, setActiveIndex] = useState(Math.floor((photos?.length ?? 0) / 2))
+    const list = photos ?? []
+    const [activeIndex, setActiveIndex] = useState(Math.floor(list.length / 2))
 
-    if (!photos?.length) return null
+    if (list.length === 0) {
+        return (
+            <div dir='rtl' className='w-full overflow-hidden py-6 sm:py-10'>
+                <div className='mx-auto aspect-[4/3] w-[88%] max-w-[880px] overflow-hidden rounded-2xl sm:rounded-3xl md:aspect-[16/7.2] md:w-[70%]'>
+                    <SafeImage src={null} alt={`${title} - بدون تصویر`} className='h-full w-full' />
+                </div>
+            </div>
+        )
+    }
 
     const updateSlides = (swiper: SwiperType) => {
         swiper.slides.forEach((slide) => {
@@ -41,7 +49,7 @@ const HotelSlider = ({ photos, title }: IProps) => {
                 centeredSlides
                 grabCursor
                 spaceBetween={12}
-                initialSlide={Math.floor(photos.length / 2)}
+                initialSlide={Math.floor(list.length / 2)}
                 breakpoints={{ 768: { spaceBetween: 24 } }}
                 onInit={updateSlides}
                 onProgress={updateSlides}
@@ -52,7 +60,7 @@ const HotelSlider = ({ photos, title }: IProps) => {
                 }}
                 onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
             >
-                {photos.map((src, i) => (
+                {list.map((src, i) => (
                     <SwiperSlide
                         key={`${i}-${src}`}
                         className='
@@ -87,7 +95,7 @@ const HotelSlider = ({ photos, title }: IProps) => {
                                 <circle cx='9' cy='9' r='1.5' />
                                 <path d='M21 15l-5-5L5 21' />
                             </svg>
-                            +{toFa(photos.length)}
+                            +{toFa(list.length)}
                         </span>
                     </SwiperSlide>
                 ))}

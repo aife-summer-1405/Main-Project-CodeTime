@@ -26,10 +26,10 @@ export default function Header({ onMenu }: { onMenu: () => void }) {
             </nav>
 
             <div className='mr-auto flex items-center gap-2'>
-                <button type='button' aria-label='اعلان ها' className={iconButton}>
+                <Link href='/dashboard/notifications' aria-label='اعلان ها' className={iconButton}>
                     <Bell size={17} />
                     <span className='absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#F04464]' />
-                </button>
+                </Link>
                 <ThemeToggleDashboard />
             </div>
         </header>

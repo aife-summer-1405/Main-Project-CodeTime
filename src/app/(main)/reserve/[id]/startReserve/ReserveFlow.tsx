@@ -1,7 +1,8 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import toast from 'react-hot-toast'
 import type { ContactFormData } from '@/lib/schemas/reserve'
 import type { Booking } from '@/lib/Api/booking'
 import type { Passenger, ReservationConfirmation, ReserveHotel, ReserveStepName } from './types/types'
@@ -21,8 +22,13 @@ interface IProps {
 
 const stepperIndex: Record<ReserveStepName, number> = { step1: 1, step2: 2, payment: 3, step3: 4 }
 
+const paymentParams = ['payment', 'bookingId', 'paymentId', 'status']
+
 const ReserveFlow = ({ hotel, checkIn, checkOut, guests }: IProps) => {
+    const router = useRouter()
+    const pathname = usePathname()
     const searchParams = useSearchParams()
+    const handled = useRef('')
     const [step, setStep] = useState<ReserveStepName>('step1')
     const [confirmation, setConfirmation] = useState<ReservationConfirmation | null>(null)
     const [passengers, setPassengers] = useState<Passenger[]>([])
@@ -34,9 +40,23 @@ const ReserveFlow = ({ hotel, checkIn, checkOut, guests }: IProps) => {
     }, [step])
 
     useEffect(() => {
-        if (searchParams.get('payment') !== 'success') return
+        const result = searchParams.get('payment')
+        if (result !== 'success' && result !== 'failed') return
 
         const bookingId = searchParams.get('bookingId')
+        const key = `${result}-${bookingId}-${searchParams.get('paymentId')}`
+        if (handled.current === key) return
+        handled.current = key
+
+        if (result === 'failed') {
+            toast.error('پرداخت ناموفق بود، دوباره تلاش کن')
+            const next = new URLSearchParams(searchParams.toString())
+            paymentParams.forEach((param) => next.delete(param))
+            const query = next.toString()
+            router.replace(query ? `${pathname}?${query}` : pathname)
+            return
+        }
+
         if (!bookingId) return
 
         try {
@@ -51,7 +71,7 @@ const ReserveFlow = ({ hotel, checkIn, checkOut, guests }: IProps) => {
         } catch {
             sessionStorage.removeItem(`reserve-confirmation-${bookingId}`)
         }
-    }, [searchParams, hotel.id])
+    }, [searchParams, hotel.id, router, pathname])
 
     return (
         <div className='mx-auto w-full max-w-[1920px] px-4 pb-10 sm:px-6 lg:px-10 xl:px-24'>

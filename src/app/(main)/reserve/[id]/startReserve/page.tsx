@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { StartReserveSkeleton } from '@/components/skeletons/SiteSkeletons'
 import { notFound } from 'next/navigation'
 import { isAxiosError } from 'axios'
 import ReserveFlow from './ReserveFlow'
@@ -29,7 +30,7 @@ const ReserveContent = async ({ params, searchParams }: IProps) => {
 }
 
 const StartReservePage = (props: IProps) => (
-    <Suspense fallback={<div className='min-h-[70dvh]' />}>
+    <Suspense fallback={<StartReserveSkeleton />}>
         <ReserveContent {...props} />
     </Suspense>
 )

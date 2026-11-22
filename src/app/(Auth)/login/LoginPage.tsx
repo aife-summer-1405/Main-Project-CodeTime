@@ -11,6 +11,7 @@ import AuthFloatingMenu from './popMenu/PopMenu'
 import LoginSlider from './slider/LoginSlider'
 import { loginSchema, LoginFormData } from '@/lib/schemas/auth'
 import { loginUser } from '@/lib/Api/authApi'
+import { saveRole } from '@/lib/dashboard/role'
 import GoogleButton from '@/components/auth/GoogleButton'
 
 const LoginPage = () => {
@@ -35,6 +36,8 @@ const LoginPage = () => {
       localStorage.setItem('access_token', data.accessToken)
       localStorage.setItem('refresh_token', data.refreshToken)
       localStorage.setItem('userId',data.user?.id)
+      localStorage.removeItem('user_role')
+      saveRole(data.user?.role ?? data.role)
       toast.success('با موفقیت وارد شدید')
 
       const redirectUrl =

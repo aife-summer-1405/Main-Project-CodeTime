@@ -7,6 +7,7 @@ import Toolbar from '@/components/reserve/hotels/ToolBar'
 import HotelList from '@/components/reserve/hotels/HotelList'
 import MapPanel from '@/components/reserve/map/MapPanel'
 import { useHotels } from '@/components/reserve/hotels/hooks/useHotels'
+import { ReserveListSkeleton } from '@/components/skeletons/SiteSkeletons'
 
 const one = (v: string | null) => (v ? [v] : [])
 
@@ -17,7 +18,7 @@ const Content = () => {
 
     const [filterOpen, setFilterOpen] = useState(false)
     const [showMap, setShowMap] = useState(false)
-    const [selectedId, setSelectedId] = useState<number | null>(null)
+    const [selectedId, setSelectedId] = useState<string | null>(null)
 
     const query = sp.get('q') ?? ''
     const [text, setText] = useState(query)
@@ -57,7 +58,7 @@ const Content = () => {
     const activeId = hotels.some((h) => h.id === selectedId) ? selectedId : null
     const selectedHotel = hotels.find((h) => h.id === activeId)
 
-    const select = (id: number) => {
+    const select = (id: string) => {
         const next = id === activeId ? null : id
         setSelectedId(next)
         if (next !== null && window.matchMedia('(max-width: 1023px)').matches) setShowMap(true)
@@ -112,7 +113,7 @@ const Content = () => {
 }
 
 const Page = () => (
-    <Suspense>
+    <Suspense fallback={<ReserveListSkeleton />}>
         <Content />
     </Suspense>
 )

@@ -2,26 +2,41 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import toast from 'react-hot-toast'
 import { ChevronDown, Landmark, List, LogOut, Settings, Wallet } from 'lucide-react'
-import { getUser, getUserId, User } from '@/lib/dashboard/dashboardApi'
+import { getErrorMessage, getUser, getUserId, type User } from '@/lib/dashboard/dashboardApi'
+import { getPayments, type Payment } from '@/lib/dashboard/paymentsApi'
+import { roleLabels, type Role } from '@/lib/dashboard/config'
 import NotificationModal from './components/NotificationModal'
-import LogoutModal from './components/LogoutModal'
-import TransactionsModal from './components/TransactionsModal'
+import TransactionsModal, { type Transaction } from './components/TransactionsModal'
+import ReceiptModal from './buyer/payments/ReceiptModal'
 
 type Props = {
+    role: Role
     slim?: boolean
     onLogout: () => void
     onNavigate?: () => void
 }
 
 type Menu = 'user' | 'wallet' | null
-type ModalName = 'logout' | 'notifications' | 'transactions' | null
+type ModalName = 'notifications' | 'transactions' | null
 
 const dropdown =
     'absolute bottom-full right-0 z-50 mb-2 w-[190px] overflow-hidden rounded-2xl border border-[#DCEEF4] bg-white py-1 shadow-lg dark:border-[#2A2A2A] dark:bg-[#121212]'
 
 const item =
     'flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-[11px] text-[#343343] transition-colors dark:text-[#D4D4D8] hover:bg-[#EAF6FA] dark:hover:bg-[#1C1C1C]'
+
+const toTransaction = (p: Payment): Transaction => {
+    const date = p.createdAt ? new Date(p.createdAt) : null
+    return {
+        id: p.id,
+        date: date ? date.toLocaleDateString('fa-IR', { day: 'numeric', month: 'long', year: 'numeric' }) : '—',
+        time: date ? date.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' }) : '—',
+        trackingCode: p.transactionId ?? '—',
+        amount: Number(p.amount) || 0,
+    }
+}
 
 function Avatar({ size, user }: { size: string; user: User | null }) {
     return (
@@ -35,18 +50,21 @@ function Avatar({ size, user }: { size: string; user: User | null }) {
     )
 }
 
-export default function UserCard({ slim, onLogout, onNavigate }: Props) {
+export default function UserCard({ role, slim, onLogout, onNavigate }: Props) {
     const [menu, setMenu] = useState<Menu>(null)
     const [modal, setModal] = useState<ModalName>(null)
     const [user, setUser] = useState<User | null>(null)
+    const [payments, setPayments] = useState<Payment[] | null>(null)
+    const [receipt, setReceipt] = useState<Payment | null>(null)
     const ref = useRef<HTMLDivElement>(null)
+    const isBuyer = role === 'buyer'
 
     const loadUser = useCallback(async () => {
         const id = getUserId()
         if (!id) return
         try {
             setUser(await getUser(id))
-        } catch { }
+        } catch {}
     }, [])
 
     useEffect(() => {
@@ -66,11 +84,23 @@ export default function UserCard({ slim, onLogout, onNavigate }: Props) {
     const name = user ? user.fullName || `${user.firstName} ${user.lastName}` : ''
     const phone = user?.phoneNumber ? `+98 ${user.phoneNumber.slice(1)}` : ''
 
-    const toggleMenu = (name: Exclude<Menu, null>) => setMenu(prev => (prev === name ? null : name))
+    const toggleMenu = (target: Exclude<Menu, null>) => setMenu((prev) => (prev === target ? null : target))
 
-    const openModal = (name: Exclude<ModalName, null>) => {
+    const openModal = (target: Exclude<ModalName, null>) => {
         setMenu(null)
-        setModal(name)
+        setModal(target)
+    }
+
+    const openTransactions = async () => {
+        openModal('transactions')
+        setPayments(null)
+        try {
+            const res = await getPayments(1, 10)
+            setPayments(res.payments)
+        } catch (e) {
+            toast.error(getErrorMessage(e, 'خطا در دریافت تراکنش‌ها'))
+            setPayments([])
+        }
     }
 
     const navigate = () => {
@@ -78,8 +108,8 @@ export default function UserCard({ slim, onLogout, onNavigate }: Props) {
         onNavigate?.()
     }
 
-    const confirmLogout = () => {
-        setModal(null)
+    const logoutClick = () => {
+        setMenu(null)
         onLogout()
     }
 
@@ -98,15 +128,7 @@ export default function UserCard({ slim, onLogout, onNavigate }: Props) {
                             </div>
                         </div>
 
-                        <Link href='/dashboard/payments' onClick={navigate} className={item}>
-                            <Wallet size={15} />
-                            شارژ کردن کیف پول
-                        </Link>
-                        <button type='button' onClick={() => openModal('notifications')} className={item}>
-                            <Settings size={15} />
-                            تنظیمات نوتیفیکیشن
-                        </button>
-                        <button type='button' onClick={() => openModal('logout')} className={item}>
+                        <button type='button' onClick={logoutClick} className={item}>
                             <LogOut size={15} />
                             خروج از حساب
                         </button>
@@ -122,7 +144,7 @@ export default function UserCard({ slim, onLogout, onNavigate }: Props) {
 
                     {!slim && (
                         <>
-                            <span className='text-[9px] text-[#777] dark:text-[#A1A1AA]'>خریدار</span>
+                            <span className='text-[9px] text-[#777] dark:text-[#A1A1AA]'>{roleLabels[role]}</span>
                             <span className='flex items-center gap-1 text-sm font-bold text-[#0069A6] dark:text-[#38A9E0]'>
                                 <ChevronDown size={14} className={`transition-transform ${menu === 'user' ? 'rotate-180' : ''}`} />
                                 {name || '...'}
@@ -132,43 +154,51 @@ export default function UserCard({ slim, onLogout, onNavigate }: Props) {
                 </button>
             </div>
 
-            <div className='relative'>
-                {menu === 'wallet' && (
-                    <div className={dropdown}>
-                        <Link href='/dashboard/payments' onClick={navigate} className={item}>
-                            <Wallet size={15} />
-                            شارژ کردن کیف پول
-                        </Link>
-                        <button type='button' onClick={() => openModal('transactions')} className={item}>
-                            <List size={15} />
-                            لیست تراکنش ها
-                        </button>
-                        <Link href='/dashboard/payments?type=withdraw' onClick={navigate} className={item}>
-                            <Landmark size={15} />
-                            برداشت وجه
-                        </Link>
-                    </div>
-                )}
-
-                <button
-                    type='button'
-                    onClick={() => toggleMenu('wallet')}
-                    title={slim ? 'کیف پول' : undefined}
-                    className={`flex w-full cursor-pointer items-center rounded-2xl bg-[#DDF0F5] py-3 text-[#55536D] dark:bg-[#1C1C1C] dark:text-[#D4D4D8] ${slim ? 'justify-center' : 'justify-between px-4'}`}
-                >
-                    {!slim && (
-                        <span className='text-start'>
-                            <span className='block text-xs font-bold text-[#0069A6] dark:text-[#38A9E0]'>کیف پول</span>
-                            <span className='block text-[10px]'>عدم موجودی</span>
-                        </span>
+            {isBuyer && (
+                <div className='relative'>
+                    {menu === 'wallet' && (
+                        <div className={dropdown}>
+                            <Link href='/dashboard/payments' onClick={navigate} className={item}>
+                                <Wallet size={15} />
+                                شارژ کردن کیف پول
+                            </Link>
+                            <button type='button' onClick={openTransactions} className={item}>
+                                <List size={15} />
+                                لیست تراکنش ها
+                            </button>
+                            <Link href='/dashboard/payments?type=withdraw' onClick={navigate} className={item}>
+                                <Landmark size={15} />
+                                برداشت وجه
+                            </Link>
+                        </div>
                     )}
-                    <Wallet size={18} />
-                </button>
-            </div>
 
-            <LogoutModal open={modal === 'logout'} onClose={() => setModal(null)} onConfirm={confirmLogout} />
+                    <button
+                        type='button'
+                        onClick={() => toggleMenu('wallet')}
+                        title={slim ? 'کیف پول' : undefined}
+                        className={`flex w-full cursor-pointer items-center rounded-2xl bg-[#DDF0F5] py-3 text-[#55536D] dark:bg-[#1C1C1C] dark:text-[#D4D4D8] ${slim ? 'justify-center' : 'justify-between px-4'}`}
+                    >
+                        {!slim && (
+                            <span className='text-start'>
+                                <span className='block text-xs font-bold text-[#0069A6] dark:text-[#38A9E0]'>کیف پول</span>
+                                <span className='block text-[10px]'>عدم موجودی</span>
+                            </span>
+                        )}
+                        <Wallet size={18} />
+                    </button>
+                </div>
+            )}
+
             <NotificationModal open={modal === 'notifications'} onClose={() => setModal(null)} />
-            <TransactionsModal open={modal === 'transactions'} onClose={() => setModal(null)} />
+            <TransactionsModal
+                open={modal === 'transactions'}
+                onClose={() => setModal(null)}
+                loading={payments === null}
+                transactions={(payments ?? []).map(toTransaction)}
+                onViewReceipt={(tx) => setReceipt(payments?.find((p) => p.id === tx.id) ?? null)}
+            />
+            <ReceiptModal payment={receipt} onClose={() => setReceipt(null)} />
         </div>
     )
 }

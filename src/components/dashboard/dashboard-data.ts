@@ -43,10 +43,5 @@ export const dashboardLinks = [
 ]
 
 
-export const reservationRows = [
-    { id: 1, hotel: 'هتل سرایان رشت', date: '۱۲ مرداد ۱۴۰۵', time: '۱۴:۳۳', price: '۱,۸۰۰,۰۰۰', status: 'تکمیل شده', type: 'success', image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=120&h=120&fit=crop' },
-    { id: 2, hotel: 'هتل سرایان رشت', date: '۱۲ مرداد ۱۴۰۵', time: '۱۴:۳۳', price: '۱,۸۰۰,۰۰۰', status: 'در انتظار', type: 'pending', image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=120&h=120&fit=crop' },
-    { id: 3, hotel: 'هتل سرایان رشت', date: '۱۲ مرداد ۱۴۰۵', time: '۱۴:۳۳', price: '۱,۸۰۰,۰۰۰', status: 'لغو شده', type: 'cancel', image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=120&h=120&fit=crop' },
-    { id: 4, hotel: 'هتل سرایان رشت', date: '۱۲ مرداد ۱۴۰۵', time: '۱۴:۳۳', price: '۱,۸۰۰,۰۰۰', status: 'لغو شده', type: 'cancel', image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=120&h=120&fit=crop' },
-]
+// 
 

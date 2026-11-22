@@ -22,8 +22,16 @@ export type User = {
     lastName: string
     phoneNumber: string
     profilePicture: string | null
+    role?: string
 }
 
+export type FinanceDashboard = {
+    totalAmount: number
+    totalBookings: number
+    totalPayments: number
+    totalPerviousMonthAmount: number
+    totalCurrentMonthAmount: number
+}
 export type UpdateUserBody = Pick<User, 'email' | 'firstName' | 'lastName' | 'phoneNumber'>
 
 export const getUserId = () => {
@@ -37,6 +45,10 @@ export const getUserId = () => {
     }
 }
 
+export async function getFinanceDashboard(): Promise<FinanceDashboard> {
+    const res = await api.get('/api/seller/finance/dashboard')
+    return res.data
+}
 export const getErrorMessage = (error: unknown, fallback: string) =>
     (error as { response?: { data?: { message?: string } } })?.response?.data?.message ?? fallback
 
@@ -61,7 +73,16 @@ export const changePassword = async (body: { currentPassword: string; newPasswor
     const { data } = await api.put('/api/users/change-password', body)
     return data
 }
-export const getDashboardSummary = async () => {
-    const { data } = await api.get<DashboardSummary>('/api/dashboard/summary')
-    return data
+let summaryRequest: Promise<DashboardSummary> | null = null
+
+export const getDashboardSummary = () => {
+    summaryRequest ??= api
+        .get<DashboardSummary>('/api/dashboard/summary')
+        .then(({ data }) => data)
+        .finally(() => {
+            setTimeout(() => {
+                summaryRequest = null
+            }, 2000)
+        })
+    return summaryRequest
 }

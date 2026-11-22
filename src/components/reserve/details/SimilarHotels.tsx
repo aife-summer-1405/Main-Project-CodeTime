@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ArrowUpLeft, ChevronLeft, MapPin, Star } from 'lucide-react'
 import { getHotels, Hotel } from '@/lib/Api/house'
+import SafeImage from '@/functions/safeImage'
 
 interface IProps {
     currentId: string
@@ -10,7 +11,6 @@ interface IProps {
 }
 
 const emptyQuery = { query: '', destination: '', sort: '', minPrice: '', maxPrice: '' }
-const fallbackImage = '/images/Rectangle (4).png'
 
 const SimilarHotels = ({ currentId, categoryName }: IProps) => {
     const [hotels, setHotels] = useState<Hotel[]>([])
@@ -50,15 +50,16 @@ const SimilarHotels = ({ currentId, categoryName }: IProps) => {
                             href={`/reserve/${hotel.id}`}
                             className='flex gap-3 p-2 rounded-[16px] border border-[#0887CA1A] shadow-[0_0_10px_0_#005EA41A] hover:-translate-y-0.5 duration-300'
                         >
-                            <div className='relative w-[104px] h-[92px] min-[420px]:w-[140px] min-[420px]:h-[100px] sm:w-[172px] sm:h-[108px] lg:w-[104px] lg:h-[92px] xl:w-[172px] xl:h-[108px] shrink-0'>
-                                <img src={hotel.photos[0]} alt={hotel.title} className='w-full h-full object-cover rounded-[8px]' />
-                                {/* {hotel.photos === undefined ? (
-                                ) : (
-                                    <div className='w-full h-full object-cover from-lime-400 to-green-2 bg-linear-30 rounded-[8px]'></div>
-                                )} */}
+                            <div className='relative w-[104px] h-[92px] min-[420px]:w-[140px] min-[420px]:h-[100px] sm:w-[172px] sm:h-[108px] lg:w-[104px] lg:h-[92px] xl:w-[172px] xl:h-[108px] shrink-0 overflow-hidden rounded-[12px]'>
+                                <SafeImage
+                                    src={hotel.photos?.[0]}
+                                    alt={hotel.title || 'تصویر'}
+                                    draggable={false}
+                                    className='w-full h-full object-cover select-none rounded-[12px]'
+                                />
                                 <div className='absolute top-2 right-2 flex items-center gap-1 text-white text-xs font-bold'>
                                     <Star size={14} color='white' />
-                                    {hotel.rate.toLocaleString('fa-IR', { minimumFractionDigits: 1 })}
+                                    {Number(hotel.rate ?? 0).toLocaleString('fa-IR', { minimumFractionDigits: 1 })}
                                 </div>
                                 <ArrowUpLeft size={16} color='white' className='absolute top-2 left-2' />
                             </div>
@@ -73,7 +74,7 @@ const SimilarHotels = ({ currentId, categoryName }: IProps) => {
 
                                 <div className='border-t border-[#0887CA33] pt-2'>
                                     <p className='text-[#0887CA] text-xs sm:text-sm font-bold'>
-                                        {hotel.price.toLocaleString('fa-IR')} تومان
+                                        {Number(hotel.price ?? 0).toLocaleString('fa-IR')} تومان
                                     </p>
                                 </div>
                             </div>

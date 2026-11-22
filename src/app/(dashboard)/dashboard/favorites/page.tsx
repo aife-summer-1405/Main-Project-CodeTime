@@ -1,10 +1,14 @@
+import PageTitle from '@/components/dashboard/common/PageTitle'
+import FavoritesList from '@/components/dashboard/buyer/favorites/FavoritesList'
+import { RoleGate } from '@/components/dashboard/RoleView'
 
 export default function FavoritesPage() {
     return (
         <div className='flex min-w-0 flex-col gap-5'>
-            <h1 className='text-base font-bold text-[#0087CA]'>••• علاقه مندی ها •••</h1>
-
-
+            <PageTitle>علاقه مندی ها</PageTitle>
+            <RoleGate allow={['buyer']}>
+                <FavoritesList />
+            </RoleGate>
         </div>
     )
 }

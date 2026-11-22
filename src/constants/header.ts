@@ -4,7 +4,7 @@ export const HEADER_LINKS = [
     href: "/",
   },
   {
-    title: "رزور سریع",
+    title: "رزرو سریع",
     href: "/reserve",
   },
   {

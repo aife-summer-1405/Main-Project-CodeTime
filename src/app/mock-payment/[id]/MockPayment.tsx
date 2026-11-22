@@ -25,17 +25,34 @@ const MockPayment = ({ paymentId, hotelId, callback }: IProps) => {
         return () => { active = false }
     }, [hotelId])
 
+    const finish = (result: 'success' | 'failed') => {
+        const url = new URL(callback, window.location.origin)
+        url.searchParams.set('paymentId', paymentId)
+        url.searchParams.set('payment', result)
+        router.push(url.pathname + url.search)
+    }
+
     return (
         <main dir='rtl' className='flex min-h-[100dvh] w-full items-center justify-center p-4'>
             <section className='mx-auto flex min-h-[420px] w-full max-w-[420px] flex-col items-center justify-center gap-5 rounded-2xl p-5 text-center shadow-[0_0_10px_0_#005EA41A]'>
                 <h1 className='text-lg font-bold text-[#060425] dark:text-white-1'>درگاه پرداخت</h1>
                 <p className='text-sm text-[#777]'>شناسه پرداخت: {faNum(Number(paymentId))}</p>
-                {error ? <p className='text-sm text-red-500'>{error}</p> : !hotel ? <p className='text-sm text-[#777]'>در حال دریافت اطلاعات هتل...</p> : (
+                {error ? (
+                    <p className='text-sm text-red-500'>{error}</p>
+                ) : !hotel ? (
+                    <p className='text-sm text-[#777]'>در حال دریافت اطلاعات هتل...</p>
+                ) : (
                     <>
                         <p className='text-sm font-medium text-[#060425] dark:text-white-1'>{hotel.title}</p>
                         <p className='text-base font-bold text-[#0A7FD6]'>{faNum(hotel.price)} تومان</p>
                         <div className='flex w-full flex-col gap-3'>
-                            <button type='button' onClick={() => router.push(callback)} className='h-12 w-full cursor-pointer rounded-2xl bg-[#15977D] text-sm font-medium text-white transition-all active:scale-[0.97]'>پرداخت موفق</button>
+                            <button
+                                type='button'
+                                onClick={() => finish('success')}
+                                className='h-12 w-full cursor-pointer rounded-2xl bg-[#15977D] text-sm font-medium text-white transition-all active:scale-[0.97]'
+                            >
+                                پرداخت موفق
+                            </button>
                         </div>
                     </>
                 )}

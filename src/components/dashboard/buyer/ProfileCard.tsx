@@ -4,6 +4,8 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { getUserById, UserProfileResponse } from '@/lib/Api/user'
+import { getUserId } from '@/lib/dashboard/dashboardApi'
+import { ProfileCardSkeleton } from '@/components/skeletons/DashboardSkeletons'
 
 export default function ProfileCard() {
     const [profile, setProfile] = useState<UserProfileResponse | null>(null)
@@ -12,7 +14,7 @@ export default function ProfileCard() {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const userId = localStorage.getItem('userId')
+                const userId = getUserId()
 
                 if (!userId) return
 
@@ -27,6 +29,8 @@ export default function ProfileCard() {
 
         fetchProfile()
     }, [])
+
+    if (loading) return <ProfileCardSkeleton />
 
     const completion = profile?.additionalPercentage ?? 0
 
@@ -48,7 +52,7 @@ export default function ProfileCard() {
                     }}
                 >
                     <span className='flex h-full w-full items-center justify-center rounded-full bg-[#F5F5F5] text-base font-bold text-[#0087CA] dark:bg-[#121212]'>
-                        {loading ? '...' : `${completion.toLocaleString('fa-IR')}٪`}
+                        {`${completion.toLocaleString('fa-IR')}٪`}
                     </span>
                 </div>
             </div>

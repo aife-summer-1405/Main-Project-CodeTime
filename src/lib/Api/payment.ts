@@ -16,6 +16,14 @@ export interface Payment {
     status: 'pending' | (string & {})
 }
 
+interface PayForBookingParams {
+    bookingId: number
+    amount: number
+    description: string
+    hotelId: string
+    returnPath: string
+}
+
 export async function createPayment(body: CreatePaymentBody, signal?: AbortSignal): Promise<Payment> {
     try {
         const { data } = await api.post<Payment>('/api/payments', body, { signal })
@@ -31,4 +39,26 @@ export async function createPayment(body: CreatePaymentBody, signal?: AbortSigna
 
         throw new Error(message)
     }
+}
+
+export async function payForBooking(
+    { bookingId, amount, description, hotelId, returnPath }: PayForBookingParams,
+    signal?: AbortSignal
+): Promise<string> {
+    const payment = await createPayment(
+        {
+            bookingId,
+            amount,
+            description,
+            callbackUrl: `${window.location.origin}${returnPath}`,
+        },
+        signal
+    )
+
+    const url = new URL(payment.paymentUrl)
+    if (url.origin !== window.location.origin) return payment.paymentUrl
+
+    url.searchParams.set('hotelId', hotelId)
+    url.searchParams.set('callback', returnPath)
+    return url.pathname + url.search
 }

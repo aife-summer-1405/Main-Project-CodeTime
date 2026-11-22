@@ -1,11 +1,13 @@
-import DashboardSection from '@/components/dashboard/DashboardSection'
+import PageTitle from '@/components/dashboard/common/PageTitle'
+import ReservationsList from '@/components/dashboard/buyer/reservations/ReservationsList'
+import SellerBookingsList from '@/components/dashboard/seller/reservations/SellerBookingsList'
+import RoleView from '@/components/dashboard/RoleView'
 
 export default function ReservationsPage() {
     return (
         <div className='flex min-w-0 flex-col gap-5'>
-            <h1 className='text-base font-bold text-[#0087CA]'>••• مدیریت رزرو ها •••</h1>
-
-            
+            <PageTitle>مدیریت رزرو ها</PageTitle>
+            <RoleView views={{ buyer: <ReservationsList />, seller: <SellerBookingsList /> }} />
         </div>
     )
 }

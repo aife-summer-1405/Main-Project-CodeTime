@@ -41,7 +41,7 @@ export default function Sidebar({ role, collapsible, onNavigate, onLogout }: Pro
             </div>
 
             <nav className='flex flex-col gap-2'>
-                {menus[role].map(({ label, href, icon: Icon }) => {
+                {menus[role].map(({ label, href, icon: Icon, badge }) => {
                     const active = href === '/dashboard' ? pathname === href : pathname.startsWith(href)
 
                     return (
@@ -50,10 +50,9 @@ export default function Sidebar({ role, collapsible, onNavigate, onLogout }: Pro
                             href={href}
                             onClick={onNavigate}
                             title={slim ? label : undefined}
-                            className={`flex h-10 items-center gap-3 rounded-lg px-3 text-xs transition-colors ${slim ? 'justify-center' : ''} ${active ? 'bg-[#0069A6] font-semibold text-white' : 'text-[#060425] dark:text-white hover:bg-[#EAF6FA] dark:hover:bg-[#1C1C1C] hover:text-[#0069A6] dark:hover:text-[#38A9E0]'
-                                }`}
+                            className={`relative flex h-10 font-medium items-center gap-3 rounded-lg px-3 text-xs transition-colors ${slim ? 'justify-center' : ''} ${active ? `${role === 'seller' ? 'bg-[#10088F]' : 'bg-[#005EA4]'}  text-white` : 'text-[#060425] dark:text-white hover:bg-[#EAF6FA] dark:hover:bg-[#1C1C1C] hover:text-[#0069A6] dark:hover:text-[#38A9E0]'}`}
                         >
-                            <Icon size={17} className='shrink-0' />
+                            <Icon className='shrink-0' />
                             <AnimatePresence initial={false}>
                                 {!slim && (
                                     <motion.span
@@ -67,12 +66,13 @@ export default function Sidebar({ role, collapsible, onNavigate, onLogout }: Pro
                                     </motion.span>
                                 )}
                             </AnimatePresence>
+                            
                         </Link>
                     )
                 })}
             </nav>
 
-            <UserCard slim={slim} onLogout={onLogout} onNavigate={onNavigate} />
+            <UserCard role={role} slim={slim} onLogout={onLogout} onNavigate={onNavigate} />
         </motion.aside>
     )
 }

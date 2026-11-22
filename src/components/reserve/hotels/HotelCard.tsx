@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { Star, MapPin, Moon, ArrowUpLeft } from 'lucide-react'
-import { discountPercent, fa } from '@/lib/format'
+import { Star, ArrowUpLeft } from 'lucide-react'
+import { fa } from '@/lib/format'
 import { Hotel } from '@/lib/Api/house'
 import SafeImage from '@/functions/safeImage'
 
@@ -11,7 +11,13 @@ type Props = {
 }
 
 export default function HotelCard({ hotel, selected, onSelect }: Props) {
-    const percent = discountPercent(hotel.price, hotel.discounted_price)
+    const price = hotel.price === null || hotel.price === undefined ? null : Number(hotel.price)
+    const discounted =
+        hotel.discounted_price === null || hotel.discounted_price === undefined ? null : Number(hotel.discounted_price)
+
+    const hasDiscount = price !== null && discounted !== null && discounted > 0 && discounted < price
+    const finalPrice = hasDiscount ? discounted : price
+
     return (
         <div
             role='button'
@@ -27,7 +33,6 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
             className={`group cursor-pointer shadow-[0_0_6px_0_#0887CA40] w-full md:h-55  shrink-0 p-2 border hover:border-[#005EA4] hover:border-2 transition rounded-[32px] flex flex-col md:flex-row gap-3 ${selected ? 'border-[#005EA4] border-2' : ''}`}
         >
             <div className='relative h-52 md:h-full w-full md:w-64 xl:w-90 shrink-0'>
-
                 {hotel.discount_percentage > 0 && (
                     <>
                         <span className='absolute top-7 z-10 -right-7 bg-red-500 text-white text-xs font-bold px-1 py-1 rounded-tr-[4px] rounded-br-[4px]'>
@@ -63,8 +68,8 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                 <div className='flex flex-col gap-2'>
                     <h2 className='text-[#060425] dark:text-white-1 font-bold text-base truncate'>{hotel.title}</h2>
                     <p className='flex items-center gap-1.5 text-gray-1 dark:text-white-1 text-xs w-full'>
-                        <img className='h-5 w-5 block dark:hidden' src="/images/Loc.svg" alt="" />
-                        <img className='h-5 w-5 hidden dark:block' src="/images/LocD.svg" alt="" />
+                        <img className='h-5 w-5 block dark:hidden' src='/images/Loc.svg' alt='' />
+                        <img className='h-5 w-5 hidden dark:block' src='/images/LocD.svg' alt='' />
                         <span className='truncate w-full'>{hotel.address}</span>
                     </p>
                 </div>
@@ -72,25 +77,22 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                 <i className='w-full border-t' />
 
                 <p className='flex items-center dark:text-white-1 gap-1.5 text-gray-1 text-xs'>
-                    <img className='h-5 w-5 block dark:hidden' src="/images/alarmclock.svg" alt="" />
-                    <img className='h-5 w-5 hidden dark:block' src="/images/alarmclockD.svg" alt="" />
+                    <img className='h-5 w-5 block dark:hidden' src='/images/alarmclock.svg' alt='' />
+                    <img className='h-5 w-5 hidden dark:block' src='/images/alarmclockD.svg' alt='' />
                     10 شب
                 </p>
 
                 <div className='flex flex-col gap-3'>
-                    <div className={`flex flex-wrap items-center ${hotel.discounted_price === null ? 'justify-end' : 'justify-between'} gap-x-3 gap-y-1`}>
-                        {hotel.discounted_price === null ? (
-                            ""
-                        ) : (
+                    <div className={`flex flex-wrap items-center ${hasDiscount ? 'justify-between' : 'justify-end'} gap-x-3 gap-y-1`}>
+                        {hasDiscount && price !== null && (
                             <div className='text-gray-1 text-xs relative'>
                                 <div className='border-t border-red-1 absolute top-[5px] left-0 w-full' />
-                                {fa(Math.round(hotel.discounted_price))} تومان
+                                {fa(Math.round(price))} تومان
                             </div>
-
                         )}
 
                         <p className='text-[#0887CA] font-bold text-sm'>
-                            {fa(hotel.price)} تومان
+                            {finalPrice !== null ? `${fa(Math.round(finalPrice))} تومان` : '—'}
                             <span className='text-[#111111] dark:text-white-1 font-normal text-xs'> /هر شب</span>
                         </p>
                     </div>
@@ -104,6 +106,6 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
                     </Link>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }

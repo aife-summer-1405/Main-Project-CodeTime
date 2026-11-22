@@ -5,6 +5,7 @@ import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { ArrowUpLeft, CalendarX } from 'lucide-react'
 import { BookingsSummary, getDashboardSummary } from '@/lib/dashboard/dashboardApi'
+import { StatCardsSkeleton } from '@/components/skeletons/DashboardSkeletons'
 
 const icon = (src: string) => <img src={src} alt='' className='h-[18px] w-[18px]' />
 
@@ -19,12 +20,16 @@ const card = 'flex h-[100px] flex-col items-center justify-center gap-1.5 rounde
 
 export default function StatCards() {
     const [summary, setSummary] = useState<BookingsSummary | null>(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         getDashboardSummary()
             .then(data => setSummary(data.bookings))
             .catch(() => toast.error('دریافت آمار داشبورد با خطا مواجه شد'))
+            .finally(() => setLoading(false))
     }, [])
+
+    if (loading) return <StatCardsSkeleton />
 
     return (
         <div className='mx-1.5 grid grid-cols-2 gap-3 sm:grid-cols-5'>
@@ -44,7 +49,7 @@ export default function StatCards() {
             >
                 <ArrowUpLeft size={16} className='text-[#0087CA]' />
                 <span className='text-sm text-[#55536D] dark:text-[#A1A1AA]'>مشاهده همه</span>
-                <strong className='text-xl leading-none text-[#10088F] dark:text-[#38A9E0]'>{summary?.bookingCount}</strong>
+                <strong className='text-xl leading-none text-[#10088F] dark:text-[#38A9E0]'>{summary ? summary.bookingCount.toLocaleString('fa-IR') : '-'}</strong>
             </Link>
         </div>
     )
