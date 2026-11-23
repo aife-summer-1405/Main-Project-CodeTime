@@ -32,6 +32,13 @@ export type FinanceDashboard = {
     totalPerviousMonthAmount: number
     totalCurrentMonthAmount: number
 }
+const errorTranslations: [string, string][] = [
+    ['access denied', 'دسترسی شما به این بخش مجاز نیست'],
+    ['unauthorized', 'ابتدا وارد حساب کاربری خود شوید'],
+    ['forbidden', 'شما اجازه‌ی انجام این عملیات را ندارید'],
+    ['not found', 'مورد درخواستی یافت نشد'],
+    ['network error', 'خطا در اتصال به اینترنت'],
+]
 export type UpdateUserBody = Pick<User, 'email' | 'firstName' | 'lastName' | 'phoneNumber'>
 
 export const getUserId = () => {
@@ -49,9 +56,17 @@ export async function getFinanceDashboard(): Promise<FinanceDashboard> {
     const res = await api.get('/api/seller/finance/dashboard')
     return res.data
 }
-export const getErrorMessage = (error: unknown, fallback: string) =>
-    (error as { response?: { data?: { message?: string } } })?.response?.data?.message ?? fallback
 
+const translateError = (message: string) => {
+    const lower = message.toLowerCase()
+    return errorTranslations.find(([key]) => lower.includes(key))?.[1] ?? message
+}
+
+export const getErrorMessage = (error: unknown, fallback: string) => {
+    const err = error as { message?: string; response?: { data?: { message?: string } } }
+    const message = err?.response?.data?.message ?? err?.message
+    return message ? translateError(message) : fallback
+}
 export const getUser = async (id: string) => {
     const { data } = await api.get(`/api/users/${id}`)
     return (data.user ?? data) as User

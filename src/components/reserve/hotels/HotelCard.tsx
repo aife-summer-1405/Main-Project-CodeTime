@@ -17,6 +17,7 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
 
     const hasDiscount = price !== null && discounted !== null && discounted > 0 && discounted < price
     const finalPrice = hasDiscount ? discounted : price
+    const discountPercent = hasDiscount ? Math.round(((price - discounted) / price) * 100) : 0
 
     return (
         <div
@@ -33,10 +34,10 @@ export default function HotelCard({ hotel, selected, onSelect }: Props) {
             className={`group cursor-pointer shadow-[0_0_6px_0_#0887CA40] w-full md:h-55  shrink-0 p-2 border hover:border-[#005EA4] hover:border-2 transition rounded-[32px] flex flex-col md:flex-row gap-3 ${selected ? 'border-[#005EA4] border-2' : ''}`}
         >
             <div className='relative h-52 md:h-full w-full md:w-64 xl:w-90 shrink-0'>
-                {hotel.discount_percentage > 0 && (
+                {discountPercent > 0 && (
                     <>
                         <span className='absolute top-7 z-10 -right-7 bg-red-500 text-white text-xs font-bold px-1 py-1 rounded-tr-[4px] rounded-br-[4px]'>
-                            %{fa(hotel.discount_percentage)}
+                            %{fa(discountPercent)}
                         </span>
                         <div
                             style={{ clipPath: 'polygon( 100% 64%, 0 100% ,0 0)' }}

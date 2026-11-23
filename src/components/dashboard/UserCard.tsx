@@ -158,18 +158,18 @@ export default function UserCard({ role, slim, onLogout, onNavigate }: Props) {
                 <div className='relative'>
                     {menu === 'wallet' && (
                         <div className={dropdown}>
-                            <Link href='/dashboard/payments' onClick={navigate} className={item}>
+                            {/* <Link href='/dashboard/payments' onClick={navigate} className={item}>
                                 <Wallet size={15} />
                                 شارژ کردن کیف پول
-                            </Link>
+                            </Link> */}
                             <button type='button' onClick={openTransactions} className={item}>
                                 <List size={15} />
                                 لیست تراکنش ها
                             </button>
-                            <Link href='/dashboard/payments?type=withdraw' onClick={navigate} className={item}>
+                            {/* <Link href='/dashboard/payments?type=withdraw' onClick={navigate} className={item}>
                                 <Landmark size={15} />
                                 برداشت وجه
-                            </Link>
+                            </Link> */}
                         </div>
                     )}
 

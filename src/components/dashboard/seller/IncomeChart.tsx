@@ -36,7 +36,7 @@ export default function IncomeChart() {
     const thumbLeft = (selected / (count - 1)) * (100 - thumbWidth)
 
     return (
-        <div className='flex flex-col gap-4 rounded-3xl border shadow-[0px_0px_4px_0px_#005EA433] border-gray-100 bg-[#f5f5f5] p-5 dark:border-white/10 dark:bg-[#1c1b2e]'>
+        <div className='flex flex-col gap-4 rounded-3xl border shadow-[0px_0px_4px_0px_#005EA433] border-gray-100 bg-[#f5f5f5] p-5 dark:border-white/10 dark:bg-[#121212]'>
             <div className='flex items-center justify-between'>
                 <h3 className='text-base font-bold text-[#060425] dark:text-white'>آمار درآمد ها</h3>
 
@@ -52,7 +52,7 @@ export default function IncomeChart() {
             </div>
 
             {loading ? (
-                <div className='h-52 animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700' />
+                <div className='h-52 animate-pulse rounded-lg bg-gray-200 dark:bg-[#3c3c3cbd]' />
             ) : (
                 <>
                     <div dir='ltr' className='relative px-2 pt-[72px]'>

@@ -17,7 +17,7 @@ export default function Step2Address({ form, errors, update }: StepProps) {
                             value={form.address}
                             onChange={(e) => update({ address: e.target.value })}
                             placeholder='ساری - دنیای آرزو - پژوهشگاه سپهران'
-                            className='h-full w-full bg-transparent pt-3 text-[12px] text-[#15977D] outline-none dark:text-white'
+                            className='h-full w-full bg-transparent pt-3 text-[12px] text-[#15977D] outline-none dark:text-[#15977D]'
                         />
                         <MapPin size={20} className='shrink-0 text-[#15977D]' />
                     </label>

@@ -1,3 +1,4 @@
+import PageTitle from '../common/PageTitle'
 import FavoritesPreview from './favorites/FavoritesPreview'
 import ProfileCard from './ProfileCard'
 import BookingsChart from './ReservationChart'
@@ -6,7 +7,7 @@ import StatCards from './StatCards'
 export default function BuyerOverview() {
     return (
         <div className='flex min-w-0 flex-col gap-5 '>
-            <h1 className='text-base font-bold text-[#0087CA]'>••• داشبورد •••</h1>
+            <PageTitle>داشبورد</PageTitle>
 
             <div className='grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_230px]'>
                 <div className='flex min-w-0 flex-col gap-4'>
