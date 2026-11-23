@@ -9,6 +9,7 @@ import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css'
 import Field from './Field'
 import { getErrorMessage, getUser, getUserId, updateUser, UpdateUserBody, uploadPicture } from '@/lib/dashboard/dashboardApi'
+import Router from 'next/router'
 
 type Avatar = { id: string; url: string }
 
@@ -176,7 +177,8 @@ export default function ProfileForm() {
             }
             await updateUser(id, values)
             toast.success('اطلاعات با موفقیت ذخیره شد')
-            loadUser()
+            window.dispatchEvent(new Event('user-updated'))
+            await loadUser()
         } catch (error) {
             toast.error(getErrorMessage(error, 'ذخیره اطلاعات با خطا مواجه شد'))
         }

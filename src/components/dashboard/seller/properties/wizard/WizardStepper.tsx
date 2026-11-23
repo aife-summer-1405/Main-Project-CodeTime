@@ -18,12 +18,7 @@ export const wizardSteps: { label: string; icon: LucideIcon }[] = [
 
 export default function WizardStepper({ current }: { current: number }) {
     return (
-        <ol className="
-            flex items-center gap-2 rounded-full px-3 py-2.5
-            bg-[linear-gradient(0.32deg,rgba(245,245,245,0.6)_0.27%,rgba(227,242,255,0.6)_49.99%,rgba(245,245,245,0.6)_99.71%)]
-            bg-none
-            border border-transparent dark:border-[#303030]
-        ">
+        <ol className='flex items-center gap-2 rounded-full dark:bg-none bg-[linear-gradient(0.32deg,rgba(245,245,245,0.6)_0.27%,rgba(227,242,255,0.6)_49.99%,rgba(245,245,245,0.6)_99.71%)] px-3 py-2.5 dark:bg-[#1C1C1C]'>
             {wizardSteps.map(({ label, icon: Icon }, i) => {
                 const done = i < current
                 const active = i === current
