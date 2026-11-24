@@ -1,80 +1,89 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { house } from "@/lib/Api/house";
-import { Bath, Bed, Car, MapPin, Star, TreeDeciduous } from "lucide-react";
-import Image from "next/image";
-import { FC } from "react";
-interface IProps {
-  house: house;
+import Link from 'next/link'
+import { Bath, Bed, Car, MapPin, Star, TreeDeciduous } from 'lucide-react'
+import { fa } from '@/lib/format'
+import SafeImage from '@/functions/safeImage'
+import type { RentHouse } from '@/lib/Api/rent'
+
+type Props = { house: RentHouse }
+
+const hasYard = (value: string) => {
+    const v = value.trim().toLowerCase()
+    return v !== '' && v !== 'none' && v !== 'no' && v !== 'ندارد'
 }
 
-const RentCard: FC<IProps> = ({ house }) => {
-  const formatedPrice = house.price.toLocaleString();
-  return (
-    <Card className="bg-white-1 dark:bg-black-1 w-153 py-2 pr-2 shadow-[0px_0px_6px_0px_#0887CA40] dark:shadow-none rounded-[32px]">
-      <div className="h-50 flex gap-2">
-        <CardHeader className="p-0 relative w-63.5 h-50 rounded-[16px] overflow-hidden">
-          <Image
-            className="w-63.5! h-50!"
-            width={254}
-            height={200}
-            src={house.photos?.[0] || "/images/House1.jpg"}
-            alt="rent property"
-          />
-          <span className="absolute top-3 right-2 text-white-1 z-99 flex items-center gap-1">
-            {house.rate}
-            <Star />
-          </span>
-          <div className="absolute top-0 z-90 size-full background: bg-linear-[180deg,rgba(6,4,37,0.5)_30%,rgba(6,4,37,0)_100%]"></div>
-        </CardHeader>
-        <CardContent className="mt-4.75 w-81.25 p-2 h-40.5">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1.5">
-              <h2 className="text-lg font-bold text-black-2 dark:text-white-1 truncate">
-                {house.title}
-              </h2>
-              <h3 className="flex items-center gap-1 h-6 overflow-hidden">
-                <MapPin />
-                <span className="truncate">{house.address}</span>
-              </h3>
-            </div>
-            <div className="border-b w-full border-black-2"></div>
-            <div className="flex flex-col gap-4.25">
-              <div className="flex gap-3 text-sm font-medium whitespace-nowrap">
-                <div className="flex gap-1">
-                  <Bed />
-                  {house.rooms} خواب
-                </div>
-                <div className="flex gap-1">
-                  <Bath />
-                  {house.bathrooms} حمام
-                </div>
-                <div className="flex gap-1">
-                  <Car />
-                  {house.parking !== 0
-                    ? `${house.parking} پارکینگ`
-                    : "بدون پارکینگ"}{" "}
-                </div>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-bold text-base text-blue-3">
-                  {formatedPrice} تومان
-                </span>
-                <Button
-                  className={
-                    "border-blue-3/50 dark:border-blue-4  text-blue-3/50 dark:text-blue-4 rounded-[8px] hover:border-blue-3 hover:text-blue-3"
-                  }
-                  variant={"outline"}
-                >
-                  مشاهده ملک
-                </Button>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </div>
-    </Card>
-  );
-};
+export default function RentCard({ house }: Props) {
+    const isMortgage = house.transaction_type?.toLowerCase().includes('mortgage')
+    const price = house.discounted_price && house.discounted_price < house.price ? house.discounted_price : house.price
+    const href = `/mortgage/${house.id}`
 
-export default RentCard;
+    return (
+        <article className='flex w-full flex-col gap-3 rounded-[32px] bg-white-1 p-2 shadow-[0px_0px_6px_0px_#0887CA40] transition hover:shadow-[0px_0px_10px_0px_#0887CA66] dark:bg-black-1 dark:shadow-none dark:ring-1 dark:ring-white-1/10 sm:flex-row'>
+            <div className='relative h-48 w-full shrink-0 overflow-hidden rounded-[24px] sm:h-auto sm:min-h-40 sm:w-44 md:w-48'>
+                <SafeImage src={house.photos[0]} alt={house.title} loading='lazy' className='absolute inset-0 size-full object-cover' />
+                {/* <div className='absolute inset-x-0 top-0 h-1/2 bg-linear-[180deg,rgba(6,4,37,0.5)_0%,rgba(6,4,37,0)_100%]' /> */}
+                <span className='absolute right-3 top-3 flex items-center gap-1 text-xs font-bold text-white-1'>
+                    {fa(house.rate)}
+                    <Star size={16} />
+                </span>
+            </div>
+
+            <div className='flex min-w-0 flex-1 flex-col justify-between gap-3 p-2'>
+                <div className='flex flex-col gap-1.5'>
+                    <h2 className='truncate text-base font-bold text-black-2 dark:text-white-1' title={house.title}>
+                        {house.title}
+                    </h2>
+                    <p className='flex items-center gap-1 text-xs text-black-2/70 dark:text-white-1/70'>
+                        <MapPin size={16} className='shrink-0' />
+                        <span className='truncate' title={house.address}>
+                            {house.address}
+                        </span>
+                    </p>
+                </div>
+
+                <i className='w-full border-t border-black-2/20 dark:border-white-1/20' />
+
+                <div className='flex flex-col gap-3'>
+                    <ul className='flex flex-wrap gap-x-3 gap-y-1 text-xs font-medium text-black-2 dark:text-white-1'>
+                        <li className='flex items-center gap-1'>
+                            <Bed size={16} />
+                            {fa(house.rooms)} خواب
+                        </li>
+                        <li className='flex items-center gap-1'>
+                            <Bath size={16} />
+                            {fa(house.bathrooms)} حمام
+                        </li>
+                        <li className='flex items-center gap-1'>
+                            <Car size={16} />
+                            {house.parking > 0 ? `${fa(house.parking)} پارکینگ` : 'بدون پارکینگ'}
+                        </li>
+                        {hasYard(house.yard_type) && (
+                            <li className='flex items-center gap-1'>
+                                <TreeDeciduous size={16} />
+                                حیاط
+                            </li>
+                        )}
+                    </ul>
+
+                    <div className='flex flex-wrap items-end justify-between gap-x-3 gap-y-2'>
+                        <div className='flex flex-col'>
+                            <span className='text-sm font-bold text-blue-3 dark:text-blue-4'>
+                                {price > 0 ? `${fa(Math.round(price))} تومان` : '—'}
+                            </span>
+                            <span className='text-[11px] text-black-2/60 dark:text-white-1/60'>
+                                {isMortgage ? 'مبلغ رهن' : 'اجاره ماهانه'}
+                                {isMortgage && house.rent_price ? ` · اجاره ${fa(Math.round(house.rent_price))} تومان` : ''}
+                            </span>
+                        </div>
+
+                        <Link
+                            href={href}
+                            className='flex h-9 items-center rounded-[8px] border border-blue-3/50 px-4 text-xs font-medium text-blue-3/70 transition hover:border-blue-3 hover:bg-blue-3 hover:text-white-1 active:scale-[0.97] dark:border-blue-4/60 dark:text-blue-4 dark:hover:bg-blue-4 dark:hover:text-black-1'
+                        >
+                            مشاهده ملک
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </article>
+    )
+}

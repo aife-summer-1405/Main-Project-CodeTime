@@ -8,6 +8,10 @@ export const HEADER_LINKS = [
     href: "/reserve",
   },
   {
+    title: "رهن و اجاره",
+    href: "/rent",
+  },
+  {
     title: "وبلاگ",
     href: "/blog",
   },

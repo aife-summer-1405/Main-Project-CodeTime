@@ -1,22 +1,22 @@
-import { FC, Suspense } from "react";
-import RentTopSection from "@/components/mortgage-rent/rent-top-section/rent-top-section";
-import RentPageList from "@/components/mortgage-rent/rent-page-list/rent-page-list";
+import { Suspense } from 'react'
+import type { Metadata } from 'next'
+import RentPage from '@/components/mortgage-rent/rent-page'
+import { RentCardSkeleton } from '@/components/mortgage-rent/rent-list'
 
-type SearchParamsPromise = Promise<Record<string, string | string[] | undefined>>;
+export const metadata: Metadata = { title: 'رهن و اجاره' }
 
-type RentPageProps = {
-  searchParams: SearchParamsPromise;
-};
-
-const page: FC<RentPageProps> = ({ searchParams }) => {
-  return (
-    <div className="flex flex-col gap-10 h-fit mx-24.25 mt-8 mb-20">
-      <RentTopSection />
-      <Suspense fallback={<div>در حال بارگذاری لیست...</div>}>
-        <RentPageList searchParams={searchParams} />
-      </Suspense>
+const Fallback = () => (
+    <div className='mx-auto grid w-full max-w-[1920px] grid-cols-1 gap-4 px-4 pb-12 pt-4 sm:px-6 lg:grid-cols-2 lg:gap-6 lg:px-10 xl:px-24'>
+        {Array.from({ length: 6 }).map((_, i) => (
+            <RentCardSkeleton key={i} />
+        ))}
     </div>
-  );
-};
+)
 
-export default page;
+export default function Page() {
+    return (
+        <Suspense fallback={<Fallback />}>
+            <RentPage />
+        </Suspense>
+    )
+}
