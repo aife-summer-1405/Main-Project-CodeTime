@@ -16,7 +16,7 @@ const ReserveStep3 = ({ confirmation }: { confirmation: ReservationConfirmation 
 
         <div className='flex w-full flex-col gap-3 sm:gap-4'>
             <Link href='/' className='flex h-12 items-center justify-center rounded-2xl bg-[#10088F] text-sm font-medium text-white transition-all duration-300 active:scale-[0.97] sm:h-14 sm:text-base'>بازگشت به صفحه اصلی</Link>
-            <Link href='/dashboard/tickets' className='flex h-12 items-center justify-center rounded-2xl bg-[#15977D] text-sm font-medium text-white transition-all duration-300 active:scale-[0.97] sm:h-14 sm:text-base'>بلیط های من</Link>
+            <Link href='/dashboard/reservations' className='flex h-12 items-center justify-center rounded-2xl bg-[#15977D] text-sm font-medium text-white transition-all duration-300 active:scale-[0.97] sm:h-14 sm:text-base'>بلیط های من</Link>
         </div>
     </div>
 )
