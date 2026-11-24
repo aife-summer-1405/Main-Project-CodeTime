@@ -3,7 +3,6 @@ import { getHotelById, type Hotel } from './house'
 import { getUserById, type UserProfile } from './user'
 
 export type MortgageHouse = Hotel & {
-    // اگر بک‌اند فیلد اجاره ماهانه بده، در کارت نمایش داده می‌شود
     rent_price?: number | null
 }
 
@@ -29,7 +28,6 @@ export async function getMortgageHouses(signal?: AbortSignal): Promise<Hotel[]> 
     })) as Hotel[]
 }
 
-// اطلاعات فروشنده با sellerId از GET /api/users/:id
 export async function getSeller(sellerId: string | number): Promise<UserProfile> {
     const { user } = await getUserById(sellerId)
     return user

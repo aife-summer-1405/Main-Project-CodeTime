@@ -12,7 +12,7 @@ import {
     Users,
     type LucideIcon,
 } from 'lucide-react'
-import { HEADER_LINKS } from '@/constants/header'
+import { HEADER_LINKS, isHeaderLinkActive } from '@/constants/header'
 
 const TOKEN_KEY = 'access_token'
 
@@ -24,7 +24,7 @@ const ICONS: Record<string, LucideIcon> = {
     '/contact-us': Users,
 }
 
-type NavItem = { title: string; href: string; Icon: LucideIcon }
+type NavItem = { title: string; href: string; Icon: LucideIcon; matches?: readonly string[] }
 
 const MobileNav = () => {
     const pathname = usePathname()
@@ -43,6 +43,7 @@ const MobileNav = () => {
     const items: NavItem[] = HEADER_LINKS.map((item) => ({
         title: item.title,
         href: item.href,
+        matches: item.matches,
         Icon: ICONS[item.href] ?? Home,
     }))
 
@@ -59,8 +60,8 @@ const MobileNav = () => {
             aria-label='منوی اصلی'
             className='md:hidden fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[10000] mx-auto max-w-[420px] h-14 rounded-[16px] bg-[#060425] shadow-[0_8px_24px_0_#06042540] flex items-center justify-around px-2'
         >
-            {items.map(({ title, href, Icon }) => {
-                const isActive = href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`)
+            {items.map(({ title, href, matches, Icon }) => {
+                const isActive = isHeaderLinkActive(pathname, { href, matches })
 
                 return (
                     <Link

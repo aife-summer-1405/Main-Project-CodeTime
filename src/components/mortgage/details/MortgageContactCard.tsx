@@ -88,12 +88,12 @@ const MortgageContactCard = ({ house }: { house: MortgageHouse }) => {
 
             <button
                 type='button'
-                onClick={onCall}
+                // onClick={onCall}
                 disabled={loading}
                 className='w-full h-12 rounded-[16px] bg-[#15977D] text-white text-[14px] font-bold cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 hover:opacity-90 active:scale-[0.97] disabled:opacity-50'
             >
                 <Phone size={18} />
-                <span dir='ltr'>تماس با {maskPhone(phone)}</span>
+                <span dir='ltr'>تماس با {phone}</span>
             </button>
 
             <button

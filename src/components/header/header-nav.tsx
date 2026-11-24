@@ -1,5 +1,5 @@
 "use client";
-import { HEADER_LINKS } from "@/constants/header";
+import { HEADER_LINKS, isHeaderLinkActive } from "@/constants/header";
 import { NavUnderline } from "../svgs/nav-underline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,10 +17,7 @@ const HeaderNav = () => {
     <NavigationMenu>
       <NavigationMenuList className={"flex gap-4 xl:gap-6"}>
         {HEADER_LINKS.map((item) => {
-          const isActive =
-            item.href === "/"
-              ? pathname === "/"
-              : pathname === item.href || pathname.startsWith(`${item.href}/`);
+          const isActive = isHeaderLinkActive(pathname, item);
 
           return (
             <NavigationMenuItem key={item.title}>
