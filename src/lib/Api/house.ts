@@ -2,172 +2,254 @@ import { ReserveHotel } from "@/app/(main)/reserve/[id]/startReserve/types/types
 import api from "../interceptor/api"
 
 export type Hotel = {
-    id: string
-    title: string
-    address: string
-    photos: string[]
-    rate: number
-    price: number
-    discounted_price: number | null
-    discount_percentage: number
-    tags: string[]
-    last_updated: string
-    capacity: number
-    location: { lat: number; lng: number; }
-    categories: { name: string }
-    bathrooms: number
-    parking: number
-    rooms: number
-    yard_type: string
-    num_comments: number
-    discount_id: string | null
-    transaction_type: string
-    sellerId: string
-    sellerName: string
-    caption: string
-    bookings: number
-    favoriteId: string | null
-    isFavorite: boolean
-}
+  id: string;
+  title: string;
+  address: string;
+  photos: string[];
+  rate: number;
+  price: number;
+  discounted_price: number | null;
+  discount_percentage: number;
+  tags: string[];
+  last_updated: string;
+  capacity: number;
+  location: { lat: number; lng: number };
+  categories: { name: string };
+  bathrooms: number;
+  parking: number;
+  rooms: number;
+  yard_type: string;
+  num_comments: number;
+  discount_id: string | null;
+  transaction_type: string;
+  sellerId: string;
+  sellerName: string;
+  caption: string;
+  bookings: number;
+  favoriteId: string | null;
+  isFavorite: boolean;
+};
 
 export type DiscountCode = {
-    id: string
-    house_id: string
-    code: string
-    discount_percentage: string
-    valid_until: string
-}
+  id: string;
+  house_id: string;
+  code: string;
+  discount_percentage: string;
+  valid_until: string;
+};
 
 export type HotelQuery = {
-    query: string
-    destination: string
-    sort: string
-    minPrice: string
-    maxPrice: string
-}
+  query: string;
+  destination: string;
+  sort: string;
+  minPrice: string;
+  maxPrice: string;
+};
 
 export type CountFilters = {
-    rooms: number
-    bathrooms: number
-    toilets: number
-    parking: number
-}
+  rooms: number;
+  bathrooms: number;
+  toilets: number;
+  parking: number;
+};
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? ''
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "";
 
 const SORTS: Record<string, { sort: string; order: string }> = {
-    newest: { sort: 'last_updated', order: 'DESC' },
-    cheapest: { sort: 'price', order: 'ASC' },
-    expensive: { sort: 'price', order: 'DESC' },
-}
+  newest: { sort: "last_updated", order: "DESC" },
+  cheapest: { sort: "price", order: "ASC" },
+  expensive: { sort: "price", order: "DESC" },
+};
 
 type ApiHotel = Omit<
-    Hotel,
-    'rate' | 'price' | 'discounted_price' | 'discount_percentage' | 'photos' | 'tags' | 'rooms' | 'bathrooms' | 'parking'
+  Hotel,
+  | "rate"
+  | "price"
+  | "discounted_price"
+  | "discount_percentage"
+  | "photos"
+  | "tags"
+  | "rooms"
+  | "bathrooms"
+  | "parking"
 > & {
-    rate: string
-    price: string
-    discounted_price: string | null
-    photos: string[] | null
-    tags: string[] | null
-    rooms: number | null
-    bathrooms: number | null
-    parking: number | null
-}
+  rate: string;
+  price: string;
+  discounted_price: string | null;
+  photos: string[] | null;
+  tags: string[] | null;
+  rooms: number | null;
+  bathrooms: number | null;
+  parking: number | null;
+};
 
-
-const FALLBACK_IMAGE = '/images/hotel-placeholder.jpg'
+const FALLBACK_IMAGE = "/images/hotel-placeholder.jpg";
 
 export const toReserveHotel = (hotel: Hotel): ReserveHotel => {
-    const hasDiscount = hotel.discounted_price !== null && hotel.discounted_price < hotel.price
+  const hasDiscount =
+    hotel.discounted_price !== null && hotel.discounted_price < hotel.price;
 
-    return {
-        id: hotel.id,
-        title: hotel.title,
-        address: hotel.address,
-        rating: hotel.rate,
-        image: hotel.photos[0] ?? FALLBACK_IMAGE,
-        capacity: Math.max(hotel.capacity, 1),
-        price: hasDiscount ? (hotel.discounted_price as number) : hotel.price,
-        discounted_price: hasDiscount ? hotel.price : null,
-    }
-}
-const discountCache = new Map<string, Promise<number>>()
+  return {
+    id: hotel.id,
+    title: hotel.title,
+    address: hotel.address,
+    rating: hotel.rate,
+    image: hotel.photos[0] ?? FALLBACK_IMAGE,
+    capacity: Math.max(hotel.capacity, 1),
+    price: hasDiscount ? (hotel.discounted_price as number) : hotel.price,
+    discounted_price: hasDiscount ? hotel.price : null,
+  };
+};
+
+const discountCache = new Map<string, Promise<number>>();
 
 export function getDiscountPercentage(id: string | null): Promise<number> {
-    if (!id) return Promise.resolve(0)
+  if (!id) return Promise.resolve(0);
 
-    const cached = discountCache.get(id)
-    if (cached) return cached
+  const cached = discountCache.get(id);
+  if (cached) return cached;
 
-    const request = api
-        .get<DiscountCode>(`/api/discount-codes/${id}`)
-        .then(({ data }) => {
-            const expired = data.valid_until && new Date(data.valid_until) < new Date()
-            return expired ? 0 : Math.round(Number(data.discount_percentage)) || 0
-        })
-        .catch(() => {
-            discountCache.delete(id)
-            return 0
-        })
+  const request = api
+    .get<DiscountCode>(`/api/discount-codes/${id}`)
+    .then(({ data }) => {
+      const expired = data.valid_until && new Date(data.valid_until) < new Date();
+      return expired ? 0 : Math.round(Number(data.discount_percentage)) || 0;
+    })
+    .catch(() => {
+      discountCache.delete(id);
+      return 0;
+    });
 
-    discountCache.set(id, request)
-    return request
+  discountCache.set(id, request);
+  return request;
 }
 
 const normalize = (h: ApiHotel): Hotel => {
-    const discounted = h.discounted_price == null ? null : Number(h.discounted_price)
+  const discounted = h.discounted_price == null ? null : Number(h.discounted_price);
 
-    return {
-        ...h,
-        rate: Number(h.rate) || 0,
-        price: Number(h.price) || 0,
-        discounted_price: discounted !== null && Number.isFinite(discounted) && discounted > 0 ? discounted : null,
-        discount_percentage: 0,
-        photos: h.photos ?? [],
-        tags: h.tags ?? [],
-        rooms: h.rooms ?? 0,
-        bathrooms: h.bathrooms ?? 0,
-        parking: h.parking ?? 0,
-    }
-}
+  return {
+    ...h,
+    rate: Number(h.rate) || 0,
+    price: Number(h.price) || 0,
+    discounted_price:
+      discounted !== null && Number.isFinite(discounted) && discounted > 0
+        ? discounted
+        : null,
+    discount_percentage: 0,
+    photos: h.photos ?? [],
+    tags: h.tags ?? [],
+    rooms: h.rooms ?? 0,
+    bathrooms: h.bathrooms ?? 0,
+    parking: h.parking ?? 0,
+  };
+};
 
 const withDiscount = async (h: Hotel): Promise<Hotel> => ({
-    ...h,
-    discount_percentage: await getDiscountPercentage(h.discount_id),
-})
+  ...h,
+  discount_percentage: await getDiscountPercentage(h.discount_id),
+});
 
-export async function getHotels(q: HotelQuery, signal?: AbortSignal): Promise<Hotel[]> {
-    const params = new URLSearchParams({ page: '1', limit: '50', transactionType: 'reservation' })
+export async function getHotels(
+  q: HotelQuery,
+  signal?: AbortSignal,
+): Promise<Hotel[]> {
+  const params = new URLSearchParams({
+    page: "1",
+    limit: "50",
+    transactionType: ["rental", "mortgage"].join(","),
+  });
 
-    if (q.query) params.set('search', q.query)
-    if (q.destination) params.set('location', q.destination)
-    if (q.minPrice) params.set('minPrice', q.minPrice)
-    if (q.maxPrice) params.set('maxPrice', q.maxPrice)
-    if (q.sort && SORTS[q.sort]) {
-        params.set('sort', SORTS[q.sort].sort)
-        params.set('order', SORTS[q.sort].order)
-    }
+  if (q.query) params.set("search", q.query);
+  if (q.destination) params.set("location", q.destination);
+  if (q.minPrice) params.set("minPrice", q.minPrice);
+  if (q.maxPrice) params.set("maxPrice", q.maxPrice);
+  if (q.sort && SORTS[q.sort]) {
+    params.set("sort", SORTS[q.sort].sort);
+    params.set("order", SORTS[q.sort].order);
+  }
 
-    const res = await fetch(`${BASE_URL}/api/houses?${params.toString()}`, { signal })
-    if (!res.ok) throw new Error('request failed')
+  const res = await fetch(`${BASE_URL}/api/houses?${params.toString()}`, {
+    signal,
+  });
+  if (!res.ok) throw new Error("request failed");
 
-    const json = await res.json()
-    const houses: ApiHotel[] = json.houses ?? json.data?.houses ?? []
-    return Promise.all(houses.map((h) => withDiscount(normalize(h))))
+  const json = await res.json();
+  const houses: ApiHotel[] = json.houses ?? json.data?.houses ?? [];
+  return Promise.all(houses.map((h) => withDiscount(normalize(h))));
 }
 
 export async function getHotelById(id: string): Promise<Hotel> {
-    const { data } = await api.get(`/api/houses/${id}`)
+  const { data } = await api.get(`/api/houses/${id}`);
 
-    return withDiscount(normalize(data.house ?? data.data ?? data))
+  return withDiscount(normalize(data.house ?? data.data ?? data));
+}
+
+export type house = {
+  id: string;
+  title: string;
+  address: string;
+  photos: string[];
+  rate: null;
+  discounted_price: null;
+  price: string;
+  tags: never[];
+  last_updated: string;
+  capacity: number;
+  location: {
+    lat: number;
+    lng: number;
+  };
+  categories: {
+    name: string;
+  };
+  bathrooms: number;
+  parking: number;
+  rooms: number;
+  yard_type: string;
+  num_comments: number;
+  discount_id: null;
+  transaction_type: string;
+  sellerId: string;
+  sellerName: string;
+  caption: string;
+  bookings: number;
+  favoriteId: null;
+  isFavorite: boolean;
+};
+
+export type rentQuery = {
+  search: string;
+  minPrice: string;
+  maxPrice: string;
+  minRent: string;
+  maxRent: string;
+};
+
+export async function getHouses(q: rentQuery): Promise<Hotel[]> {
+  const params = new URLSearchParams({
+    page: "1",
+    limit: "10",
+    transactionType: "rental",
+  });
+  if (q.minPrice) params.set("minPrice", q.minPrice);
+  if (q.maxPrice) params.set("maxPrice", q.maxPrice);
+  if (q.minRent) params.set("minRent", q.minRent);
+  if (q.maxRent) params.set("maxRent", q.maxRent);
+
+  const res = await fetch(`${BASE_URL}/api/houses?${params.toString()}`);
+
+  if (!res.ok) throw new Error("request failed");
+
+  const json = await res.json();
+  const houses: ApiHotel[] = json.houses ?? json.data?.houses ?? [];
+  return Promise.all(houses.map((h) => withDiscount(normalize(h))));
 }
 
 export const filterByCounts = (hotels: Hotel[], c: CountFilters): Hotel[] =>
-    hotels.filter(
-        (h) =>
-            h.rooms >= c.rooms &&
-            h.bathrooms >= c.bathrooms &&
-            h.bathrooms >= c.toilets &&
-            h.parking >= c.parking
-    )
+  hotels.filter(
+    (h) =>
+      h.rooms >= c.rooms &&
+      h.bathrooms >= c.bathrooms &&
+      h.bathrooms >= c.toilets &&
+      h.parking >= c.parking,
+  );

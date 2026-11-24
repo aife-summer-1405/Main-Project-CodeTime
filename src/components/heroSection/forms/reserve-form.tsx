@@ -2,9 +2,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  reserveSchema,
+  reserveFormSchema,
   type ReserveFormValues,
-} from "@/schemas/reserve-schema";
+} from "@/schemas/reserve-form-schema";
 import { Button } from "@/components/ui/button";
 import { SearchIcon } from "lucide-react";
 import ListInput from "./list-inpt";
@@ -18,7 +18,7 @@ export default function ReserveForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<ReserveFormValues>({
-    resolver: zodResolver(reserveSchema),
+    resolver: zodResolver(reserveFormSchema),
     defaultValues: {
       checkIn: "",
       checkOut: "",
