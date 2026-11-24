@@ -30,7 +30,7 @@ const RentCard: FC<IProps> = ({ house }) => {
         <CardContent className="mt-4.75 w-81.25 p-2 h-40.5">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <h2 className="text-lg font-bold text-black-2 truncate">
+              <h2 className="text-lg font-bold text-black-2 dark:text-white-1 truncate">
                 {house.title}
               </h2>
               <h3 className="flex items-center gap-1 h-6 overflow-hidden">
