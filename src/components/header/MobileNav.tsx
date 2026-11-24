@@ -1,31 +1,72 @@
 'use client'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, MapPin, Newspaper, Users, type LucideIcon } from 'lucide-react'
+import {
+    Building2,
+    Home,
+    LayoutDashboard,
+    LogIn,
+    MapPin,
+    Newspaper,
+    Users,
+    type LucideIcon,
+} from 'lucide-react'
 import { HEADER_LINKS } from '@/constants/header'
 
-const ICONS: LucideIcon[] = [Home, MapPin, Newspaper, Users]
+const TOKEN_KEY = 'access_token'
+
+const ICONS: Record<string, LucideIcon> = {
+    '/': Home,
+    '/reserve': MapPin,
+    '/rent': Building2,
+    '/blog': Newspaper,
+    '/contact-us': Users,
+}
+
+type NavItem = { title: string; href: string; Icon: LucideIcon }
 
 const MobileNav = () => {
     const pathname = usePathname()
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
+
+    useEffect(() => {
+        const check = () => setIsLoggedIn(!!localStorage.getItem(TOKEN_KEY))
+        check()
+        const onStorage = (e: StorageEvent) => {
+            if (e.key === null || e.key === TOKEN_KEY) check()
+        }
+        window.addEventListener('storage', onStorage)
+        return () => window.removeEventListener('storage', onStorage)
+    }, [pathname])
+
+    const items: NavItem[] = HEADER_LINKS.map((item) => ({
+        title: item.title,
+        href: item.href,
+        Icon: ICONS[item.href] ?? Home,
+    }))
+
+    if (isLoggedIn !== null) {
+        items.push(
+            isLoggedIn
+                ? { title: 'داشبورد', href: '/dashboard', Icon: LayoutDashboard }
+                : { title: 'ورود', href: '/login', Icon: LogIn }
+        )
+    }
 
     return (
         <nav
             aria-label='منوی اصلی'
             className='md:hidden fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[10000] mx-auto max-w-[420px] h-14 rounded-[16px] bg-[#060425] shadow-[0_8px_24px_0_#06042540] flex items-center justify-around px-2'
         >
-            {HEADER_LINKS.map((item, i) => {
-                const Icon = ICONS[i] ?? Home
-                const isActive =
-                    item.href === '/'
-                        ? pathname === '/'
-                        : pathname === item.href || pathname.startsWith(`${item.href}/`)
+            {items.map(({ title, href, Icon }) => {
+                const isActive = href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`)
 
                 return (
                     <Link
-                        key={item.title}
-                        href={item.href}
-                        aria-label={item.title}
+                        key={href}
+                        href={href}
+                        aria-label={title}
                         aria-current={isActive ? 'page' : undefined}
                         className='relative flex-1 h-full flex items-center justify-center active:scale-90 transition-transform duration-300'
                     >
