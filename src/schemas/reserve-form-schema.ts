@@ -1,7 +1,7 @@
 
 import { z } from "zod";
 
-export const reserveSchema = z
+export const reserveFormSchema = z
   .object({
     checkIn: z.string().min(1, "تاریخ ورود را انتخاب کنید"),
 
@@ -26,4 +26,4 @@ export const reserveSchema = z
     }
   );
 
-export type ReserveFormValues = z.infer<typeof reserveSchema>;
+export type ReserveFormValues = z.infer<typeof reserveFormSchema>;
