@@ -11,6 +11,7 @@ import LandingArrowText from "@/components/landing-arrow-text";
 import Footer from "@/components/footer/Footer";
 import { Suspense } from "react";
 
+import NavigationMobile from "@/components/landing-top/navigation-mobile/navigation-mobile";
 
 export const metadata: Metadata = {
   title: "Rahn kadeh",
@@ -33,6 +34,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
+
+        <div className="sm:hidden fixed bottom-10 flex justify-center w-full z-999">
+          <NavigationMobile />
+        </div>
+
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

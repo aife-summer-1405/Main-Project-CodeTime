@@ -166,6 +166,15 @@
     scrollbar-color: #0887ca #e6eef4;
   }
 }
+/* * {
+  outline: 1px solid red;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+} */
 
 /* swiper */
 
@@ -187,7 +196,6 @@
 
 @media (max-width: 1023px) {
   .swiper .swiper-pagination {
-    bottom: 20px !important;
   }
 }
 
@@ -345,4 +353,8 @@
 
 .dark .hotel-popup .leaflet-popup-content-wrapper::after {
     border-top-color: #252525 !important;
+}
+@media (max-width: 1023) {
+  .swiper .swiper-pagination {
+  }
 }
