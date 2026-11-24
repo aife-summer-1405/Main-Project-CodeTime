@@ -90,8 +90,8 @@ export async function getHotels(
   const params = new URLSearchParams({
     page: "1",
     limit: "50",
-    transactionType: "reservation",
-  });
+    transactionType: ["rental", "mortgage"].join(","),
+    });
 
   if (q.query) params.set("search", q.query);
   if (q.destination) params.set("location", q.destination);
@@ -145,12 +145,25 @@ export type house = {
   isFavorite: boolean;
 };
 
-export async function getHouses() {
+export type rentQuery = {
+  search: string;
+  minPrice: string;
+  maxPrice: string;
+  minRent: string;
+  maxRent: string;
+};
+
+export async function getHouses(q: rentQuery) {
   const params = new URLSearchParams({
-    page: "3",
+    page: "1",
     limit: "10",
-    transactionType: "",
+    transactionType: "rental",
   });
+  if (q.minPrice) params.set("minPrice", q.minPrice);
+  if (q.maxPrice) params.set("maxPrice", q.maxPrice);
+  if (q.minRent) params.set("minRent", q.minRent);
+  if (q.maxRent) params.set("maxRent", q.maxRent);
+
   const res = await fetch(`${BASE_URL}/api/houses?${params.toString()}`);
 
   if (!res.ok) throw new Error("request failed");

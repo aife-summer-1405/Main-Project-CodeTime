@@ -44,52 +44,52 @@ const maxAreaItems: SelectItem[] = [
 
 const minPriceItems: SelectItem[] = [
   NONE_OPTION,
-  { label: "40 میلیون تومان", value: 40 },
-  { label: "50 میلیون تومان", value: 50 },
-  { label: "60 میلیون تومان", value: 60 },
-  { label: "70 میلیون تومان", value: 70 },
-  { label: "80 میلیون تومان", value: 80 },
-  { label: "90 میلیون تومان", value: 90 },
-  { label: "100 میلیون تومان", value: 100 },
+  { label: "40 میلیون تومان", value: 40000000 },
+  { label: "50 میلیون تومان", value: 50000000 },
+  { label: "60 میلیون تومان", value: 60000000 },
+  { label: "70 میلیون تومان", value: 70000000 },
+  { label: "80 میلیون تومان", value: 80000000 },
+  { label: "90 میلیون تومان", value: 9000000 },
+  { label: "100 میلیون تومان", value: 100000000 },
 ];
 
 const maxPriceItems: SelectItem[] = [
   NONE_OPTION,
-  { label: "110 میلیون تومان", value: 110 },
-  { label: "120 میلیون تومان", value: 120 },
-  { label: "130 میلیون تومان", value: 130 },
-  { label: "140 میلیون تومان", value: 140 },
-  { label: "150 میلیون تومان", value: 150 },
-  { label: "160 میلیون تومان", value: 160 },
-  { label: "170 میلیون تومان", value: 170 },
-  { label: "180 میلیون تومان", value: 180 },
-  { label: "190 میلیون تومان", value: 190 },
-  { label: "200 میلیون تومان", value: 200 },
+  { label: "110 میلیون تومان", value: 110000000 },
+  { label: "120 میلیون تومان", value: 120000000 },
+  { label: "130 میلیون تومان", value: 130000000 },
+  { label: "140 میلیون تومان", value: 140000000  },
+  { label: "150 میلیون تومان", value: 150000000  },
+  { label: "160 میلیون تومان", value: 160000000  },
+  { label: "170 میلیون تومان", value: 170000000  },
+  { label: "180 میلیون تومان", value: 180000000  },
+  { label: "190 میلیون تومان", value: 190000000  },
+  { label: "200 میلیون تومان", value: 200000000  },
 ];
 
 const minRentItems: SelectItem[] = [
   NONE_OPTION,
-  { label: "40 میلیون تومان", value: 40 },
-  { label: "50 میلیون تومان", value: 50 },
-  { label: "60 میلیون تومان", value: 60 },
-  { label: "70 میلیون تومان", value: 70 },
-  { label: "80 میلیون تومان", value: 80 },
-  { label: "90 میلیون تومان", value: 90 },
-  { label: "100 میلیون تومان", value: 100 },
+  { label: "40 میلیون تومان", value: 40000000 },
+  { label: "50 میلیون تومان", value: 50000000 },
+  { label: "60 میلیون تومان", value: 60000000 },
+  { label: "70 میلیون تومان", value: 70000000 },
+  { label: "80 میلیون تومان", value: 80000000 },
+  { label: "90 میلیون تومان", value: 9000000 },
+  { label: "100 میلیون تومان", value: 100000000 },
 ];
 
 const maxRentItems: SelectItem[] = [
   NONE_OPTION,
-  { label: "110 میلیون تومان", value: 110 },
-  { label: "120 میلیون تومان", value: 120 },
-  { label: "130 میلیون تومان", value: 130 },
-  { label: "140 میلیون تومان", value: 140 },
-  { label: "150 میلیون تومان", value: 150 },
-  { label: "160 میلیون تومان", value: 160 },
-  { label: "170 میلیون تومان", value: 170 },
-  { label: "180 میلیون تومان", value: 180 },
-  { label: "190 میلیون تومان", value: 190 },
-  { label: "200 میلیون تومان", value: 200 },
+  { label: "110 میلیون تومان", value: 110000000  },
+  { label: "120 میلیون تومان", value: 120000000  },
+  { label: "130 میلیون تومان", value: 130000000  },
+  { label: "140 میلیون تومان", value: 140000000  },
+  { label: "150 میلیون تومان", value: 150000000  },
+  { label: "160 میلیون تومان", value: 160000000  },
+  { label: "170 میلیون تومان", value: 170000000  },
+  { label: "180 میلیون تومان", value: 180000000  },
+  { label: "190 میلیون تومان", value: 190000000  },
+  { label: "200 میلیون تومان", value: 200000000  },
 ];
 
 const getLabelByValue = (
@@ -185,7 +185,7 @@ const RentRangeFilterForm = () => {
   ]);
 
   return (
-    <form className="flex gap-10 items-center h-13.5">
+    <form className="flex gap-10 items-center h-13.5 relative z-999">
       <StackedSelectInput
         errors={errors}
         id="minArea"

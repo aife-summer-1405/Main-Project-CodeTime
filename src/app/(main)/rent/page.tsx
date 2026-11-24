@@ -1,16 +1,19 @@
-import RentPageList from "@/components/mortgage-rent/rent-page-list/rent-page-list";
+import { FC, Suspense } from "react";
 import RentTopSection from "@/components/mortgage-rent/rent-top-section/rent-top-section";
-import { getHouses } from "@/lib/Api/house";
-import { Suspense } from "react";
+import RentPageList from "@/components/mortgage-rent/rent-page-list/rent-page-list";
 
-const page = () => {
+type SearchParamsPromise = Promise<Record<string, string | string[] | undefined>>;
+
+type RentPageProps = {
+  searchParams: SearchParamsPromise;
+};
+
+const page: FC<RentPageProps> = ({ searchParams }) => {
   return (
     <div className="flex flex-col gap-10 h-fit mx-24.25 mt-8 mb-20">
-      <Suspense fallback={<div>در حال بارگذاری فیلترها...</div>}>
-        <RentTopSection />
-      </Suspense>
-      <Suspense fallback={<div>در حال بارگذاری...</div>}>
-        <RentPageList />
+      <RentTopSection />
+      <Suspense fallback={<div>در حال بارگذاری لیست...</div>}>
+        <RentPageList searchParams={searchParams} />
       </Suspense>
     </div>
   );

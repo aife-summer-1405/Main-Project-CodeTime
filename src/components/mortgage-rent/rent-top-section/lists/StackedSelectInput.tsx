@@ -61,11 +61,11 @@ function StackedSelectInput<T extends FieldValues>({
       >
         <SelectTrigger
           iconClassName="size-6"
-          className="h-6! cursor-pointer border-0 p-0"
+          className="h-6! cursor-pointer border-0 p-0 dark:bg-transparent"
         >
           <span>{title}</span>
         </SelectTrigger>
-        <SelectContent className={"z-999! relative! bg-white-1"}>
+        <SelectContent className={"z-99! absolute! top-8 -right-20 bg-white-1 dark:bg-black-1"}>
           <SelectGroup className={"max-h-60 overflow-y-scroll"}>
             {items.map((item) => (
               <SelectItem
@@ -86,7 +86,7 @@ function StackedSelectInput<T extends FieldValues>({
         value={state !== "هیچکدام" ? state : ""}
         placeholder={placeHolder}
         readOnly
-        className="focus:outline-0 caret-transparent cursor-default w-full text-sm font-medium text-blue-1 placeholder:text-black-2/50"
+        className="focus:outline-0 dark:text-white-1 dark:placeholder:text-white-1/50 caret-transparent cursor-default w-full text-sm font-medium text-blue-1 placeholder:text-black-2/50"
         {...register(id)}
       />
       {errors[id] && (
