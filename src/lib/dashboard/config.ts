@@ -64,6 +64,7 @@ export const menus: Record<Role, NavItem[]> = {
 export const topLinks = [
     { label: 'صفحه اصلی', href: '/' },
     { label: 'رزرو سریع', href: '/reserve' },
+    { label: 'رهن و اجاره', href: '/rent' },
     { label: 'وبلاگ', href: '/blog' },
     { label: 'درباره ما', href: '/contact-us' },
 ]

@@ -29,7 +29,7 @@ const MortgageAbout = ({ house }: { house: MortgageHouse }) => {
                     <div key={label} className='flex items-center gap-2.5 rounded-[8px] bg-[#F5F5F5D9] px-3 py-2.5 shadow-[0_0_10px_0_#005EA41A]'>
                         <Icon size={24} className='text-[#10088F] shrink-0' />
                         <div className='flex flex-col'>
-                            <span className='text-[11px] text-gray-1'>{label}</span>
+                            <span className='text-[11px] text-gray-1 text-[#121212]'>{label}</span>
                             <span className='text-sm font-bold text-[#060425]'>{value}</span>
                         </div>
                     </div>
@@ -38,7 +38,7 @@ const MortgageAbout = ({ house }: { house: MortgageHouse }) => {
                     <div className='flex items-center gap-2.5 rounded-[8px] bg-[#F5F5F5D9] px-3 py-2.5 shadow-[0_0_10px_0_#005EA41A]'>
                         <Trees size={24} className='text-[#10088F] shrink-0' />
                         <div className='flex flex-col'>
-                            <span className='text-[11px] text-gray-1'>نوع حیاط</span>
+                            <span className='text-[11px] text-gray-1 text-[#121212]'>نوع حیاط</span>
                             <span className='text-sm font-bold text-[#060425]'>{yard}</span>
                         </div>
                     </div>

@@ -29,7 +29,7 @@ const MortgageDetail = ({ house, comments, totalComments }: IProps) => {
             <div className='w-full bg-white-1 dark:bg-transparent max-w-[1920px] mx-auto overflow-hidden'>
                 <div className='text-gray-1 px-4 pt-4 lg:pr-6 w-full text-xs sm:text-sm font-semibold flex gap-1.5 sm:gap-2.5'>
                     <Link className='cursor-pointer whitespace-nowrap' href='/'>خانه /</Link>
-                    <Link className='cursor-pointer whitespace-nowrap' href='/mortgage'>رهن و اجاره /</Link>
+                    <Link className='cursor-pointer whitespace-nowrap' href='/rent'>رهن و اجاره /</Link>
                     <p className='text-[#10088F] truncate min-w-0' title={house.title}>{house.title}</p>
                 </div>
 
@@ -55,7 +55,7 @@ const MortgageDetail = ({ house, comments, totalComments }: IProps) => {
 
                     {/* right container */}
                     <div className='w-full lg:w-80 xl:w-100 shrink-0 flex flex-col gap-6 lg:gap-8'>
-                        <aside className='w-full shadow-[0_0_10px_0_#005EA41A] rounded-[16px] bg-[#F5F5F5D9]'>
+                        <aside className='w-full shadow-[0_0_10px_0_#005EA41A] rounded-[16px] bg-[#F5F5F5D9] '>
                             <MortgageContactCard house={house} />
                         </aside>
                         <SimilarMortgages currentId={house.id} categoryName={house.categories?.name} />

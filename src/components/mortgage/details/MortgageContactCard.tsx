@@ -14,7 +14,6 @@ const MortgageContactCard = ({ house }: { house: MortgageHouse }) => {
     const [seller, setSeller] = useState<UserProfile | null>(null)
     const [loading, setLoading] = useState(true)
 
-    // اطلاعات فروشنده با sellerId
     useEffect(() => {
         const controller = new AbortController()
         setLoading(true)
@@ -57,7 +56,7 @@ const MortgageContactCard = ({ house }: { house: MortgageHouse }) => {
                         </div>
                         <p className='text-[15px] font-bold text-[#060425]'>{name}</p>
                         {seller?.createdAt && (
-                            <p className='text-[11px] text-gray-1'>عضو از {faDate(seller.createdAt)}</p>
+                            <p className='text-[11px] text-gray-1 text-[#121212]'>عضو از {faDate(seller.createdAt)}</p>
                         )}
                     </>
                 )}
