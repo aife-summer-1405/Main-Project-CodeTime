@@ -40,7 +40,7 @@ export default function Modal({ open, onClose, title, className = 'max-w-md', ch
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                     onMouseDown={onClose}
-                    className='fixed inset-0 z-[100000] flex items-center justify-center bg-black/40 p-4'
+                    className='fixed inset-0 z-[1000] flex items-center justify-center bg-black/40 p-4'
                 >
                     <motion.div
                         role='dialog'

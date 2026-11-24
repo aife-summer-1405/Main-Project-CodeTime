@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { Bell, Menu, Moon } from 'lucide-react'
-import { topLinks } from '@/lib/dashboard/config'
+import { topLinks, type Role } from '@/lib/dashboard/config'
 import { ThemeToggleDashboard } from '../theme-toggle-dashboard'
 
 const iconButton = 'relative flex h-9 w-9 items-center justify-center rounded-full border border-[#E4EDF1] dark:border-[#2A2A2A] text-[#55536D] dark:text-[#D4D4D8] transition hover:bg-[#EAF6FA] dark:hover:bg-[#1C1C1C]'
 
-export default function Header({ onMenu }: { onMenu: () => void }) {
+export default function Header({ role, onMenu }: { role: Role; onMenu: () => void }) {
     return (
         <header className='flex h-14 shrink-0 items-center gap-3 rounded-[20px] border border-[#DCEEF4] dark:border-[#2A2A2A] bg-[#F5F5F5] dark:bg-[#121212] px-4 sm:px-6 shadow-[0px_0px_8px_0px_#0887CA26]'>
             <button
@@ -26,10 +26,12 @@ export default function Header({ onMenu }: { onMenu: () => void }) {
             </nav>
 
             <div className='mr-auto flex items-center gap-2'>
-                <Link href='/dashboard/notifications' aria-label='اعلان ها' className={iconButton}>
-                    <Bell size={17} />
-                    <span className='absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#F04464]' />
-                </Link>
+                {role !== 'admin' && (
+                    <Link href='/dashboard/notifications' aria-label='اعلان ها' className={iconButton}>
+                        <Bell size={17} />
+                        <span className='absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#F04464]' />
+                    </Link>
+                )}
                 <ThemeToggleDashboard />
             </div>
         </header>

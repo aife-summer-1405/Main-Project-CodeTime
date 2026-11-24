@@ -20,28 +20,28 @@ export default function Sidebar({ role, collapsible, onNavigate, onLogout }: Pro
             initial={false}
             animate={{ width: slim ? 78 : 210 }}
             transition={{ duration: 0.28, ease: 'easeInOut' }}
-            className='menuDashRight shadow-[0px_0px_8px_0px_#0887CA26] relative z-100000 flex overflow-hidden overflow-y-scroll h-full flex-col rounded-3xl border border-[#DCEEF4] dark:border-[#2A2A2A] bg-[#F5F5F5] dark:bg-[#121212] p-3'
+            className='shadow-[0px_0px_8px_0px_#0887CA26] relative z-1000 flex h-full flex-col overflow-hidden rounded-3xl border border-[#DCEEF4] dark:border-[#2A2A2A] bg-[#F5F5F5] dark:bg-[#121212] p-3'
         >
+            <div className='shrink-0'>
+                <LogoType textSize={slim ? '10px' : '32px'} />
 
-            <LogoType textSize={slim ? '10px' : '32px'} />
+                <div className='relative my-3.5 flex h-14 items-center justify-center'>
+                    {!slim && <img className='h-14' src='/images/vector (3).svg' alt='' />}
 
-
-            <div className='relative my-3.5 flex h-14 items-center justify-center'>
-                {!slim && <img className='h-14 ' src='/images/vector (3).svg' alt='' />}
-
-                {collapsible && (
-                    <button
-                        type='button'
-                        onClick={() => setCollapsed((v) => !v)}
-                        className={`flex h-8 w-8 items-center justify-center cursor-pointer ${slim ? '' : 'absolute left-24 top-[50%] -translate-x-1/2 -translate-y-1/2'}`}
-                    >
-                        <img className={`h-4 transition-transform duration-300  dark:bg-[#ccc] dark:rounded-[4px]`} src='/images/3.svg' alt='' />
-                    </button>
-                )}
+                    {collapsible && (
+                        <button
+                            type='button'
+                            onClick={() => setCollapsed((v) => !v)}
+                            className={`flex h-8 w-8 cursor-pointer items-center justify-center ${slim ? '' : 'absolute left-24 top-[50%] -translate-x-1/2 -translate-y-1/2'}`}
+                        >
+                            <img className='h-4 transition-transform duration-300 dark:rounded-[4px] dark:bg-[#ccc]' src='/images/3.svg' alt='' />
+                        </button>
+                    )}
+                </div>
             </div>
 
-            <nav className='flex flex-col gap-2'>
-                {menus[role].map(({ label, href, icon: Icon, badge }) => {
+            <nav className='menuDashRight flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto'>
+                {menus[role].map(({ label, href, icon: Icon }) => {
                     const active = href === '/dashboard' ? pathname === href : pathname.startsWith(href)
 
                     return (
@@ -50,7 +50,7 @@ export default function Sidebar({ role, collapsible, onNavigate, onLogout }: Pro
                             href={href}
                             onClick={onNavigate}
                             title={slim ? label : undefined}
-                            className={`relative flex h-10 font-medium items-center gap-3 rounded-lg px-3 text-xs transition-colors ${slim ? 'justify-center' : ''} ${active ? `${role === 'seller' ? 'bg-[#10088F]' : 'bg-[#005EA4]'}  text-white` : 'text-[#060425] dark:text-white hover:bg-[#EAF6FA] dark:hover:bg-[#1C1C1C] hover:text-[#0069A6] dark:hover:text-[#38A9E0]'}`}
+                            className={`relative flex h-10 shrink-0 items-center gap-3 rounded-lg px-3 text-xs font-medium transition-colors ${slim ? 'justify-center' : ''} ${active ? `${role === 'buyer' ? 'bg-[#005EA4]' : 'bg-[#10088F]'} text-white` : 'text-[#060425] hover:bg-[#EAF6FA] hover:text-[#0069A6] dark:text-white dark:hover:bg-[#1C1C1C] dark:hover:text-[#38A9E0]'}`}
                         >
                             <Icon className='shrink-0' />
                             <AnimatePresence initial={false}>
@@ -66,13 +66,14 @@ export default function Sidebar({ role, collapsible, onNavigate, onLogout }: Pro
                                     </motion.span>
                                 )}
                             </AnimatePresence>
-                            
                         </Link>
                     )
                 })}
             </nav>
 
-            <UserCard role={role} slim={slim} onLogout={onLogout} onNavigate={onNavigate} />
+            <div className='shrink-0'>
+                <UserCard role={role} slim={slim} onLogout={onLogout} onNavigate={onNavigate} />
+            </div>
         </motion.aside>
     )
 }

@@ -38,7 +38,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
                 </div>
 
                 <div className='relative flex min-h-0 min-w-0 flex-1 flex-col gap-5'>
-                    <Header onMenu={() => setDrawer(true)} />
+                    <Header role={role} onMenu={() => setDrawer(true)} />
                     <main className='min-h-0 min-w-0 flex-1 overflow-y-auto rounded-[40px] rounded-tr-[4px] rounded-bl-[4px] border shadow-[0px_0px_8px_0px_#0887CA26] border-[#DCEEF4] dark:border-[#2A2A2A] bg-[#F5F5F5] dark:bg-[#121212] p-4 sm:p-6'>
                         {children}
                     </main>

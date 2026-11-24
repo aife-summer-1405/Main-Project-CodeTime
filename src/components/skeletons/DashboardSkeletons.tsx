@@ -248,3 +248,22 @@ export function DashboardShellSkeleton() {
         </div>
     )
 }
+
+export function AdminOverviewSkeleton() {
+    return (
+        <div aria-busy='true' className='flex min-w-0 flex-col gap-5'>
+            <PageTitleSkeleton />
+            <StatCardsSkeleton count={5} />
+            <div className='mx-1.5 flex items-center justify-between'>
+                <Bone className='h-3 w-24' />
+                <Bone className='h-3 w-16' />
+            </div>
+            <TableSkeleton columns={4} rows={5} actions={false} />
+            <div className='mx-1.5 flex items-center justify-between'>
+                <Bone className='h-3 w-24' />
+                <Bone className='h-3 w-16' />
+            </div>
+            <TableSkeleton columns={6} rows={5} actions={false} />
+        </div>
+    )
+}

@@ -47,9 +47,10 @@ type DateFieldProps = {
     onChange: (iso: string) => void
     min?: string
     max?: string
+    zIndex?: number
 }
 
-function JalaliDateField({ label, value, onChange, min, max }: DateFieldProps) {
+export function JalaliDateField({ label, value, onChange, min, max, zIndex = 9999 }: DateFieldProps) {
     return (
         <div className={dateField}>
             <span className='pointer-events-none absolute right-3 top-1 z-10 text-[9px] text-[#8A8997]'>{label}</span>
@@ -63,7 +64,7 @@ function JalaliDateField({ label, value, onChange, min, max }: DateFieldProps) {
                 maxDate={max ? fromISO(max)! : undefined}
                 editable={false}
                 portal
-                zIndex={9999}
+                zIndex={zIndex}
                 calendarPosition='bottom-center'
                 containerClassName='h-full w-full'
                 inputClass={dateInput}

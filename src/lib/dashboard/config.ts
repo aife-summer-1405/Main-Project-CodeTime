@@ -1,12 +1,18 @@
 import type { ComponentType, SVGProps } from 'react'
 import {
     BellIcon,
+    BlogIcon,
+    CategoryIcon,
     CommentsIcon,
+    ContactIcon,
     DashboardIcon,
+    DiscountIcon,
     HeartIcon,
+    LocationIcon,
     PropertiesIcon,
     ReservationsIcon,
     UserIcon,
+    UsersIcon,
     WalletIcon,
 } from '@/components/dashboard/NavIcons'
 
@@ -38,7 +44,21 @@ export const menus: Record<Role, NavItem[]> = {
         { label: 'مدیریت نظرات', href: '/dashboard/comments', icon: CommentsIcon, badge: '+۵' },
         { label: 'اعلان ها', href: '/dashboard/notifications', icon: BellIcon },
     ],
-    admin: [],
+    admin: [
+        { label: 'داشبورد', href: '/dashboard', icon: DashboardIcon },
+        { label: 'اطلاعات کاربری', href: '/dashboard/account', icon: UserIcon },
+        { label: 'مدیریت کاربران', href: '/dashboard/users', icon: UsersIcon },
+        { label: 'مدیریت املاک', href: '/dashboard/properties', icon: PropertiesIcon },
+        { label: 'مدیریت رزرو ها', href: '/dashboard/reservations', icon: ReservationsIcon },
+        { label: 'مدیریت پرداخت ها', href: '/dashboard/payments', icon: WalletIcon },
+        { label: 'مدیریت نظرات', href: '/dashboard/comments', icon: CommentsIcon },
+        { label: 'ارتباط با ما', href: '/dashboard/contact-us', icon: ContactIcon },
+        { label: 'مدیریت مکان ها', href: '/dashboard/locations', icon: LocationIcon },
+        { label: 'مدیریت دسته بندی ها', href: '/dashboard/categories', icon: CategoryIcon },
+        { label: 'مدیریت وبلاگ', href: '/dashboard/blogs', icon: BlogIcon },
+        { label: 'مدیریت اعلان ها', href: '/dashboard/notifications', icon: BellIcon },
+        { label: 'مدیریت کدهای تخفیف', href: '/dashboard/discount-codes', icon: DiscountIcon },
+    ],
 }
 
 export const topLinks = [

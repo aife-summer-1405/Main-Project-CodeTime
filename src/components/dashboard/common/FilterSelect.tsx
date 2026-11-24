@@ -82,7 +82,7 @@ export default function FilterSelect({ label, value, onChange, options, classNam
                 createPortal(
                     <AnimatePresence>
                         {open && pos && (
-                            <div dir='rtl' className='fixed inset-0 z-[120]' onMouseDown={() => setPos(null)}>
+                            <div dir='rtl' className='fixed inset-0 z-[1200]' onMouseDown={() => setPos(null)}>
                                 <motion.ul
                                     ref={list}
                                     initial={{ opacity: 0, y: pos.bottom !== undefined ? 8 : -8, scale: 0.97 }}

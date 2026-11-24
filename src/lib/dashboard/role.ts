@@ -7,6 +7,7 @@ export const DEV_ROLE_KEY = 'dev_role'
 const aliases: Record<string, Role> = {
     buyer: 'buyer',
     seller: 'seller',
+    admin: 'admin',
 }
 
 export const normalizeRole = (value: unknown): Role | null => {
