@@ -1,8 +1,7 @@
 import { logoFont } from "@/assets/fonts";
+import { cn } from "cn";
 import Link from "next/link";
 import { FC } from "react";
-
-const goHomePage = () => {};
 
 interface IProps {
   textSize?: string;
@@ -12,6 +11,7 @@ interface IProps {
 
   darkTextColor1?: string;
   darkTextColor2?: string;
+  className?: string
 }
 
 const LogoType: FC<IProps> = ({
@@ -22,11 +22,12 @@ const LogoType: FC<IProps> = ({
 
   darkTextColor1 = "#F5F5F5",
   darkTextColor2 = "#005EA4",
+  className,
 }) => {
   return (
     <Link
       href={"/"}
-      className={`${logoFont.className} flex gap-1 leading-13.75`}
+      className={cn(`${logoFont.className} h-fit flex gap-1 leading-13.75 max-sm:leading-normal`, className)}
       style={
         {
           fontSize: textSize,
@@ -37,11 +38,11 @@ const LogoType: FC<IProps> = ({
         } as React.CSSProperties
       }
     >
-      <span className="text-(--logo-color-1) dark:text-(--logo-dark-color-1)">
+      <span className="max-sm:h-10 text-(--logo-color-1) dark:text-(--logo-dark-color-1)">
         رهن
       </span>
 
-      <span className="text-(--logo-color-2) dark:text-(--logo-dark-color-2)">
+      <span className="max-sm:h-10 text-(--logo-color-2) dark:text-(--logo-dark-color-2)">
         کده
       </span>
     </Link>

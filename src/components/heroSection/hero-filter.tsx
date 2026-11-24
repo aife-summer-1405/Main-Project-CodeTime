@@ -1,7 +1,7 @@
 import { HERO_FILTER } from "@/constants/hero-section";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import ReserveForm from "./forms/reserve-form";
-import { Underline2 } from "../svgs/nav-underline";
+import { Underline2 } from "../svgs/underline";
 
 const HeroFilter = () => {
   return (

@@ -1,6 +1,6 @@
 "use client";
 import { HEADER_LINKS, isHeaderLinkActive } from "@/constants/header";
-import { NavUnderline } from "../svgs/nav-underline";
+// import { NavUnderline } from "../svgs/nav-underline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -9,6 +9,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import { NavUnderline } from "../svgs/underline";
 
 const HeaderNav = () => {
   const pathname = usePathname();
@@ -23,7 +24,7 @@ const HeaderNav = () => {
             <NavigationMenuItem key={item.title}>
               <div className="relative flex flex-col items-center w-fit">
                 <NavigationMenuLink
-                  className={`text-black-1 dark:text-white-1 font-medium text-base
+                  className={`text-black-1 dark:text-white-1 font-medium text-base max-lg:text-sm max-md:text-xs
                       focus:bg-transparent hover:bg-transparent
                       transition-all duration-300 p-0 
                       ${isActive
