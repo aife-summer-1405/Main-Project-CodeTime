@@ -1,4 +1,6 @@
-import api from '../interceptor/api'
+import api from '@/lib/interceptor/api'
+import { transactionKey } from '../common/transactions'
+import { number, obj, text } from '@/lib/Api/shared'
 
 export type SellerHouse = {
     id: string
@@ -15,45 +17,6 @@ export type SellerHouse = {
     category: string
     transactionType: string
     comments: number
-}
-
-export const TRANSACTION_LABELS: Record<string, string> = {
-    rental: 'اجاره',
-    mortgage: 'رهن',
-    reservation: 'رزرو',
-    direct_purchase: 'خرید مستقیم',
-}
-
-const LABEL_TO_KEY: Record<string, string> = Object.fromEntries(
-    Object.entries(TRANSACTION_LABELS).map(([key, label]) => [label, key])
-)
-
-export const transactionKey = (value: string | null | undefined): string => {
-    const raw = (value ?? '').trim()
-    if (!raw) return ''
-    if (raw in TRANSACTION_LABELS) return raw
-    const normalized = raw.toLowerCase().replace(/[\s-]+/g, '_')
-    if (normalized in TRANSACTION_LABELS) return normalized
-    return LABEL_TO_KEY[raw] ?? raw
-}
-
-export const transactionLabel = (value: string) => {
-    if (!value) return '—'
-    return TRANSACTION_LABELS[transactionKey(value)] ?? value
-}
-
-export const transactionOptions = Object.entries(TRANSACTION_LABELS).map(([value, label]) => ({
-    label,
-    value,
-}))
-
-type Raw = Record<string, unknown>
-
-const obj = (value: unknown): Raw => (value && typeof value === 'object' ? (value as Raw) : {})
-const text = (value: unknown) => (value === undefined || value === null ? '' : String(value))
-const number = (value: unknown) => {
-    const n = Number(value)
-    return Number.isFinite(n) ? n : 0
 }
 
 const firstPhoto = (photos: unknown): string | null => {

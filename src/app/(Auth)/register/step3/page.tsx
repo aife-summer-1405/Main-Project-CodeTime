@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 import { EyeClosed, EyeIcon } from 'lucide-react'
 import AuthFloatingMenu from '../../login/popMenu/PopMenu'
 import { registerStep3Schema, RegisterStep3FormData } from '@/lib/schemas/auth'
-import { completeRegistration } from '@/lib/Api/authApi'
+import { completeRegistration } from '@/lib/Api/auth'
 import { RegisterStepName } from '../types/types'
 
 interface IStep {

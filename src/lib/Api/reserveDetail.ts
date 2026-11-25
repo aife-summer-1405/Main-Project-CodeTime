@@ -1,4 +1,4 @@
-import { getUserId } from '../dashboard/dashboardApi'
+import { getUserId } from '@/lib/Api/dashboard/common/user'
 import api from '../interceptor/api'
 
 export interface IHotelDetail {

@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Eye, EyeOff } from 'lucide-react'
 import Field from './Field'
-import { changePassword, getErrorMessage } from '@/lib/dashboard/dashboardApi'
+import { changePassword } from '@/lib/Api/dashboard/common/user'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
 
 type PasswordValues = {
     currentPassword: string

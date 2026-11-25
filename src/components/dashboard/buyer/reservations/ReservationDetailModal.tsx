@@ -2,7 +2,7 @@
 
 import Modal from '../../components/Modal'
 import { fa } from '@/lib/format'
-import type { Reservation } from '@/lib/dashboard/bookingsApi'
+import type { Reservation } from '@/lib/Api/dashboard/buyer/bookings'
 
 type Props = { reservation: Reservation | null; onClose: () => void }
 

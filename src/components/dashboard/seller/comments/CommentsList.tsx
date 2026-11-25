@@ -3,8 +3,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Pencil, Star, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { fa, faDate } from '@/lib/format'
-import { getUserId } from '@/lib/dashboard/dashboardApi'
-import { commentErrorMessage, deleteComment, getSellerComments, isFinalCommentError, loadCommentsErrorMessage, SellerComment, updateComment } from '@/lib/dashboard/sellerCommentApi'
+import { getUserId } from '@/lib/Api/dashboard/common/user'
+import {
+    commentErrorMessage,
+    deleteComment,
+    getSellerComments,
+    isFinalCommentError,
+    loadCommentsErrorMessage,
+    SellerComment,
+    updateComment,
+} from '@/lib/Api/dashboard/seller/comments'
 import ListToolbar from '../../common/ListToolbar'
 import DataList, { type Column } from '../../common/DataList'
 import Pagination from '../../common/Pagination'

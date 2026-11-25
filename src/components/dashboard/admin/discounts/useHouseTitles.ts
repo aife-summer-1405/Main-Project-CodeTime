@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { getHouseTitle } from '@/lib/dashboard/adminContentApi'
+import { getHouseTitle } from '@/lib/Api/dashboard/admin/discounts'
 
 export type HouseTitleMap = Record<string, string | null>
 

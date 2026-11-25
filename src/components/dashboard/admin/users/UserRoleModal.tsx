@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { roleLabels, type Role } from '@/lib/dashboard/config'
-import { getErrorMessage } from '@/lib/dashboard/dashboardApi'
-import { updateUserRole, type AdminUser } from '@/lib/dashboard/adminApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { updateUserRole, type AdminUser } from '@/lib/Api/dashboard/admin/users'
 import Modal from '../../components/Modal'
 
 type Props = { user: AdminUser | null; onClose: () => void; onSaved: () => void }

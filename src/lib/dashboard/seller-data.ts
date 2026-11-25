@@ -1,4 +1,4 @@
-import type { Payment } from './paymentsApi'
+import type { Payment } from '@/lib/Api/dashboard/buyer/payments'
 
 export type PropertyStatus = 'active' | 'pending' | 'inactive'
 export type SellerBookingStatus = 'confirmed' | 'pending' | 'canceled'

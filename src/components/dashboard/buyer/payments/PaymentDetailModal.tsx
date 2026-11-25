@@ -5,8 +5,8 @@ import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 import Modal from '../../components/Modal'
 import { fa } from '@/lib/format'
-import { getErrorMessage } from '@/lib/dashboard/dashboardApi'
-import { getPaymentById, type Payment } from '@/lib/dashboard/paymentsApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { getPaymentById, type Payment } from '@/lib/Api/dashboard/buyer/payments'
 
 type Props = { paymentId: string | null; onClose: () => void }
 

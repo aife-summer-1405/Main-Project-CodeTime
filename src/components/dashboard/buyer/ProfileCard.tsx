@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { getUserById, UserProfileResponse } from '@/lib/Api/user'
-import { getUserId } from '@/lib/dashboard/dashboardApi'
+import { getUserId } from '@/lib/Api/dashboard/common/user'
 import { ProfileCardSkeleton } from '@/components/skeletons/DashboardSkeletons'
 
 export default function ProfileCard() {

@@ -4,9 +4,10 @@ import Link from 'next/link'
 import { ExternalLink, MapPin, Star } from 'lucide-react'
 import SafeImage from '@/functions/safeImage'
 import { fa, faDate, faTime, toFaDigits } from '@/lib/format'
-import type { AdminBooking, BookingHouse } from '@/lib/dashboard/adminApi'
+import type { AdminBooking } from '@/lib/Api/dashboard/admin/bookings'
+import type { BookingHouse } from '@/lib/Api/dashboard/admin/houses'
 import { bookingStatusOptions } from '@/lib/dashboard/seller-data'
-import { transactionLabel } from '@/lib/dashboard/sellerHousesApi'
+import { transactionLabel } from '@/lib/Api/dashboard/common/transactions'
 import Modal from '../../components/Modal'
 
 type Props = {

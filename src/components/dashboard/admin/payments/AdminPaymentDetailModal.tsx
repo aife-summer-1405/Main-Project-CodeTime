@@ -3,17 +3,10 @@
 import { useEffect, useState } from 'react'
 import { Mail, Phone } from 'lucide-react'
 import { faDate, faTime, toFaDigits } from '@/lib/format'
-import {
-    getAdminBooking,
-    getAdminPayment,
-    getAdminUserById,
-    getBookingHouse,
-    paymentStatusOptions,
-    type AdminBooking,
-    type AdminPayment,
-    type AdminUser,
-    type BookingHouse,
-} from '@/lib/dashboard/adminApi'
+import { getAdminBooking, type AdminBooking } from '@/lib/Api/dashboard/admin/bookings'
+import { getAdminPayment, paymentStatusOptions, type AdminPayment } from '@/lib/Api/dashboard/admin/payments'
+import { getAdminUserById, type AdminUser } from '@/lib/Api/dashboard/admin/users'
+import { getBookingHouse, type BookingHouse } from '@/lib/Api/dashboard/admin/houses'
 import { bookingStatusOptions } from '@/lib/dashboard/seller-data'
 import Modal from '../../components/Modal'
 import RoleBadge from '../RoleBadge'

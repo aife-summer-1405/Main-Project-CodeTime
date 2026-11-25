@@ -5,7 +5,8 @@ import { Heart, Star } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { Hotel } from '@/lib/Api/house'
 import { addHotelToFavorites, getHouseById, removeHotelFromFavorites } from '@/lib/Api/reserveDetail'
-import { getErrorMessage, getUserId } from '@/lib/dashboard/dashboardApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { getUserId } from '@/lib/Api/dashboard/common/user'
 
 interface IProps {
   hotel: Hotel

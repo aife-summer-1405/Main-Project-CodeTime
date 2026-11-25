@@ -4,15 +4,10 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { faDate } from '@/lib/format'
-import { getErrorMessage } from '@/lib/dashboard/dashboardApi'
-import {
-    getAdminBookings,
-    getAdminDashboard,
-    getAdminUsers,
-    type AdminBooking,
-    type AdminSummary,
-    type AdminUser,
-} from '@/lib/dashboard/adminApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { getAdminBookings, type AdminBooking } from '@/lib/Api/dashboard/admin/bookings'
+import { getAdminDashboard, type AdminSummary } from '@/lib/Api/dashboard/admin/summary'
+import { getAdminUsers, type AdminUser } from '@/lib/Api/dashboard/admin/users'
 import { AdminOverviewSkeleton } from '@/components/skeletons/DashboardSkeletons'
 import PageTitle from '../common/PageTitle'
 import DataList, { type Column } from '../common/DataList'

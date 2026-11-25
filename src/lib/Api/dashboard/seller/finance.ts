@@ -1,5 +1,18 @@
-import api from '../interceptor/api'
-import type { SellerTransaction } from './seller-data'
+import api from '@/lib/interceptor/api'
+import type { SellerTransaction } from '@/lib/dashboard/seller-data'
+
+export type FinanceDashboard = {
+    totalAmount: number
+    totalBookings: number
+    totalPayments: number
+    totalPerviousMonthAmount: number
+    totalCurrentMonthAmount: number
+}
+
+export async function getFinanceDashboard(): Promise<FinanceDashboard> {
+    const res = await api.get('/api/seller/finance/dashboard')
+    return res.data
+}
 
 export type TransactionStatus = 'paid' | 'pending' | 'failed'
 export type TransactionType = 'wallet' | 'booking'

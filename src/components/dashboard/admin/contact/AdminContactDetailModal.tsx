@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react'
 import { Mail, User } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { getErrorMessage } from '@/lib/dashboard/dashboardApi'
-import { getAdminContactMessage, type AdminContactMessage } from '@/lib/dashboard/adminApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { getAdminContactMessage, type AdminContactMessage } from '@/lib/Api/dashboard/admin/contact'
 import Modal from '../../components/Modal'
 
 type Props = { message: AdminContactMessage | null; onClose: () => void }

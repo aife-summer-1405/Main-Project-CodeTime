@@ -1,4 +1,4 @@
-import type { AdminUser } from '@/lib/dashboard/adminApi'
+import type { AdminUser } from '@/lib/Api/dashboard/admin/users'
 
 export default function UserCell({ user }: { user: AdminUser }) {
     return (

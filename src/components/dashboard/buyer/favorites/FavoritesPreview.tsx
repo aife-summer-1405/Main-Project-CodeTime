@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
-import { getErrorMessage, getUserId } from '@/lib/dashboard/dashboardApi'
-import { getFavorites, type Favorite } from '@/lib/dashboard/favoritesApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { getUserId } from '@/lib/Api/dashboard/common/user'
+import { getFavorites, type Favorite } from '@/lib/Api/dashboard/buyer/favorites'
 import { favoriteColumns } from './FavoritesList'
 import DataList from '../../common/DataList'
 

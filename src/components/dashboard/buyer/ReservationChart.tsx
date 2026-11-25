@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
 import { fa } from '@/lib/format'
-import { getDashboardSummary, type BookingsSummary } from '@/lib/dashboard/dashboardApi'
+import { getDashboardSummary, type BookingsSummary } from '@/lib/Api/dashboard/common/summary'
 
 export default function BookingsChart() {
     const [summary, setSummary] = useState<BookingsSummary | null>(null)

@@ -3,8 +3,8 @@
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { getErrorMessage } from '@/lib/dashboard/dashboardApi'
-import { createAdminCategory, updateAdminCategory, type AdminCategory } from '@/lib/dashboard/adminApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { createAdminCategory, updateAdminCategory, type AdminCategory } from '@/lib/Api/dashboard/admin/categories'
 import Modal from '../../components/Modal'
 import FieldBox, { fieldInput } from '../FieldBox'
 

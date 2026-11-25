@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 import { EyeClosed, EyeIcon } from 'lucide-react'
 import AuthFloatingMenu from '../../login/popMenu/PopMenu'
 import { forgotStep3Schema, ForgotStep3FormData } from '@/lib/schemas/auth'
-import { forgotPasswordReset } from '@/lib/Api/authApi'
+import { forgotPasswordReset } from '@/lib/Api/auth'
 
 interface IStep {
     email: string

@@ -1,5 +1,5 @@
 import { propertyTypeOptions, subTypeOptions } from '@/lib/dashboard/seller-data'
-import { transactionOptions } from '@/lib/dashboard/sellerHousesApi'
+import { transactionOptions } from '@/lib/Api/dashboard/common/transactions'
 import { RateField, SelectField, TextArea, TextField } from './Inputs'
 import { getDiscountError } from './discount'
 import type { StepProps } from './types'

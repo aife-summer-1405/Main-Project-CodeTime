@@ -2,8 +2,8 @@
 
 import { CalendarDays, Clock, Tag } from 'lucide-react'
 import { faDate, faTime, toFaDigits } from '@/lib/format'
-import type { AdminUser } from '@/lib/dashboard/adminApi'
-import type { AdminNotification } from '@/lib/dashboard/adminContentApi'
+import type { AdminUser } from '@/lib/Api/dashboard/admin/users'
+import type { AdminNotification } from '@/lib/Api/dashboard/admin/notifications'
 import Modal from '../../components/Modal'
 import { PaymentUser } from '../payments/paymentColumns'
 import { notificationTypeLabel } from './notificationType'

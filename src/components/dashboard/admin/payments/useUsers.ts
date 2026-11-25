@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { getAdminUserById, type AdminUser } from '@/lib/dashboard/adminApi'
+import { getAdminUserById, type AdminUser } from '@/lib/Api/dashboard/admin/users'
 
 export type UserMap = Record<string, AdminUser | null>
 

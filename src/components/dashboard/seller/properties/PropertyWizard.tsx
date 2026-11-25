@@ -5,13 +5,13 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { getErrorMessage } from '@/lib/dashboard/dashboardApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
 import {
     createSellerHouse,
     getSellerHouse,
     updateSellerHouse,
     uploadHousePhotos,
-} from '@/lib/dashboard/sellerHousesApi'
+} from '@/lib/Api/dashboard/seller/houses'
 import PageTitle from '../../common/PageTitle'
 import WizardStepper, { wizardSteps } from './wizard/WizardStepper'
 import Step1Basic from './wizard/Step1Basic'

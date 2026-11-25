@@ -3,14 +3,11 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { fa, faDate, faTime } from '@/lib/format'
-import { getErrorMessage, getFinanceDashboard, type FinanceDashboard } from '@/lib/dashboard/dashboardApi'
-import {
-    getSellerTransactions,
-    toSellerTransaction,
-    type FinanceTransaction,
-} from '@/lib/dashboard/sellerFinanceApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { getFinanceDashboard, type FinanceDashboard } from '@/lib/Api/dashboard/seller/finance'
+import { getSellerTransactions, toSellerTransaction, type FinanceTransaction } from '@/lib/Api/dashboard/seller/finance'
 import { toReceiptPayment } from '@/lib/dashboard/seller-data'
-import type { Payment } from '@/lib/dashboard/paymentsApi'
+import type { Payment } from '@/lib/Api/dashboard/buyer/payments'
 import { FinanceSkeleton } from '@/components/skeletons/DashboardSkeletons'
 import PageTitle from '../../common/PageTitle'
 import ListToolbar from '../../common/ListToolbar'

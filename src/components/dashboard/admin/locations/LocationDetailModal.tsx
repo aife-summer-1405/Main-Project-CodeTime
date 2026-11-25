@@ -1,7 +1,7 @@
 'use client'
 
 import { toFaDigits } from '@/lib/format'
-import type { AdminLocation } from '@/lib/dashboard/adminApi'
+import type { AdminLocation } from '@/lib/Api/dashboard/admin/locations'
 import Modal from '../../components/Modal'
 import MapPicker from '../../common/MapPicker'
 

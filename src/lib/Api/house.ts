@@ -61,7 +61,7 @@ const SORTS: Record<string, { sort: string; order: string }> = {
   expensive: { sort: "price", order: "DESC" },
 };
 
-type ApiHotel = Omit<
+export type ApiHotel = Omit<
   Hotel,
   | "rate"
   | "price"
@@ -124,7 +124,7 @@ export function getDiscountPercentage(id: string | null): Promise<number> {
   return request;
 }
 
-const normalize = (h: ApiHotel): Hotel => {
+export const normalizeHotel = (h: ApiHotel): Hotel => {
   const discounted = h.discounted_price == null ? null : Number(h.discounted_price);
 
   return {
@@ -175,74 +175,13 @@ export async function getHotels(
 
   const json = await res.json();
   const houses: ApiHotel[] = json.houses ?? json.data?.houses ?? [];
-  return Promise.all(houses.map((h) => withDiscount(normalize(h))));
+  return Promise.all(houses.map((h) => withDiscount(normalizeHotel(h))));
 }
 
 export async function getHotelById(id: string): Promise<Hotel> {
   const { data } = await api.get(`/api/houses/${id}`);
 
-  return withDiscount(normalize(data.house ?? data.data ?? data));
-}
-
-export type house = {
-  id: string;
-  title: string;
-  address: string;
-  photos: string[];
-  rate: null;
-  discounted_price: null;
-  price: string;
-  tags: never[];
-  last_updated: string;
-  capacity: number;
-  location: {
-    lat: number;
-    lng: number;
-  };
-  categories: {
-    name: string;
-  };
-  bathrooms: number;
-  parking: number;
-  rooms: number;
-  yard_type: string;
-  num_comments: number;
-  discount_id: null;
-  transaction_type: string;
-  sellerId: string;
-  sellerName: string;
-  caption: string;
-  bookings: number;
-  favoriteId: null;
-  isFavorite: boolean;
-};
-
-export type rentQuery = {
-  search: string;
-  minPrice: string;
-  maxPrice: string;
-  minRent: string;
-  maxRent: string;
-};
-
-export async function getHouses(q: rentQuery): Promise<Hotel[]> {
-  const params = new URLSearchParams({
-    page: "1",
-    limit: "10",
-    transactionType: "rental",
-  });
-  if (q.minPrice) params.set("minPrice", q.minPrice);
-  if (q.maxPrice) params.set("maxPrice", q.maxPrice);
-  if (q.minRent) params.set("minRent", q.minRent);
-  if (q.maxRent) params.set("maxRent", q.maxRent);
-
-  const res = await fetch(`${BASE_URL}/api/houses?${params.toString()}`);
-
-  if (!res.ok) throw new Error("request failed");
-
-  const json = await res.json();
-  const houses: ApiHotel[] = json.houses ?? json.data?.houses ?? [];
-  return Promise.all(houses.map((h) => withDiscount(normalize(h))));
+  return withDiscount(normalizeHotel(data.house ?? data.data ?? data));
 }
 
 export const filterByCounts = (hotels: Hotel[], c: CountFilters): Hotel[] =>

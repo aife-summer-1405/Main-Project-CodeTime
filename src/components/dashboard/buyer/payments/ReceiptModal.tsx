@@ -1,6 +1,6 @@
 import Modal from '../../components/Modal'
 import { fa } from '@/lib/format'
-import type { Payment } from '@/lib/dashboard/paymentsApi'
+import type { Payment } from '@/lib/Api/dashboard/buyer/payments'
 
 type Props = { payment: Payment | null; onClose: () => void }
 

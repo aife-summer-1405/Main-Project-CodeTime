@@ -6,7 +6,7 @@ import { isAxiosError } from 'axios'
 import toast from 'react-hot-toast'
 import AuthFloatingMenu from '../../login/popMenu/PopMenu'
 import { registerPhoneStep1Schema, RegisterPhoneStep1FormData } from '@/lib/schemas/auth'
-import { startRegisterPhone } from '@/lib/Api/authApi'
+import { startRegisterPhone } from '@/lib/Api/auth'
 import { RegisterPhoneStepName } from '../types/types'
 import GoogleButton from '@/components/auth/GoogleButton'
 

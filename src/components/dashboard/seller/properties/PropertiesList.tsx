@@ -7,14 +7,9 @@ import { ExternalLink, Pencil, Plus, Star, Store, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import SafeImage from '@/functions/safeImage'
 import { fa, faDate } from '@/lib/format'
-import { getErrorMessage } from '@/lib/dashboard/dashboardApi'
-import {
-    deleteSellerHouse,
-    getSellerHouses,
-    transactionLabel,
-    transactionOptions,
-    type SellerHouse,
-} from '@/lib/dashboard/sellerHousesApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { deleteSellerHouse, getSellerHouses, type SellerHouse } from '@/lib/Api/dashboard/seller/houses'
+import { transactionLabel, transactionOptions } from '@/lib/Api/dashboard/common/transactions'
 import ListToolbar from '../../common/ListToolbar'
 import DataList, { type Column } from '../../common/DataList'
 import Pagination from '../../common/Pagination'

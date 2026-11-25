@@ -4,7 +4,7 @@ import { MessageCircle, Phone } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { getSeller, maskPhone, type MortgageHouse } from '@/lib/Api/mortgage'
 import type { UserProfile } from '@/lib/Api/user'
-import { getUserId } from '@/lib/dashboard/dashboardApi'
+import { getUserId } from '@/lib/Api/dashboard/common/user'
 import { faDate } from '@/lib/format'
 
 const faNum = (n: number) => n.toLocaleString('fa-IR')

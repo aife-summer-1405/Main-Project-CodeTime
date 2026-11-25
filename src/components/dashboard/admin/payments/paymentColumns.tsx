@@ -1,5 +1,6 @@
 import { fa, faDate, toFaDigits } from '@/lib/format'
-import type { AdminPayment, AdminUser } from '@/lib/dashboard/adminApi'
+import type { AdminPayment } from '@/lib/Api/dashboard/admin/payments'
+import type { AdminUser } from '@/lib/Api/dashboard/admin/users'
 import type { Column } from '../../common/DataList'
 import StatusIcon from '../../seller/StatusIcon'
 import UserCell from '../UserCell'

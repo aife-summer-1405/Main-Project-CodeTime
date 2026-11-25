@@ -10,7 +10,7 @@ import Link from 'next/link'
 import AuthFloatingMenu from './popMenu/PopMenu'
 import LoginSlider from './slider/LoginSlider'
 import { loginSchema, LoginFormData } from '@/lib/schemas/auth'
-import { loginUser } from '@/lib/Api/authApi'
+import { loginUser } from '@/lib/Api/auth'
 import { saveRole } from '@/lib/dashboard/role'
 import GoogleButton from '@/components/auth/GoogleButton'
 

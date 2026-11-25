@@ -1,5 +1,5 @@
 import { faDate, faTime, toFaDigits } from '@/lib/format'
-import type { AdminBooking } from '@/lib/dashboard/adminApi'
+import type { AdminBooking } from '@/lib/Api/dashboard/admin/bookings'
 import type { Column } from '../../common/DataList'
 import StatusIcon from '../../seller/StatusIcon'
 

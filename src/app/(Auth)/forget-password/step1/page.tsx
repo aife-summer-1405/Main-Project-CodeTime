@@ -6,7 +6,7 @@ import { isAxiosError } from 'axios'
 import toast from 'react-hot-toast'
 import AuthFloatingMenu from '../../login/popMenu/PopMenu'
 import { forgotStep1Schema, ForgotStep1FormData } from '@/lib/schemas/auth'
-import { forgotPasswordRequest } from '@/lib/Api/authApi'
+import { forgotPasswordRequest } from '@/lib/Api/auth'
 import type { ForgotStepName } from '../types/types'
 
 interface IStep {

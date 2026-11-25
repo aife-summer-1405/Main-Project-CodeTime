@@ -6,7 +6,7 @@ import { isAxiosError } from 'axios'
 import toast from 'react-hot-toast'
 import AuthFloatingMenu from '../../login/popMenu/PopMenu'
 import { registerStep2Schema, RegisterStep2FormData } from '@/lib/schemas/auth'
-import { startRegisterPhone, verifyPhone } from '@/lib/Api/authApi'
+import { startRegisterPhone, verifyPhone } from '@/lib/Api/auth'
 import { RegisterPhoneStepName } from '../types/types'
 
 const RESEND_SECONDS = 600

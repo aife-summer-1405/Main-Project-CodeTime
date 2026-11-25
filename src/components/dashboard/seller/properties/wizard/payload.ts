@@ -1,9 +1,5 @@
-import {
-    transactionKey,
-    type CreateHousePayload,
-    type HouseDetail,
-    type UpdateHousePayload,
-} from '@/lib/dashboard/sellerHousesApi'
+import { transactionKey } from '@/lib/Api/dashboard/common/transactions'
+import { type CreateHousePayload, type HouseDetail, type UpdateHousePayload } from '@/lib/Api/dashboard/seller/houses'
 import { subTypeOptions } from '@/lib/dashboard/seller-data'
 import { getDiscountError } from './discount'
 import type { WizardForm } from './types'

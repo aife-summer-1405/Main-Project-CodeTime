@@ -4,11 +4,17 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Ban, Info, Play } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { fa, faDate, faTime } from '@/lib/format'
-import { getErrorMessage, getUserId } from '@/lib/dashboard/dashboardApi'
-import { cancelBooking, continueBooking, getFullBookingDetail, type DetailedBooking } from '@/lib/dashboard/bookingsApi'
-import { getSellerBookings } from '@/lib/dashboard/sellerBookingsApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { getUserId } from '@/lib/Api/dashboard/common/user'
+import {
+    cancelBooking,
+    continueBooking,
+    getFullBookingDetail,
+    type DetailedBooking,
+} from '@/lib/Api/dashboard/common/bookings'
+import { getSellerBookings } from '@/lib/Api/dashboard/seller/bookings'
 import { toReceiptPayment, type SellerBooking } from '@/lib/dashboard/seller-data'
-import type { Payment } from '@/lib/dashboard/paymentsApi'
+import type { Payment } from '@/lib/Api/dashboard/buyer/payments'
 import ListToolbar from '../../common/ListToolbar'
 import DataList, { type Column } from '../../common/DataList'
 import Pagination from '../../common/Pagination'

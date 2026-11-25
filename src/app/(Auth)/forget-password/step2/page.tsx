@@ -6,7 +6,7 @@ import { isAxiosError } from 'axios'
 import toast from 'react-hot-toast'
 import AuthFloatingMenu from '../../login/popMenu/PopMenu'
 import { forgotStep2Schema, ForgotStep2FormData } from '@/lib/schemas/auth'
-import { forgotPasswordRequest, forgotPasswordVerify } from '@/lib/Api/authApi'
+import { forgotPasswordRequest, forgotPasswordVerify } from '@/lib/Api/auth'
 import type { ForgotStepName } from '../types/types'
 
 const RESEND_SECONDS = 600

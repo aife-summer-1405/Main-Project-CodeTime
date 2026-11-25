@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { fa } from '@/lib/format'
-import { getErrorMessage, getFinanceDashboard, type FinanceDashboard } from '@/lib/dashboard/dashboardApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { getFinanceDashboard, type FinanceDashboard } from '@/lib/Api/dashboard/seller/finance'
 
 const FA_DIGITS = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']
 const toFaDigit = (n: number) => String(n).replace(/\d/g, (d) => FA_DIGITS[Number(d)])

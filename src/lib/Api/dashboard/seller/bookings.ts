@@ -1,6 +1,7 @@
-import api from '../interceptor/api'
-import { first, normalizeBooking, number, obj, text } from './bookingsApi'
-import type { SellerBooking } from './seller-data'
+import api from '@/lib/interceptor/api'
+import { first, number, obj, text } from '@/lib/Api/shared'
+import { normalizeBooking } from '../buyer/bookings'
+import type { SellerBooking } from '@/lib/dashboard/seller-data'
 
 const statusOf = { success: 'confirmed', pending: 'pending', cancel: 'canceled' } as const
 

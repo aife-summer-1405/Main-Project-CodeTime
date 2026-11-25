@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { CalendarDays, Clock, ExternalLink, Tag } from 'lucide-react'
 import { faDate, toFaDigits } from '@/lib/format'
-import type { AdminBlog, AdminUser } from '@/lib/dashboard/adminApi'
+import type { AdminBlog } from '@/lib/Api/dashboard/admin/blogs'
+import type { AdminUser } from '@/lib/Api/dashboard/admin/users'
 import Modal from '../../components/Modal'
 import { PaymentUser } from '../payments/paymentColumns'
 

@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Role } from '@/lib/dashboard/config'
-import { getUser, getUserId } from '@/lib/dashboard/dashboardApi'
+import { getUser, getUserId } from '@/lib/Api/dashboard/common/user'
 import { isLoggedIn, readRole, saveRole } from '@/lib/dashboard/role'
 import { DashboardShellSkeleton } from '../skeletons/DashboardSkeletons'
 

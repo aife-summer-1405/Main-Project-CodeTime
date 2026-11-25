@@ -1,4 +1,4 @@
-import { getHouses, house, rentQuery } from "@/lib/Api/house";
+import { getRentHouses, type RentHouse, type RentQuery } from "@/lib/Api/rent";
 import RentCard from "../rent-card/rent-card";
 
 type RentPageListProps = {
@@ -15,7 +15,13 @@ const getFirstValue = (
 const RentPageList = async ({ searchParams }: RentPageListProps) => {
   const resolvedParams = await searchParams;
 
-  const query: rentQuery = {
+  const query: RentQuery = {
+    page: 1,
+    limit: 10,
+    transactionType: "rental",
+    sort: "newest",
+    location: "",
+    category: "",
     search: getFirstValue(resolvedParams.search) ?? "",
     minPrice: getFirstValue(resolvedParams.minPrice) ?? "",
     maxPrice: getFirstValue(resolvedParams.maxPrice) ?? "",
@@ -25,7 +31,7 @@ const RentPageList = async ({ searchParams }: RentPageListProps) => {
     maxRent: getFirstValue(resolvedParams.maxRent) ?? "",
   };
 
-  const houses: house[] = await getHouses(query);
+  const { houses }: { houses: RentHouse[] } = await getRentHouses(query);
 
   return (
     <div className="h-fit min-h-114">

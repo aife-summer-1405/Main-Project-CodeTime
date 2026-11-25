@@ -3,18 +3,17 @@
 import { useEffect, useState } from 'react'
 import { Ban, Info, Pencil, Play, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { getErrorMessage } from '@/lib/dashboard/dashboardApi'
-import { cancelBooking, continueBooking } from '@/lib/dashboard/bookingsApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import { cancelBooking, continueBooking } from '@/lib/Api/dashboard/common/bookings'
 import { bookingStatusOptions } from '@/lib/dashboard/seller-data'
 import {
     deleteAdminBooking,
     getAdminBooking,
     getAdminBookings,
-    getBookingHouse,
     type AdminBooking,
-    type BookingHouse,
     type BookingStatus,
-} from '@/lib/dashboard/adminApi'
+} from '@/lib/Api/dashboard/admin/bookings'
+import { getBookingHouse, type BookingHouse } from '@/lib/Api/dashboard/admin/houses'
 import ListToolbar from '../../common/ListToolbar'
 import DataList from '../../common/DataList'
 import Pagination from '../../common/Pagination'

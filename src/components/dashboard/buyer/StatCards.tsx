@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { ArrowUpLeft, CalendarX } from 'lucide-react'
-import { BookingsSummary, getDashboardSummary } from '@/lib/dashboard/dashboardApi'
+import { BookingsSummary, getDashboardSummary } from '@/lib/Api/dashboard/common/summary'
 import { StatCardsSkeleton } from '@/components/skeletons/DashboardSkeletons'
 
 const icon = (src: string) => <img src={src} alt='' className='h-[18px] w-[18px]' />

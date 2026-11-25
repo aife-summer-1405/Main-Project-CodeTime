@@ -5,7 +5,7 @@ import { Calendar, MapPin, Send, Star } from 'lucide-react'
 import toast from 'react-hot-toast'
 import SafeImage from '@/functions/safeImage'
 import { fa, faDate, faTime } from '@/lib/format'
-import type { DetailedBooking } from '@/lib/dashboard/bookingsApi'
+import type { DetailedBooking } from '@/lib/Api/dashboard/common/bookings'
 import Modal from '../../components/Modal'
 
 export type BookingModalName = 'details' | 'travelers' | 'payments' | 'changes' | null

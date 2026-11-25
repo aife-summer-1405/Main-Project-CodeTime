@@ -3,8 +3,13 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { getErrorMessage } from '@/lib/dashboard/dashboardApi'
-import { paymentStatusOptions, updateAdminPayment, type AdminPayment, type PaymentStatus } from '@/lib/dashboard/adminApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import {
+    paymentStatusOptions,
+    updateAdminPayment,
+    type AdminPayment,
+    type PaymentStatus,
+} from '@/lib/Api/dashboard/admin/payments'
 import Modal from '../../components/Modal'
 import FilterSelect from '../../common/FilterSelect'
 import FieldBox, { fieldInput } from '../FieldBox'

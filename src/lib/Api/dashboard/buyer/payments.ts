@@ -1,4 +1,4 @@
-import api from '../interceptor/api'
+import api from '@/lib/interceptor/api'
 
 export type Payment = {
     id: string

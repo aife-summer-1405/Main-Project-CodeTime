@@ -8,7 +8,14 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css'
 import Field from './Field'
-import { getErrorMessage, getUser, getUserId, updateUser, UpdateUserBody, uploadPicture } from '@/lib/dashboard/dashboardApi'
+import { getErrorMessage } from '@/lib/Api/dashboard/common/errors'
+import {
+    getUser,
+    getUserId,
+    updateUser,
+    UpdateUserBody,
+    uploadPicture,
+} from '@/lib/Api/dashboard/common/user'
 import Router from 'next/router'
 
 type Avatar = { id: string; url: string }

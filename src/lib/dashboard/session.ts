@@ -1,4 +1,4 @@
-import { logoutUser } from '@/lib/Api/authApi'
+import { logoutUser } from '@/lib/Api/auth'
 import { ACCESS_KEY, ROLE_KEY } from './role'
 
 const sessionKeys = [ACCESS_KEY, 'refresh_token', 'userId', ROLE_KEY]
