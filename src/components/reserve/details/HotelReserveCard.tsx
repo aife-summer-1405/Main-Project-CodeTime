@@ -30,7 +30,7 @@ const Chevron = ({ open }: { open: boolean }) => (
     </svg>
 )
 
-const GuestSelect = ({ max, value, onChange }: { max: number; value: number | null; onChange: (v: number) => void }) => (
+const GuestSelect = ({ max, value, onChange }: { max: number; value: number | null; onChange: (v: number | null) => void }) => (
     <Listbox value={value} onChange={onChange}>
         <div className='relative'>
             <ListboxButton className='w-full flex flex-col gap-3 text-right cursor-pointer'>
@@ -170,7 +170,7 @@ const HotelReserveCard = ({ hotel }: IProps) => {
             <div className='flex flex-col gap-3'>
                 <p className='text-[14px] font-medium text-[#060425]'>قیمت کل با تخفیف</p>
 
-                <div className={`flex flex-wrap items-center ${hotel.discounted_price === null ? 'justify-end':'justify-between'} gap-2`}>
+                <div className={`flex flex-wrap items-center ${hotel.discounted_price === null ? 'justify-end' : 'justify-between'} gap-2`}>
                     {hotel.discounted_price !== null && (
                         <div className='text-[#111111] text-sm font-bold relative'>
                             <div className='border-t border-red-1 absolute top-[9px] left-0 w-full' />
